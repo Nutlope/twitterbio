@@ -6,6 +6,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@radix-ui/react-popover": "^1.0.2",
+    "@tailwindcss/forms": "^0.5.3",
+    "framer-motion": "^8.4.3",
+    "lucide-react": "^0.105.0-alpha.4",
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0"
