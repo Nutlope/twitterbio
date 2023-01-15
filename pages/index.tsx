@@ -14,9 +14,9 @@ import ResizablePanel from "../components/ResizablePanel";
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState("");
-  const [vibe, setVibe] = useState<
-    "Professional Vibe" | "Casual Vibe" | "Funny Vibe"
-  >("Professional Vibe");
+  const [vibe, setVibe] = useState<"Professional" | "Casual" | "Funny">(
+    "Professional"
+  );
   const [generatedBios, setGeneratedBios] = useState<String>("");
 
   console.log("Streamed response: ", generatedBios);
@@ -34,7 +34,9 @@ const Home: NextPage = () => {
         prompt: `Generate 2 ${vibe.substring(
           0,
           vibe.indexOf(" ")
-        )} twitter bios with no hashtags based on this bio: ${bio}`,
+        )} twitter bios with no hashtags and clearly labeled "1." and "2." based on this bio: ${bio}${
+          bio.slice(-1) === "." ? "" : "."
+        }`,
       }),
     });
     console.log("Edge function returned.");

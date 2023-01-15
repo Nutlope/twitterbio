@@ -6,10 +6,10 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-type vibeType = "Professional Vibe" | "Casual Vibe" | "Funny Vibe";
+type vibeType = "Professional" | "Casual" | "Funny";
 
 interface DropDownProps {
-  vibe: "Professional Vibe" | "Casual Vibe" | "Funny Vibe";
+  vibe: "Professional" | "Casual" | "Funny";
   setVibe: (vibe: vibeType) => void;
 }
 
@@ -44,39 +44,39 @@ export default function DropDown({ vibe, setVibe }: DropDownProps) {
             <Menu.Item>
               {({ active }) => (
                 <button
-                  onClick={() => setVibe("Professional Vibe")}
+                  onClick={() => setVibe("Professional")}
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "block px-4 py-2 text-sm w-full text-left"
                   )}
                 >
-                  Professional Vibe
+                  Professional
                 </button>
               )}
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
                 <button
-                  onClick={() => setVibe("Casual Vibe")}
+                  onClick={() => setVibe("Casual")}
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "block px-4 py-2 text-sm w-full text-left"
                   )}
                 >
-                  Casual Vibe
+                  Casual
                 </button>
               )}
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
                 <button
-                  onClick={() => setVibe("Funny Vibe")}
+                  onClick={() => setVibe("Funny")}
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "block px-4 py-2 text-sm w-full text-left"
                   )}
                 >
-                  Funny Vibe
+                  Funny
                 </button>
               )}
             </Menu.Item>
