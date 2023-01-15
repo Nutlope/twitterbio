@@ -11,6 +11,7 @@
 - [x] Show streaming in console.logs
 
 ## Todos v2
+
 - [ ] Fix bug in the dropdown where it's not highlighting the currently selected option
 - [ ] Rebuild this with a serverless function and run benchmarks on the difference
 - [ ] Make better README and add it to templates marketplace
