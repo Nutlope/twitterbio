@@ -13,12 +13,88 @@ const Home: NextPage = () => {
   const [vibe, setVibe] = useState<
     "Professional Vibe" | "Casual Vibe" | "Funny Vibe"
   >("Professional Vibe");
+  const [generatedBios, setGeneratedBios] = useState<String>("");
 
-  const onSubmit = (e: any) => {
+  const onSubmit = async (e: any) => {
     e.preventDefault();
+    setGeneratedBios("");
     setLoading(true);
-    // Make call to openAI here
-    console.log("submitted");
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: `Generate 2 ${vibe.substring(
+          0,
+          vibe.indexOf(" ")
+        )} twitter bios with no hashtags based on this bio: ${bio}`,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const data = response.body;
+
+    if (!data) {
+      return;
+    }
+
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+
+    let done = false;
+    let tempState = "";
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const newValue = decoder
+        .decode(value)
+        .replaceAll("data: ", "")
+        .split("\n\n")
+        .filter(Boolean);
+
+      if (tempState) {
+        newValue[0] = tempState + newValue[0];
+        tempState = "";
+      }
+
+      newValue.forEach((newVal) => {
+        if (newVal === "[DONE]") {
+          return;
+        }
+
+        try {
+          const json = JSON.parse(newVal) as {
+            id: string;
+            object: string;
+            created: number;
+            choices?: {
+              text: string;
+              index: number;
+              logprobs: null;
+              finish_reason: null | string;
+            }[];
+            model: string;
+          };
+
+          if (!json.choices?.length) {
+            throw new Error("Something went wrong.");
+          }
+
+          const choice = json.choices[0];
+
+          setGeneratedBios((prev) => prev + choice.text);
+        } catch (error) {
+          tempState = newVal;
+        }
+      });
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -88,14 +164,15 @@ const Home: NextPage = () => {
           )}
         </form>
         <div className="space-y-10 my-10 max-w-lg">
-          <p>
+          {generatedBios && !loading && <div>{generatedBios}</div>}
+          {/* <p>
             <b>Variation 1:</b> Professional coder by day, amateur pun-smith by
             night. Come join me on my journey of turning 0s and 1s into humor!
           </p>
           <p>
             <b>Variation 2:</b> Just a programmer looking to make the world a
             funnier place one line of code at a time.
-          </p>
+          </p> */}
         </div>
         {/* Generate multiple variations */}
         {/* Add that resizable box from framer motion around everything*/}
