@@ -5,11 +5,21 @@ import { useState } from "react";
 import DropDown from "../components/DropDown";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import LoadingDots from "../components/LoadingDots";
 
 const Home: NextPage = () => {
-  const [openPopover, setOpenPopover] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [bio, setBio] = useState("");
+  const [vibe, setVibe] = useState<
+    "Professional Vibe" | "Casual Vibe" | "Funny Vibe"
+  >("Professional Vibe");
 
-  console.log({ openPopover });
+  const onSubmit = (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+    // Make call to openAI here
+    console.log("submitted");
+  };
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
@@ -19,7 +29,7 @@ const Home: NextPage = () => {
       </Head>
 
       <Header />
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4">
+      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12">
         <a
           className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mb-5"
           href="https://github.com/Nutlope/search-youtuber"
@@ -32,24 +42,24 @@ const Home: NextPage = () => {
         <h1 className="text-6xl max-w-2xl font-bold text-slate-900">
           Generate your next Twitter bio in seconds
         </h1>
-        <div className="max-w-xl">
-          <div className="flex mt-8 items-center space-x-3">
+        <form onSubmit={onSubmit} className="max-w-xl">
+          <div className="flex mt-10 items-center space-x-3">
             <Image src="/1-black.png" width={30} height={30} alt="1 icon" />
             <p className="">
               Copy your current bio{" "}
               <span className="text-slate-500">
-                (or write two sentences about yourself)
+                (or write some sentences about yourself)
               </span>
               .
             </p>
           </div>
           <textarea
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
             rows={4}
-            name="comment"
-            id="comment"
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm my-5"
+            className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
             placeholder={
-              "Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Nextjs. Writing at nutlope.substack.com."
+              "Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js."
             }
           />
           <div className="flex mb-5 items-center space-x-3">
@@ -57,18 +67,38 @@ const Home: NextPage = () => {
             <p className="">Select your vibe.</p>
           </div>
           <div className="block">
-            <DropDown
-              openPopover={openPopover}
-              setOpenPopover={setOpenPopover}
-            />
+            <DropDown vibe={vibe} setVibe={setVibe} />
           </div>
-          {/* Add some validation so this doesn't happen */}
-          {/* Generate multiple variations */}
-          {/* Add that resizable box  */}
-          <button className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full">
-            Generate your bio &rarr;
-          </button>
+
+          {!loading && (
+            <button
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              type="submit"
+            >
+              Generate your bio &rarr;
+            </button>
+          )}
+          {loading && (
+            <button
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              type="submit"
+            >
+              <LoadingDots color="white" style="large" />
+            </button>
+          )}
+        </form>
+        <div className="space-y-10 my-10 max-w-lg">
+          <p>
+            <b>Variation 1:</b> Professional coder by day, amateur pun-smith by
+            night. Come join me on my journey of turning 0s and 1s into humor!
+          </p>
+          <p>
+            <b>Variation 2:</b> Just a programmer looking to make the world a
+            funnier place one line of code at a time.
+          </p>
         </div>
+        {/* Generate multiple variations */}
+        {/* Add that resizable box from framer motion around everything*/}
       </main>
       <Footer />
     </div>
