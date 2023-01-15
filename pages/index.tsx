@@ -113,7 +113,7 @@ const Home: NextPage = () => {
       </Head>
 
       <Header />
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12">
+      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
         <a
           className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mb-5"
           href="https://github.com/vercel/twitter-bio-generator"
@@ -193,12 +193,12 @@ const Home: NextPage = () => {
                   </h2>
                   <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                     {generatedBios
-                      .substring(5)
+                      .substring(generatedBios.indexOf("1") + 3)
                       .split("2.")
                       .map((generatedBio) => {
                         return (
                           <div
-                            className="bg-white rounded-xl shadow-md px-3 py-4 hover:bg-gray-100 transition cursor-copy border"
+                            className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
                             onClick={() => {
                               navigator.clipboard.writeText(generatedBio);
                               toast("Bio copied to clipboard", {
