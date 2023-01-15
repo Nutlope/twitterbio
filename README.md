@@ -8,14 +8,15 @@
 - [ ] Push it to Vercel github repo and deploy to Vercel
 - [ ] Fix link to GitHub + in footer
 - [ ] Check lighthouse scores and optimize
+- [ ] Add Vercel Analytics
 
 ## Todos v2
 
-- [ ] Clean up code for generatebio function, create helper for that + for backend
-- [ ] Make console.logs pretty and tell folks they can look at them, maybe through tooltip on the loading button
+- [x] Clean up code for generatebio function
+- [x] Make console.logs pretty and tell folks they can look at them
 - [ ] Make 'active' work in dropdown
 - [ ] Can try doing the same thing with a serverless function and running benchmarks
-- [ ] Maybe generate 3 variations and position them more creatively on desktop
+- [ ] Look over the code for streaming vs what Malte sent before, and compare
 - [ ] Make better README
 - [ ] Add to templates marketplace
 - [ ] Launch on Twitter

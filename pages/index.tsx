@@ -19,6 +19,8 @@ const Home: NextPage = () => {
   >("Professional Vibe");
   const [generatedBios, setGeneratedBios] = useState<String>("");
 
+  console.log("Streamed response: ", generatedBios);
+
   const generateBio = async (e: any) => {
     e.preventDefault();
     setGeneratedBios("");
@@ -35,13 +37,14 @@ const Home: NextPage = () => {
         )} twitter bios with no hashtags based on this bio: ${bio}`,
       }),
     });
+    console.log("Edge function returned.");
 
     if (!response.ok) {
       throw new Error(response.statusText);
     }
 
+    // This data is a ReadableStream
     const data = response.body;
-
     if (!data) {
       return;
     }
@@ -90,7 +93,6 @@ const Home: NextPage = () => {
           }
 
           const choice = json.choices[0];
-
           setGeneratedBios((prev) => prev + choice.text);
         } catch (error) {
           tempState = newVal;
@@ -131,7 +133,7 @@ const Home: NextPage = () => {
               alt="1 icon"
               className="mb-5 sm:mb-0"
             />
-            <p className="text-left">
+            <p className="text-left font-medium">
               Copy your current bio{" "}
               <span className="text-slate-500">
                 (or write a few sentences about yourself)
@@ -145,12 +147,12 @@ const Home: NextPage = () => {
             rows={4}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
             placeholder={
-              "Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js."
+              "e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js."
             }
           />
           <div className="flex mb-5 items-center space-x-3">
             <Image src="/2-black.png" width={30} height={30} alt="1 icon" />
-            <p className="">Select your vibe.</p>
+            <p className="text-left font-medium">Select your vibe.</p>
           </div>
           <div className="block">
             <DropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} />
@@ -165,7 +167,10 @@ const Home: NextPage = () => {
             </button>
           )}
           {loading && (
-            <button className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full">
+            <button
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              disabled
+            >
               <LoadingDots color="white" style="large" />
             </button>
           )}
@@ -175,31 +180,37 @@ const Home: NextPage = () => {
           reverseOrder={false}
           toastOptions={{ duration: 2000 }}
         />
+        <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
         <ResizablePanel>
           <AnimatePresence mode="wait">
             <motion.div className="space-y-10 my-10">
               {generatedBios && !loading && (
-                <div className="space-y-8 flex flex-col items-center justify-center">
-                  {generatedBios
-                    .substring(5)
-                    .split("2.")
-                    .map((generatedBio) => {
-                      return (
-                        <div
-                          className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy"
-                          onClick={() => {
-                            navigator.clipboard.writeText(generatedBio);
-                            toast("Bio copied to clipboard", {
-                              icon: "✂️",
-                            });
-                          }}
-                          key={generatedBio}
-                        >
-                          <p>{generatedBio}</p>
-                        </div>
-                      );
-                    })}
-                </div>
+                <>
+                  <h2 className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto">
+                    Your generated bios
+                  </h2>
+                  <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+                    {generatedBios
+                      .substring(5)
+                      .split("2.")
+                      .map((generatedBio) => {
+                        return (
+                          <div
+                            className="bg-white rounded-xl shadow-md px-3 py-4 hover:bg-gray-100 transition cursor-copy border"
+                            onClick={() => {
+                              navigator.clipboard.writeText(generatedBio);
+                              toast("Bio copied to clipboard", {
+                                icon: "✂️",
+                              });
+                            }}
+                            key={generatedBio}
+                          >
+                            <p>{generatedBio}</p>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </>
               )}
             </motion.div>
           </AnimatePresence>
