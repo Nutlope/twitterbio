@@ -6,7 +6,6 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-// TODO: Make sure 'active' is working
 export default function DropDown({ vibe, setVibe }: any) {
   return (
     <Menu as="div" className="relative block text-left w-full">

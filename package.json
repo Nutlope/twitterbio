@@ -15,6 +15,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.42.0",
+    "react-hot-toast": "^2.4.0",
     "react-use-measure": "^2.1.1"
   },
   "devDependencies": {
