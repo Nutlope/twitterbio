@@ -7,7 +7,7 @@ export default function Header() {
       <Link href="/" className="flex space-x-3">
         <Image
           alt="header text"
-          src="/writingIcon2.png"
+          src="/writingIcon.png"
           className="sm:w-12 sm:h-12 w-8 h-8"
           width={32}
           height={32}
