@@ -6,12 +6,12 @@ export default function Footer() {
       <div>
         Powered by{" "}
         <a
-          href="https://replicate.com/"
+          href="https://openai.com/"
           target="_blank"
           rel="noreferrer"
           className="font-bold hover:underline transition underline-offset-2"
         >
-          Next.js{" "}
+          OpenAI{" "}
         </a>
         and{" "}
         <a
