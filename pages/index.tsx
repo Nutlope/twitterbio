@@ -119,16 +119,22 @@ const Home: NextPage = () => {
           <Github />
           <p>Star on GitHub</p>
         </a>
-        <h1 className="text-6xl max-w-2xl font-bold text-slate-900">
+        <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900">
           Generate your next Twitter bio in seconds
         </h1>
         <div className="max-w-xl">
           <div className="flex mt-10 items-center space-x-3">
-            <Image src="/1-black.png" width={30} height={30} alt="1 icon" />
-            <p className="">
+            <Image
+              src="/1-black.png"
+              width={30}
+              height={30}
+              alt="1 icon"
+              className="mb-5 sm:mb-0"
+            />
+            <p className="text-left">
               Copy your current bio{" "}
               <span className="text-slate-500">
-                (or write some sentences about yourself)
+                (or write a few sentences about yourself)
               </span>
               .
             </p>
@@ -147,7 +153,7 @@ const Home: NextPage = () => {
             <p className="">Select your vibe.</p>
           </div>
           <div className="block">
-            <DropDown vibe={vibe} setVibe={setVibe} />
+            <DropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} />
           </div>
 
           {!loading && (

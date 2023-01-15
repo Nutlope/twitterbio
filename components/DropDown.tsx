@@ -6,7 +6,14 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function DropDown({ vibe, setVibe }: any) {
+type vibeType = "Professional Vibe" | "Casual Vibe" | "Funny Vibe";
+
+interface DropDownProps {
+  vibe: "Professional Vibe" | "Casual Vibe" | "Funny Vibe";
+  setVibe: (vibe: vibeType) => void;
+}
+
+export default function DropDown({ vibe, setVibe }: DropDownProps) {
   return (
     <Menu as="div" className="relative block text-left w-full">
       <div>
