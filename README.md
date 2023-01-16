@@ -14,7 +14,7 @@
 
 - [x] Figure out how to hard limit them to 160 character
 - [x] Fix bug in the dropdown where it's not highlighting the currently selected option
-- [ ] Rebuild this with a serverless function and run benchmarks on the difference
+- [x] Rebuild this with a serverless function and run benchmarks on the difference
 - [ ] Make better README, add it to templates marketplace, & launch on Twitter
 
 ## Ideas
