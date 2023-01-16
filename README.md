@@ -1,24 +1,27 @@
-# TwitterBio
+# [TwitterBio.com](https://www.twitterbio.com/)
 
-## Todos v1
+This project generates Twitter bios for you using AI.
 
-- [x] Proof of concept in OpenAI playgroups
-- [x] v1 of desktop UI
-- [x] v1 of edge function streaming
-- [x] Make site fully responsive
-- [x] Get it to perfect lighthouse score
-- [x] Clean up code for generatebio function
-- [x] Show streaming in console.logs
+[![Twitter Bio Generator](./public/screenshot.png)](https://www.twitterbio.com)
 
-## Todos v2
+## How it works
 
-- [x] Figure out how to hard limit them to 160 character
-- [x] Fix bug in the dropdown where it's not highlighting the currently selected option
-- [x] Rebuild this with a serverless function and run benchmarks on the difference
-- [ ] Make better README, add it to templates marketplace, & launch on Twitter
+This project uses the GPT-3 API from OpenAI (specifically, davinci-text-003) and Vercel Edge functions with streaming. It constructs a prompt based on the form and user input, sends it to the GPT-3 API via a Vercel Edge function, then streams the response back to the application.
 
-## Ideas
+Video and blog post coming soon on how to build apps with OpenAI and Vercel Edge functions!
 
-- Maybe add a "poetic" vibe
-- Maybe add a "short" vs "long" dropdown
-- Maybe do a linkedin version
+## Running Locally
+
+After cloning the repo, go to [OpenAI](https://replicate.com/) to make an account and put your API key in a file called `.env`.
+
+Then, run the application in the command line and it will be available at `http://localhost:3000`.
+
+```bash
+npm run dev
+```
+
+## One-Click Deploy
+
+Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Nutlope/twitterbio&env=OPENAI_API_KEY&project-name=twitter-bio-generator&repo-name=twitterbio)

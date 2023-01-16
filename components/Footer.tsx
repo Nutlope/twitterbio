@@ -37,7 +37,7 @@ export default function Footer() {
           </svg>
         </Link>
         <Link
-          href="https://github.com/vercel/twitter-bio-generator"
+          href="https://github.com/Nutlope/twitterbio"
           className="group"
           aria-label="TaxPal on GitHub"
         >
