@@ -21,6 +21,15 @@ const Home: NextPage = () => {
 
   console.log("Streamed response: ", generatedBios);
 
+  const prompt =
+    vibe === "Funny"
+      ? `Generate 2 ${vibe} twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Also base it on this bio: ${bio}${
+          bio.slice(-1) === "." ? "" : "."
+        }`
+      : `Generate 2 ${vibe} twitter bios with no hashtags and clearly labeled "1." and "2." based on this bio: ${bio}${
+          bio.slice(-1) === "." ? "" : "."
+        }`;
+
   const generateBio = async (e: any) => {
     e.preventDefault();
     setGeneratedBios("");
@@ -31,12 +40,7 @@ const Home: NextPage = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: `Generate 2 ${vibe.substring(
-          0,
-          vibe.indexOf(" ")
-        )} twitter bios with no hashtags and clearly labeled "1." and "2." based on this bio: ${bio}${
-          bio.slice(-1) === "." ? "" : "."
-        }`,
+        prompt,
       }),
     });
     console.log("Edge function returned.");
