@@ -23,10 +23,10 @@ const Home: NextPage = () => {
 
   const prompt =
     vibe === "Funny"
-      ? `Generate 2 ${vibe} twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Also base it on this bio: ${bio}${
+      ? `Generate 2 ${vibe} twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Make sure each generated bio is 160 characters max and base it on this bio: ${bio}${
           bio.slice(-1) === "." ? "" : "."
         }`
-      : `Generate 2 ${vibe} twitter bios with no hashtags and clearly labeled "1." and "2." based on this bio: ${bio}${
+      : `Generate 2 ${vibe} twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure each generated bio is 160 characters max and base them on this bio: ${bio}${
           bio.slice(-1) === "." ? "" : "."
         }`;
 
