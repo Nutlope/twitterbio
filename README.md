@@ -13,7 +13,7 @@
 ## Todos v2
 
 - [x] Figure out how to hard limit them to 160 character
-- [ ] Fix bug in the dropdown where it's not highlighting the currently selected option
+- [x] Fix bug in the dropdown where it's not highlighting the currently selected option
 - [ ] Rebuild this with a serverless function and run benchmarks on the difference
 - [ ] Make better README and add it to templates marketplace
 - [ ] Launch site on Twitter w/ templates marketplace & github link

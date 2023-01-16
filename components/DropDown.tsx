@@ -1,5 +1,9 @@
 import { Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/20/solid";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@heroicons/react/20/solid";
 import { Fragment } from "react";
 
 function classNames(...classes: string[]) {
@@ -12,6 +16,8 @@ interface DropDownProps {
   vibe: "Professional" | "Casual" | "Funny";
   setVibe: (vibe: vibeType) => void;
 }
+
+let vibes: vibeType[] = ["Professional", "Casual", "Funny"];
 
 export default function DropDown({ vibe, setVibe }: DropDownProps) {
   return (
@@ -39,47 +45,30 @@ export default function DropDown({ vibe, setVibe }: DropDownProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute left-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items
+          className="absolute left-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          key={vibe}
+        >
           <div className="">
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  onClick={() => setVibe("Professional")}
-                  className={classNames(
-                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                    "block px-4 py-2 text-sm w-full text-left"
-                  )}
-                >
-                  Professional
-                </button>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  onClick={() => setVibe("Casual")}
-                  className={classNames(
-                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                    "block px-4 py-2 text-sm w-full text-left"
-                  )}
-                >
-                  Casual
-                </button>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  onClick={() => setVibe("Funny")}
-                  className={classNames(
-                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                    "block px-4 py-2 text-sm w-full text-left"
-                  )}
-                >
-                  Funny
-                </button>
-              )}
-            </Menu.Item>
+            {vibes.map((vibeItem) => (
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    onClick={() => setVibe(vibeItem)}
+                    className={classNames(
+                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                      vibe === vibeItem ? "bg-gray-200" : "",
+                      "px-4 py-2 text-sm w-full text-left flex items-center space-x-2 justify-between"
+                    )}
+                  >
+                    <span>{vibeItem}</span>
+                    {vibe === vibeItem ? (
+                      <CheckIcon className="w-4 h-4 text-bold" />
+                    ) : null}
+                  </button>
+                )}
+              </Menu.Item>
+            ))}
           </div>
         </Menu.Items>
       </Transition>
