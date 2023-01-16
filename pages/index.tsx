@@ -23,10 +23,10 @@ const Home: NextPage = () => {
 
   const prompt =
     vibe === "Funny"
-      ? `Generate 2 ${vibe} twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Make sure each generated bio is 160 characters max and base it on this bio: ${bio}${
+      ? `Generate 2 funny twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Make sure each generated bio is at max 20 words and base it on this context: ${bio}${
           bio.slice(-1) === "." ? "" : "."
         }`
-      : `Generate 2 ${vibe} twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure each generated bio is 160 characters max and base them on this bio: ${bio}${
+      : `Generate 2 ${vibe} twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure each generated bio is at least 14 words and at max 20 words and base them on this context: ${bio}${
           bio.slice(-1) === "." ? "" : "."
         }`;
 
@@ -192,9 +192,11 @@ const Home: NextPage = () => {
             <motion.div className="space-y-10 my-10">
               {generatedBios && !loading && (
                 <>
-                  <h2 className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto">
-                    Your generated bios
-                  </h2>
+                  <div>
+                    <h2 className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto">
+                      Your generated bios
+                    </h2>
+                  </div>
                   <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                     {generatedBios
                       .substring(generatedBios.indexOf("1") + 3)
