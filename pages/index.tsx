@@ -4,7 +4,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
-import DropDown from "../components/DropDown";
+import DropDown, { VibeType } from "../components/DropDown";
 import Footer from "../components/Footer";
 import Github from "../components/GitHub";
 import Header from "../components/Header";
@@ -14,7 +14,7 @@ import ResizablePanel from "../components/ResizablePanel";
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState("");
-  const [vibe, setVibe] = useState<"Professional" | "Casual" | "Funny">(
+  const [vibe, setVibe] = useState<VibeType>(
     "Professional"
   );
   const [generatedBios, setGeneratedBios] = useState<String>("");
