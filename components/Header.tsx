@@ -16,7 +16,11 @@ export default function Header() {
           twitterBio.com
         </h1>
       </Link>
-      <a href="https://vercel.ai" target="_blank" rel="noreferrer">
+      <a
+        href="https://vercel.com/templates/next.js/twitter-bio"
+        target="_blank"
+        rel="noreferrer"
+      >
         <Image
           alt="Vercel Icon"
           src="/vercelLogo.png"
