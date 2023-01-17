@@ -51,7 +51,7 @@ export default function DropDown({ vibe, setVibe }: DropDownProps) {
         >
           <div className="">
             {vibes.map((vibeItem) => (
-              <Menu.Item>
+              <Menu.Item key={vibeItem}>
                 {({ active }) => (
                   <button
                     onClick={() => setVibe(vibeItem)}
