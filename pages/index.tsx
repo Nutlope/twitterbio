@@ -19,7 +19,6 @@ const Home: NextPage = () => {
   );
   const [generatedBios, setGeneratedBios] = useState<String>("");
 
-  console.log("Streamed response: ", generatedBios);
 
   const prompt =
     vibe === "Funny"
@@ -43,7 +42,6 @@ const Home: NextPage = () => {
         prompt,
       }),
     });
-    console.log("Edge function returned.");
 
     if (!response.ok) {
       throw new Error(response.statusText);
