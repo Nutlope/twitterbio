@@ -1,4 +1,9 @@
 import type { NextRequest } from "next/server";
+import {
+  createParser,
+  ParsedEvent,
+  ReconnectInterval,
+} from "eventsource-parser";
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing env var from OpenAI");
@@ -16,6 +21,9 @@ const handler = async (req: NextRequest): Promise<Response> => {
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
   }
+
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
 
   const payload = {
     model: "text-davinci-003",
@@ -38,11 +46,41 @@ const handler = async (req: NextRequest): Promise<Response> => {
     body: JSON.stringify(payload),
   });
 
-  const data = res.body;
+  let counter = 0;
+  const stream = new ReadableStream({
+    async start(controller) {
+      // callback
+      function onParse(event: ParsedEvent | ReconnectInterval) {
+        if (event.type === "event") {
+          const data = event.data;
+          // https://beta.openai.com/docs/api-reference/completions/create#completions/create-stream
+          if (data === "[DONE]") {
+            controller.close();
+            return;
+          }
+          const json = JSON.parse(data);
+          const text = json.choices[0].text;
+          if (counter < 2 && (text.match(/\n/) || []).length) {
+            // this is a prefix character (i.e., "\n\n"), do nothing
+            return;
+          }
+          const queue = encoder.encode(text);
+          controller.enqueue(queue);
+          counter++;
+        }
+      }
 
-  return new Response(data, {
-    headers: { "Content-Type": "application/json; charset=utf-8" },
+      // stream response (SSE) from OpenAI may be fragmented into multiple chunks
+      // this ensures we properly read chunks and invoke an event for each SSE event stream
+      const parser = createParser(onParse);
+      // https://web.dev/streams/#asynchronous-iteration
+      for await (const chunk of res.body as any) {
+        parser.feed(decoder.decode(chunk));
+      }
+    },
   });
+
+  return new Response(stream);
 };
 
 export default handler;
