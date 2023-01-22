@@ -59,51 +59,11 @@ const Home: NextPage = () => {
     const decoder = new TextDecoder();
 
     let done = false;
-    let tempState = "";
-
     while (!done) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
-      const newValue = decoder
-        .decode(value)
-        .replaceAll("data: ", "")
-        .split("\n\n")
-        .filter(Boolean);
-
-      if (tempState) {
-        newValue[0] = tempState + newValue[0];
-        tempState = "";
-      }
-
-      newValue.forEach((newVal) => {
-        if (newVal === "[DONE]") {
-          return;
-        }
-
-        try {
-          const json = JSON.parse(newVal) as {
-            id: string;
-            object: string;
-            created: number;
-            choices?: {
-              text: string;
-              index: number;
-              logprobs: null;
-              finish_reason: null | string;
-            }[];
-            model: string;
-          };
-
-          if (!json.choices?.length) {
-            throw new Error("Something went wrong.");
-          }
-
-          const choice = json.choices[0];
-          setGeneratedBios((prev) => prev + choice.text);
-        } catch (error) {
-          tempState = newVal;
-        }
-      });
+      const chunkValue = decoder.decode(value);
+      setGeneratedBios((prev) => prev + chunkValue);
     }
 
     setLoading(false);
