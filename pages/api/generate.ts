@@ -58,15 +58,20 @@ const handler = async (req: NextRequest): Promise<Response> => {
             controller.close();
             return;
           }
-          const json = JSON.parse(data);
-          const text = json.choices[0].text;
-          if (counter < 2 && (text.match(/\n/) || []).length) {
-            // this is a prefix character (i.e., "\n\n"), do nothing
-            return;
+          try {
+            const json = JSON.parse(data);
+            const text = json.choices[0].text;
+            if (counter < 2 && (text.match(/\n/) || []).length) {
+              // this is a prefix character (i.e., "\n\n"), do nothing
+              return;
+            }
+            const queue = encoder.encode(text);
+            controller.enqueue(queue);
+            counter++;
+          } catch (e) {
+            // maybe parse error
+            controller.error(e);
           }
-          const queue = encoder.encode(text);
-          controller.enqueue(queue);
-          counter++;
         }
       }
 
