@@ -13,7 +13,7 @@ function classNames(...classes: string[]) {
 export type VibeType = "Professional" | "Casual" | "Funny";
 
 interface DropDownProps {
-  vibe: VibeType
+  vibe: VibeType;
   setVibe: (vibe: VibeType) => void;
 }
 
