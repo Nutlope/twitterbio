@@ -30,6 +30,7 @@ const Home: NextPage = () => {
     e.preventDefault();
     setGeneratedBios("");
     setLoading(true);
+
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: {
@@ -45,7 +46,6 @@ const Home: NextPage = () => {
     }
 
     let answer = await response.json();
-    console.log({ answer });
     setGeneratedBios(answer.choices[0].text);
     setLoading(false);
   };
