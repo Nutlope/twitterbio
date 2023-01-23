@@ -17,8 +17,6 @@ const Home: NextPage = () => {
   const [vibe, setVibe] = useState<VibeType>("Professional");
   const [generatedBios, setGeneratedBios] = useState<String>("");
 
-  console.log("Streamed response: ", generatedBios);
-
   const prompt =
     vibe === "Funny"
       ? `Generate 2 funny twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Make sure each generated bio is at max 20 words and base it on this context: ${bio}${
@@ -41,29 +39,14 @@ const Home: NextPage = () => {
         prompt,
       }),
     });
-    console.log("Edge function returned.");
 
     if (!response.ok) {
       throw new Error(response.statusText);
     }
 
-    // This data is a ReadableStream
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-
-    let done = false;
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      setGeneratedBios((prev) => prev + chunkValue);
-    }
-
+    let answer = await response.json();
+    console.log({ answer });
+    setGeneratedBios(answer.choices[0].text);
     setLoading(false);
   };
 
