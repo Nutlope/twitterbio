@@ -55,8 +55,8 @@ const Home: NextPage = () => {
 
     const reader = data.getReader();
     const decoder = new TextDecoder();
-
     let done = false;
+
     while (!done) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
