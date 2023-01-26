@@ -13,15 +13,7 @@ export default function Footer() {
         >
           OpenAI{" "}
         </a>
-        and{" "}
-        <a
-          href="https://vercel.com/"
-          target="_blank"
-          rel="noreferrer"
-          className="font-bold hover:underline transition underline-offset-2"
-        >
-          Vercel Edge Functions.
-        </a>
+        and Next.js Serverless Functions.
       </div>
       <div className="flex space-x-4 pb-4 sm:pb-0">
         <Link
