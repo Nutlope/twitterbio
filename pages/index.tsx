@@ -89,7 +89,7 @@ const Home: NextPage = () => {
           Generate your next Twitter bio in seconds
         </h1>
         <p className="text-slate-500 mt-5">18,167 bios generated so far.</p>
-        <div className="max-w-xl">
+        <div className="max-w-xl w-full">
           <div className="flex mt-10 items-center space-x-3">
             <Image
               src="/1-black.png"
