@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { OpenAIStream, OpenAIStreamPayload } from "../../utils/OpenAIStream";
+import { generatePrompt, vibes, VibeType } from "../../utils/prompt";
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing env var from OpenAI");
@@ -9,14 +10,27 @@ export const config = {
   runtime: "edge",
 };
 
-const handler = async (req: NextRequest): Promise<Response> => {
-  const { prompt } = (await req.json()) as {
-    prompt?: string;
-  };
+type GenerateRequestBody = {
+  bio?: string;
+  vibe?: VibeType;
+};
 
-  if (!prompt) {
-    return new Response("No prompt in the request", { status: 400 });
+const handler = async (req: NextRequest): Promise<Response> => {
+  if (req.method !== "POST") {
+    return new Response("Method not allowed", { status: 405 });
   }
+
+  const { bio, vibe } = (await req.json()) as GenerateRequestBody;
+
+  if (!bio) {
+    return new Response("No bio in the request", { status: 400 });
+  }
+
+  if (!vibe || !vibes.includes(vibe)) {
+    return new Response("Invalid vibe", { status: 400 });
+  }
+
+  const prompt = generatePrompt(bio, vibe);
 
   const payload: OpenAIStreamPayload = {
     model: "text-davinci-003",

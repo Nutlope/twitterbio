@@ -3,13 +3,14 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
-import { Toaster, toast } from "react-hot-toast";
-import DropDown, { VibeType } from "../components/DropDown";
+import { toast, Toaster } from "react-hot-toast";
+import DropDown from "../components/DropDown";
 import Footer from "../components/Footer";
 import Github from "../components/GitHub";
 import Header from "../components/Header";
 import LoadingDots from "../components/LoadingDots";
 import ResizablePanel from "../components/ResizablePanel";
+import { type VibeType } from "../utils/prompt";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -18,15 +19,6 @@ const Home: NextPage = () => {
   const [generatedBios, setGeneratedBios] = useState<String>("");
 
   console.log("Streamed response: ", generatedBios);
-
-  const prompt =
-    vibe === "Funny"
-      ? `Generate 2 funny twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Make sure each generated bio is at max 20 words and base it on this context: ${bio}${
-          bio.slice(-1) === "." ? "" : "."
-        }`
-      : `Generate 2 ${vibe} twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure each generated bio is at least 14 words and at max 20 words and base them on this context: ${bio}${
-          bio.slice(-1) === "." ? "" : "."
-        }`;
 
   const generateBio = async (e: any) => {
     e.preventDefault();
@@ -38,7 +30,8 @@ const Home: NextPage = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt,
+        bio,
+        vibe,
       }),
     });
     console.log("Edge function returned.");
