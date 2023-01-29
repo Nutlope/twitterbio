@@ -122,7 +122,7 @@ const handler = async (req: NextRequest): Promise<Response> => {
   const { toolName, formData } = (await req.json()) as {
     toolName: string;
     formData: { [key: string]: string };
-};
+  };
 
   // if (!prompt) {
   //   return new Response("No prompt in the request", { status: 400 });
@@ -140,7 +140,7 @@ const handler = async (req: NextRequest): Promise<Response> => {
   //   stream: true,
   //   n: 1,
   // };
-  
+
 
   const payload = await fetch('http://localhost:5001/toolModel', {
     method: 'POST',
