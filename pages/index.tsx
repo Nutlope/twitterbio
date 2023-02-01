@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import { useState } from 'react'
 import { Toaster, toast } from 'react-hot-toast'
 import DropDown, { VibeType } from '../components/DropDown'
@@ -22,10 +21,10 @@ const Home: NextPage = () => {
 
   const prompt =
     vibe === 'Funny'
-      ? `Generate 2 funny text summaries with no hashtags and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Make sure each generated summary is at max ${length} words and base it on this context: ${summary}${
+      ? `Generate 2 funny text summaries with no hashtags and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Make sure each generated summary is ${length} words minimun/limit and base it on this context: ${summary}${
           summary.slice(-1) === '.' ? '' : '.'
         }`
-      : `Generate 2 ${vibe} summaries clearly labeled "1." and "2.". Make sure each generated summary is at least ${length} words limit and base them on this context: ${summary}${
+      : `Generate 2 ${vibe} summaries clearly labeled "1." and "2.". Make sure each generated summary ${length} words minimun/limit and base them on this context: ${summary}${
           summary.slice(-1) === '.' ? '' : '.'
         }`
 
@@ -91,13 +90,9 @@ const Home: NextPage = () => {
         </h1>
         <div className='w-full max-w-xl'>
           <div className='flex items-center mt-10 space-x-3'>
-            <Image
-              src='/1-black.png'
-              width={30}
-              height={30}
-              alt='1 icon'
-              className='mb-5 sm:mb-0'
-            />
+            <div className='flex items-center justify-center w-12 h-10 text-sm text-white bg-black rounded-full'>
+              <p>1</p>
+            </div>
             <p className='font-medium text-left'>
               Copy current summary{' '}
               <span className='text-slate-500'>
@@ -117,37 +112,41 @@ const Home: NextPage = () => {
             }
           />
           <div className='flex items-center mb-5 space-x-3'>
-            <Image src='/2-black.png' width={30} height={30} alt='1 icon' />
+            <div className='flex items-center justify-center w-10 h-10 text-sm text-white bg-black rounded-full'>
+              <p>2</p>
+            </div>
             <p className='font-medium text-left'>Select your vibe.</p>
           </div>
           <div className='block'>
             <DropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} />
           </div>
           <div className='flex items-center mt-8 mb-5 space-x-3'>
-            <Image src='/2-black.png' width={30} height={30} alt='1 icon' />
+            <div className='flex items-center justify-center w-10 h-10 text-sm text-white bg-black rounded-full'>
+              <p>3</p>
+            </div>
             <p className='font-medium text-left'>
               Select the length of your summary.
             </p>
 
             {/* input counter */}
-            <div className='flex items-center justify-center w-10 h-10 ml-2 text-sm text-white bg-black rounded-full'>
-              <p>{length}</p>
+            <div className='flex items-center justify-center w-20 h-8 ml-2 text-sm text-white bg-black rounded'>
+              <p>{length} words</p>
             </div>
           </div>
 
-          <div className='flex items-center justify-center w-full mt-5 space-x-3'>
-            <div className='flex items-center justify-center w-10 h-10 text-sm text-white bg-black rounded-full'>
-              <p>1</p>
+          <div className='flex items-center justify-center w-full mt-12 space-x-3'>
+            <div className='flex items-center justify-center w-12 h-10 text-sm text-white bg-blue-600 rounded-full'>
+              <p>10</p>
             </div>
             <input
               type='range'
-              min='1'
+              min='10'
               max='100'
               value={length}
               onChange={(e) => setLength(parseInt(e.target.value))}
               className='w-full h-2 bg-gray-300 rounded-full cursor-pointer'
             />
-            <div className='flex items-center justify-center w-10 h-10 text-sm text-white bg-black rounded-full'>
+            <div className='flex items-center justify-center w-12 h-10 text-sm text-white bg-blue-600 rounded-full'>
               <p>100</p>
             </div>
           </div>
@@ -158,8 +157,11 @@ const Home: NextPage = () => {
 
           {!loading && (
             <button
-              className='w-full px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80'
+              className={`w-full px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80 ${
+                summary.length === 10 && 'opacity-50 cursor-not-allowed'
+              }`}
               onClick={(e) => generateSummary(e)}
+              disabled={summary.length === 0}
             >
               Generate summary &rarr;
             </button>
