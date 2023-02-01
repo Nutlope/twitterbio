@@ -1,43 +1,22 @@
-import Document, { Head, Html, Main, NextScript } from "next/document";
+import Document, { Head, Html, Main, NextScript } from 'next/document'
 
 class MyDocument extends Document {
   render() {
     return (
-      <Html lang="en">
+      <Html lang='en'>
         <Head>
-          <link rel="icon" href="/favicon.ico" />
-          <meta
-            name="description"
-            content="Generate your next Twitter bio in seconds."
-          />
-          <meta property="og:site_name" content="twitterbio.com" />
-          <meta
-            property="og:description"
-            content="Generate your next Twitter bio in seconds."
-          />
-          <meta property="og:title" content="Twitter Bio Generator" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="Twitter Bio Generator" />
-          <meta
-            name="twitter:description"
-            content="Generate your next Twitter bio in seconds."
-          />
-          <meta
-            property="og:image"
-            content="https://twitterbio.com/og-image.png"
-          />
-          <meta
-            name="twitter:image"
-            content="https://twitterbio.com/og-image.png"
-          />
+          <link rel='icon' href='/favicon.ico' />
+          <meta name='description' content='Summarize your text in seconds.' />
+          <meta name='theme-color' content='#000000' />
+          <meta name='viewport' content='width=device-width, initial-scale=1' />
         </Head>
         <body>
           <Main />
           <NextScript />
         </body>
       </Html>
-    );
+    )
   }
 }
 
-export default MyDocument;
+export default MyDocument
