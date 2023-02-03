@@ -1,6 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from '../../lib/prisma';
 
+
+export const config = {
+  runtime: "edge",
+};
+
 function replaceVariables(prompt: any, variables: Object[]) {
   let newPrompt = prompt;
   for (const key in variables) {

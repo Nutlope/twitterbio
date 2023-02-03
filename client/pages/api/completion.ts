@@ -1,5 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+
+export const config = {
+    runtime: "edge",
+  };
+  
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const { prompt } = req.body;
 
