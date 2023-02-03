@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model field {
+  field_id           Int                  @id(map: "fields_pkey") @default(autoincrement())
+  field_name         String               @db.VarChar(255)
+  type               String               @db.VarChar(255)
+  label              String               @db.VarChar(255)
+  placeholder        String?              @db.VarChar(255)
+  required           Boolean
+  tool_id            Int
+  status             String               @default("Active") @db.VarChar(255)
+  options            Json?
+  default_value      String?              @db.VarChar(255)
+  command            String               @default("\"\"")
+  tool               tool                 @relation(fields: [tool_id], references: [tool_id], onDelete: NoAction, onUpdate: NoAction, map: "fields_schema_id_fkey")
+  form_field_options form_field_options[]
+}
+
+model form_field_options {
+  id       Int    @id(map: "options_pkey") @default(autoincrement())
+  value    String @db.VarChar(255)
+  label    String @db.VarChar(255)
+  field_id Int
+  status   String @db.VarChar(255)
+  field    field  @relation(fields: [field_id], references: [field_id], onDelete: NoAction, onUpdate: NoAction, map: "options_field_id_fkey")
+}
+
+model tool {
+  tool_id                   Int     @id(map: "schemas_pkey") @default(autoincrement())
+  tool_name                 String  @db.VarChar(255)
+  display_name              String  @db.VarChar(255)
+  prompt                    String  @db.VarChar(5000)
+  status                    String  @db.VarChar(255)
+  created_by                String  @db.VarChar(255)
+  model                     String? @default("text-davinci-003") @db.VarChar(255)
+  temperature               Float?  @default(0.7)
+  max_tokens                Int?    @default(150)
+  top_p                     Float?  @default(1)
+  frequency_penalty         Float?  @default(1)
+  presence_penalty          Float?  @default(0)
+  long_markdown_description String? @default("") @db.VarChar(5000)
+  tags                      String? @default("[]") @db.VarChar(255)
+  example_response          String? @default("") @db.VarChar(5000)
+  n_responses               Int?    @default(1)
+  stop                      Json    @default("[\"***NO STOP SEQUENCE***\"]") @db.Json
+  field                     field[]
+}
