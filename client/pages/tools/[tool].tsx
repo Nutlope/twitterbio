@@ -659,14 +659,12 @@ interface ToolProps {
   prompt: string;
 }
 
-export async function getServerSideProps(
-  params = { tool: "blog-idea-generator" } 
-): Promise<{ props: ToolProps }> {
+export async function getServerSideProps(context: any): Promise<{ props: ToolProps }> {
+  const { toolName } = context.params;
 
-  const toolName = params.tool;
   const data = await prisma.tool.findFirst({
     where: {
-      tool_name: toolName,
+      tool_name: "midjourney-prompt-generator",
     },
     include: {
       field: true,
