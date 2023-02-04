@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { SetStateAction, useState } from "react";
-import { GetStaticProps, GetStaticPaths } from "next";
+import { GetStaticProps, GetStaticPaths, GetServerSideProps } from "next";
 import { Toaster, toast } from "react-hot-toast";
 import DropDown from "../../components/DropDown";
 import DropDownNew from "../../components/DropDownNew";
@@ -12,16 +12,37 @@ import Github from "../../components/GitHub";
 import Header from "../../components/Header";
 import LoadingDots from "../../components/LoadingDots";
 import ResizablePanel from "../../components/ResizablePanel";
+import prisma from "../../lib/prisma";
+import { tool } from "@prisma/client";
+
+// interface Props {
+//   schema: ToolSchema;
+// }
 
 interface Props {
-  schema: ToolSchema;
+  tool_name: string;
+  display_name: string;
+  fields: Array<{
+    field_name: string;
+    type: string;
+    label: string;
+    required: boolean;
+    options: { value: string; label: string; }[] | undefined;
+    placeholder: string | undefined;
+    command: string;
+  }>;
+  prompt: string;
 }
+
+
+
+
 
 interface FormData {
   [key: string]: string | undefined;
 }
 
-const Tool: NextPage<Props> = ({ schema }) => {
+const Tool: NextPage<Props> = ({ tool_name, display_name, fields, prompt }) => {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState("");
   const [vibe, setVibe] = useState<"Professional" | "Casual" | "Funny">(
@@ -29,8 +50,8 @@ const Tool: NextPage<Props> = ({ schema }) => {
   );
   const [generatedBios, setGeneratedBios] = useState<String>("");
   const [generatedBios2, setGeneratedBios2] = useState<String>("");
-  const initialFormData = schema.fields.reduce((formData, field) => {
-    formData[field.field_name] = field.type === "select" && field.options ? field.options[0].value : "";
+  const initialFormData = fields.reduce((formData, field) => {
+    formData[field.field_name] = field.type === "select" && Array.isArray(field.options) ? field.options[0].value : "";
     return formData;
   }, {} as FormData);
   //TODO is it ok to have it as type string instead of String?
@@ -60,7 +81,7 @@ const Tool: NextPage<Props> = ({ schema }) => {
   // console.log("schema", schema);
   console.log("formData", formData)
 
-  const formFields = schema.fields.map((field, index) => {
+  const formFields = fields.map((field, index) => {
     let input;
     if (field.type === "select") {
       input = (
@@ -210,9 +231,9 @@ const Tool: NextPage<Props> = ({ schema }) => {
     setGeneratedBios2("");
     setGeneratedResponsesList([]);
     setLoading(true);
-    const toolPrompt = schema.prompt;
+    const toolPrompt = prompt;
     const payload = {
-      toolName: schema.tool_name,
+      toolName: tool_name,
       formData: formData
     }
     const response = await fetch("/api/generate", {
@@ -349,7 +370,7 @@ const Tool: NextPage<Props> = ({ schema }) => {
           <p>Star on GitHub</p>
         </a> */}
         <h1 className="sm:text-6xl mb-12 text-4xl max-w-2xl font-bold text-slate-900">
-          Generate your {schema.display_name} in seconds
+          Generate your {display_name} in seconds
         </h1>
 
         <div className="max-w-xl min-w-[77%]">
@@ -461,22 +482,217 @@ interface ToolData {
 }
 
 //TODO should this default be blog-idea-geenrator?
-export const getStaticProps: GetStaticProps<{ schema: ToolSchema }, { tool: string }> = async ({ params = { tool: "blog-idea-generator" } }) => {
+// export const getStaticProps: GetStaticProps<{ schema: ToolSchema }, { tool: string }> = async ({ params = { tool: "blog-idea-generator" } }) => {
 
-  const res = await fetch(`http://localhost:300/api/schema/${params.tool}`);
-  const data = await res.json();
-  return { props: { schema: data[0] }, revalidate: 6000 };
+//   const res = await fetch(`http://localhost:300/api/schema/${params.tool}`);
+//   const data = await res.json();
+//   return { props: { schema: data[0] }, revalidate: 6000 };
+// };
+
+// export const getStaticPaths: GetStaticPaths<{ tool: string }> = async () => {
+//   const res = await fetch("http://localhost:300/api/allTools");
+//   const data = await res.json() as ToolData[];
+//   const paths = data.map((tool) => {
+//     return { params: { tool: tool.tool_name } };
+//   });
+//   return { paths, fallback: true};
+// };
+
+// export const getStaticProps: GetStaticProps<{ schema: ToolSchema }, { tool: string }> = async ({ params = { tool } }) => {
+//   const schema = await prisma.tool.findFirst({ where: { tool_name: params.tool } })
+
+//   return { props: { schema } }
+// };
+// export const getStaticProps: GetStaticProps<{ schema: ToolSchema }, { tool: string }> = async ({ params = { tool: "blog-idea-generator" } }) => {
+
+//     const data = await prisma.tool.findFirst({ where: { tool_name: params.tool } })
+
+//     return { props: { schema: data }, revalidate: 6000 }
+// };
+
+// export const getStaticPaths: GetStaticPaths<{ tool: string }> = async () => {
+//   const tools = await prisma.tool.findMany()
+//   const paths = tools.map(tool => ({ params: { tool: tool.tool_name } }))
+
+//   return { paths, fallback: false }
+// };
+
+// export default Tool;
+
+
+// export const getStaticProps: GetStaticProps<{ schema: ToolSchema }, { tool: string }> = async ({ params = { tool: "blog-idea-generator" } }) => {
+//     const toolName = typeof params.tool === 'string' ? params.tool : 'blog-idea-generator'
+//     const data = await prisma.tool.findFirst({ where: { tool_name: toolName } })
+//     console.log(data)
+//     return { props: { schema: data }, revalidate: 6000 }
+//   } catch (error) {
+//     console.error(error)
+//     return { props: { schema: null }, revalidate: 6000 }
+//   }
+// }
+
+// export const getStaticPaths: GetStaticPaths = async () => {
+
+//   try {
+//     const tools = await prisma.tool.findMany()
+//     const paths = tools.map(tool => ({ params: { tool: tool.tool_name } }))
+//     return { paths, fallback: true }
+//   } catch (error) {
+//     console.error(error)
+//     return { paths: [], fallback: true}
+//   }
+// }
+
+interface ToolSchema {
+  tool_name: string;
+  display_name: string;
+  fields: {
+    field_name: string;
+    type: string;
+    label: string;
+    required: boolean;
+    options?: { value: string; label: string }[];
+    placeholder?: string;
+    command: string;
+  }[];
+  prompt: string;
+}
+
+const ToolSchemaConverter = (tool: {
+  tool_id: number;
+  tool_name: string;
+  display_name: string;
+  prompt: string;
+  status: string;
+  created_by: string;
+  model?: string;
+  temperature?: number;
+  max_tokens?: number;
+  top_p?: number;
+  frequency_penalty?: number;
+  presence_penalty?: number;
+  long_markdown_description?: string;
+  tags?: string;
+  example_response?: string;
+  n_responses?: number;
+  stop: string;
+  fields: any[];
+}): ToolSchema => {
+  return {
+    tool_name: tool.tool_name,
+    display_name: tool.display_name,
+    fields: tool.fields.map((field: any) => {
+      return {
+        field_name: field.field_name,
+        type: field.type,
+        label: field.label,
+        required: field.required,
+        options: field.options,
+        placeholder: field.placeholder,
+        command: field.command
+      };
+    }),
+    prompt: tool.prompt
+  };
 };
 
-export const getStaticPaths: GetStaticPaths<{ tool: string }> = async () => {
-  const res = await fetch("http://localhost:300/api/allTools");
-  const data = await res.json() as ToolData[];
-  const paths = data.map((tool) => {
-    return { params: { tool: tool.tool_name } };
+
+// export const getStaticProps: GetStaticProps<{ schema: tool }, { tool: string }> = async ({ params = { tool: "blog-idea-generator" } }) => {
+
+//   const data = await prisma.tool.findFirst({ where: { tool_name: params.tool } }) as tool
+//   return { props: { schema: data }, revalidate: 6000 };
+// };
+
+// export const getStaticPaths: GetStaticPaths<{ tool: string }> = async () => {
+//   // const res = await fetch("http://localhost:300/api/allTools");
+//   // const data = await res.json() as ToolData[];
+//   const data = await prisma.tool.findMany() as ToolData[]
+//   const paths = data.map((tool) => {
+//     return { params: { tool: tool.tool_name } };
+//   });
+//   return { paths, fallback: true};
+// };
+
+// export const getStaticProps: GetStaticProps<{ schema: ToolSchema }, { tool: string }> = async ({ params = { tool: "blog-idea-generator" } }) => {
+//   const data = await prisma.tool.findFirst({ where: { tool_name: params.tool }, select: { ...tool, fields: true }}) as tool | null;
+//   if (!data) {
+//     throw new Error('Tool not found');
+//   }
+//   const schema = ToolSchemaConverter.convert(data);
+
+//   // const fields = await prisma.field.findFirst({ where: { tool_id: data.tool_id } });
+//   // if (!fields) {
+//   //   throw new Error('Tool not found');
+//   // }
+//   // const schema: ToolSchema = {
+//   //   tool_name: data.tool_name,
+//   //   display_name: data.display_name,
+//   //   fields: fields,
+//   //   prompt: data.prompt,
+//   // };
+//   return { props: { schema }, revalidate: 6000 };
+// };
+
+// export const getStaticPaths: GetStaticPaths<{ tool: string }> = async () => {
+//   const data = await prisma.tool.findMany();
+//   const paths = data.map((tool) => {
+//     return { params: { tool: tool.tool_name } };
+//   });
+//   return { paths, fallback: true};
+// };
+
+
+import { NextPageContext } from "next";
+
+interface ToolProps {
+  tool_name: string;
+  display_name: string;
+  fields: {
+    field_name: string;
+    type: string;
+    label: string;
+    required: boolean;
+    options: any;
+    placeholder: string | null;
+    command: string;
+  }[];
+  prompt: string;
+}
+
+export async function getServerSideProps(
+  params = { tool: "blog-idea-generator" } 
+): Promise<{ props: ToolProps }> {
+
+  const toolName = params.tool;
+  const data = await prisma.tool.findFirst({
+    where: {
+      tool_name: toolName,
+    },
+    include: {
+      field: true,
+    },
   });
-  return { paths, fallback: true};
-};
-
-
+    if (!data) {
+    throw new Error('Tool not found');
+  }
+  return {
+    props: {
+      tool_name: data.tool_name,
+      display_name: data.display_name,
+      fields: data.field.map((field: { field_name: any; type: any; label: any; required: any; options: any; placeholder: any; command: any; }) => {
+        return {
+          field_name: field.field_name,
+          type: field.type,
+          label: field.label,
+          required: field.required,
+          options: field.options,
+          placeholder: field.placeholder,
+          command: field.command,
+        };
+      }),
+      prompt: data.prompt,
+    },
+  };
+}
 
 export default Tool;
