@@ -463,13 +463,13 @@ interface ToolData {
 //TODO should this default be blog-idea-geenrator?
 export const getStaticProps: GetStaticProps<{ schema: ToolSchema }, { tool: string }> = async ({ params = { tool: "blog-idea-generator" } }) => {
 
-  const res = await fetch(`/api/schema/${params.tool}`);
+  const res = await fetch(`http://localhost:300/api/schema/${params.tool}`);
   const data = await res.json();
   return { props: { schema: data[0] }, revalidate: 6000 };
 };
 
 export const getStaticPaths: GetStaticPaths<{ tool: string }> = async () => {
-  const res = await fetch("/api/allTools");
+  const res = await fetch("http://localhost:300/api/allTools");
   const data = await res.json() as ToolData[];
   const paths = data.map((tool) => {
     return { params: { tool: tool.tool_name } };
