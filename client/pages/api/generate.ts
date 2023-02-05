@@ -108,7 +108,10 @@
 // export default handler;
 
 
-import type { NextRequest } from "next/server";
+import type { NextApiRequest, NextApiResponse } from "next";
+import prisma from '../../lib/prisma';
+import axios from 'axios';
+import { replaceVariables, validatePrompt } from "../../lib/util";
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing env var from OpenAI");
@@ -118,11 +121,8 @@ export const config = {
   runtime: "edge",
 };
 
-const handler = async (req: NextRequest): Promise<Response> => {
-  const { toolName, formData } = (await req.json()) as {
-    toolName: string;
-    formData: { [key: string]: string };
-  };
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { toolName, formValues } = req.body;
 
   // if (!prompt) {
   //   return new Response("No prompt in the request", { status: 400 });
@@ -142,39 +142,64 @@ const handler = async (req: NextRequest): Promise<Response> => {
   // };
 
 
-  const payload = await fetch('http://localhost:5001/toolModel', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      toolName,
-      formData
-    })
-  })
-  .then(res => res.json())
-  .then(data => data)
-  .catch(err => console.log(err))
+  try {
+    const modelResponse = await prisma.tool.findMany({
+      where: { tool_name: toolName }
+    });
 
-  console.log("payload is ", payload)
+    if (modelResponse.length === 0) {
+      return res.status(400).json({ error: 'Error fetching prompt'});
+    }
 
+    console.log("prrsp", modelResponse[0]);
 
-  const res = await fetch("https://api.openai.com/v1/completions", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY ?? ""}`,
-    },
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+    const model = modelResponse[0];
 
+    const promptWithVariables = replaceVariables(model.prompt, formValues);
+    const isValid = validatePrompt(promptWithVariables);
 
-  const data = res.body;
-  // const data = "e"
+    if (!isValid) {
+      return res.status(400).send({ error: 'Error parsing prompt' });
+    }
+    console.log("stop", model.stop);
 
-  return new Response(data, {
-    headers: { "Content-Type": "application/json; charset=utf-8" },
-  });
+    console.log("prompt is ", promptWithVariables)
+
+    try {
+      axios.post('https://api.openai.com/v1/completions', {
+          model: "text-davinci-003",
+          prompt: promptWithVariables,
+          temperature: model.temperature,
+          max_tokens: model.max_tokens,
+          top_p: model.top_p,
+          frequency_penalty: model.frequency_penalty,
+          presence_penalty: model.presence_penalty,
+          n: model.n_responses,
+          stop: JSON.parse(model.stop!.toString())
+      }, {
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          }
+      }).then(response => {
+          console.log("response", response.data.choices[0].text)
+          // const splitResponse = splitList(response.data.choices[0].text)
+          // console.log("splitList", splitResponse);
+          // res.send(splitResponse);
+
+          //deletes newline at the end (I think)
+          const allOutputs = response.data.choices.map((choice: any) => choice.text.trim().replace(/\\n/g, "\n"))
+          res.send(allOutputs);
+      });
+
+  } catch (error) {
+      console.error(error);
+      return res.status(500).send(error);
+  }
+
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal error' });
+  }
 };
 
 export default handler;
