@@ -23,12 +23,10 @@ const Home: NextPage = () => {
 
   const prompt =
     vibe === "Funny"
-      ? `Generate 2 funny twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Make sure each generated bio is at max 20 words and base it on this context: ${bio}${
-          bio.slice(-1) === "." ? "" : "."
-        }`
-      : `Generate 2 ${vibe} twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure each generated bio is at least 14 words and at max 20 words and base them on this context: ${bio}${
-          bio.slice(-1) === "." ? "" : "."
-        }`;
+      ? `Generate 2 funny twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Make sure each generated bio is at max 20 words and base it on this context: ${bio}${bio.slice(-1) === "." ? "" : "."
+      }`
+      : `Generate 2 ${vibe} twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure each generated bio is at least 14 words and at max 20 words and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."
+      }`;
 
   const generateBio = async (e: any) => {
     e.preventDefault();
@@ -41,6 +39,7 @@ const Home: NextPage = () => {
       },
       body: JSON.stringify({
         prompt,
+        toolName: 'blog-idea-generator',
       }),
     });
     console.log("Edge function returned.");
@@ -64,46 +63,43 @@ const Home: NextPage = () => {
     while (!done) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
-      const newValue = decoder
-        .decode(value)
-        .replaceAll("data: ", "")
-        .split("\n\n")
-        .filter(Boolean);
+      try {
+        const newValue = JSON.parse(decoder
+          .decode(value)
+        );
 
-      if (tempState) {
-        newValue[0] = tempState + newValue[0];
-        tempState = "";
-      }
+        console.log(newValue);
 
-      newValue.forEach((newVal) => {
-        if (newVal === "[DONE]") {
-          return;
+        if (tempState) {
+          newValue[0] = tempState + newValue[0];
+          tempState = "";
         }
 
-        try {
-          const json = JSON.parse(newVal) as {
-            id: string;
-            object: string;
-            created: number;
-            choices?: {
+        newValue.forEach((newVal) => {
+          if (newVal === "[DONE]") {
+            return;
+          }
+
+          try {
+            const json = newVal as {
               text: string;
               index: number;
               logprobs: null;
               finish_reason: null | string;
-            }[];
-            model: string;
-          };
+            };
 
-          if (!json.choices?.length) {
-            throw new Error("Something went wrong.");
+            const choice = json;
+            console.log(`text ${choice.text}`)
+            setGeneratedBios((prev) => prev + choice.text);
+          } catch (error) {
+            console.error(error);
+            tempState = newVal;
           }
-
-          const choice = json.choices[0];
-          setGeneratedBios((prev) => prev + choice.text);
-        } catch (error) {
-          tempState = newVal;
-        }
-      });
+        });
+      } catch (error) {
+        console.error(error);
+        continue;
+      }
     }
 
     setLoading(false);
@@ -199,10 +195,9 @@ const Home: NextPage = () => {
                   </div>
                   <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                     {generatedBios
-                      .substring(generatedBios.indexOf("1") + 3)
-                      .split("2.")
-                      .map((generatedBio) => {
-                        return (
+                      .split('1. ')
+                      .map((generatedBio: string) => {
+                        return generatedBio.trim() !== '' && (
                           <div
                             className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
                             onClick={() => {
