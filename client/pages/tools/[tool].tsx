@@ -118,7 +118,7 @@ const Tool: NextPage<Props> = ({ tool_name, display_name, fields, prompt }) => {
               className="mb-5 sm:mb-0"
             />
             <p className="text-left font-medium">
-               {field.command}{" "}
+              {field.command}{" "}
               {/* <span className="text-slate-500">
                 (or write a few sentences about yourself)
               </span> */}
@@ -131,7 +131,7 @@ const Tool: NextPage<Props> = ({ tool_name, display_name, fields, prompt }) => {
             rows={4}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
             placeholder={
-             field.placeholder ? field.placeholder : `Enter your ${field.field_name} here`
+              field.placeholder ? field.placeholder : `Enter your ${field.field_name} here`
             }
           />
         </>
@@ -226,22 +226,19 @@ const Tool: NextPage<Props> = ({ tool_name, display_name, fields, prompt }) => {
   //   setLoading(false);
   // };
   const generateBio = async (e: any) => {
+    console.log(formData);
     e.preventDefault();
-    setGeneratedBios("");
-    setGeneratedBios2("");
     setGeneratedResponsesList([]);
     setLoading(true);
-    const toolPrompt = prompt;
-    const payload = {
-      toolName: tool_name,
-      formData: formData
-    }
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        prompt: formData.prompt_description,
+        toolName: "midjourney-prompt-generator",
+      }),
     });
     console.log("Edge function returned.");
 
@@ -255,8 +252,6 @@ const Tool: NextPage<Props> = ({ tool_name, display_name, fields, prompt }) => {
       return;
     }
 
-
-
     const reader = data.getReader();
     const decoder = new TextDecoder();
 
@@ -266,85 +261,46 @@ const Tool: NextPage<Props> = ({ tool_name, display_name, fields, prompt }) => {
     while (!done) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
-      const newValue = decoder
-        .decode(value)
-        .replaceAll("data: ", "")
-        .split("\n\n")
-        .filter(Boolean);
+      try {
+        const newValue = JSON.parse(decoder
+          .decode(value)
+        );
 
-      if (tempState) {
-        newValue[0] = tempState + newValue[0];
-        tempState = "";
-      }
+        console.log(newValue);
 
-      newValue.forEach((newVal) => {
-        if (newVal === "[DONE]") {
-          return;
+        if (tempState) {
+          newValue[0] = tempState + newValue[0];
+          tempState = "";
         }
 
-        try {
-          const json = JSON.parse(newVal) as {
-            id: string;
-            object: string;
-            created: number;
-            choices?: {
+        newValue.forEach((newVal) => {
+          if (newVal === "[DONE]") {
+            return;
+          }
+
+          try {
+            const json = newVal as {
               text: string;
               index: number;
               logprobs: null;
               finish_reason: null | string;
-            }[];
-            model: string;
-          };
+            };
 
-          if (!json.choices?.length) {
-            throw new Error("Something went wrong.");
+            const choice = json;
+            console.log(`text ${choice.text}`)
+            setGeneratedResponsesList((prev) => [...prev, choice.text]);
+          } catch (error) {
+            console.error(error);
+            tempState = newVal;
           }
-
-          console.log("json", json)
-
-          const choice = json.choices[0];
-          console.log("choiceText", choice.text + " " +  choice.index)
-          setGeneratedBios((prev) => choice.index == 0 ? prev + choice.text : prev);
-
-          // setGeneratedResponsesList((prev) => {
-          //   prev[choice.index] = prev[choice.index] + choice.text;
-          //   return prev;
-          // });
-          // setGeneratedResponsesList((prev) => {
-          //   if (!prev[choice.index]) prev[choice.index] = ""; // check if there is already an element at that index, if not add an empty string
-          //   prev[choice.index] = prev[choice.index] + choice.text;
-          //   // console.log("prev");
-          //   // console.log("")
-          //   return prev;
-          // });
-          // setGeneratedResponsesList((prev) => {
-          //   let currentValue = prev[choice.index] || ""; // check if there is already an element at that index, if not set currentValue to an empty string
-          //   currentValue = choice.text;
-          //   prev[choice.index] = currentValue;
-          //   // console.log("dataIs", prev, currentValue, choice.text, choice.index)
-          //   return prev;
-          //   });
-          setGeneratedResponsesList(existingItems => {
-
-            if (!existingItems[choice.index]) existingItems[choice.index] = "";
-
-            return existingItems.map((item, j) => {
-            
-            return j === choice.index ? item + choice.text : item
-            
-            5 })});
-
-
-
-          // const choice2 = json.choices[1];
-          // console.log("json choices", json.choices)
-          // setGeneratedBios2((prev) => prev + choice2.text);
-          // console.log(generatedBios2)
-        } catch (error) {
-          tempState = newVal;
-        }
-      });
+        });
+      } catch (error) {
+        console.error(error);
+        continue;
+      }
     }
+
+    setLoading(false);
 
 
     setLoading(false);
@@ -412,26 +368,26 @@ const Tool: NextPage<Props> = ({ tool_name, display_name, fields, prompt }) => {
                   <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                     {generatedResponsesList.map((generatedResponse) => {
                       const trimmedResponse = generatedResponse.trim().replace(/\\n/g, "\n")
-                      
+
 
                       // .substring(generatedBios.indexOf("1") + 3)
                       // .split("2.")
                       // .map((generatedBio) => {
-                        return (
-                          <div
-                            className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
-                            onClick={() => {
-                              navigator.clipboard.writeText(trimmedResponse);
-                              toast("Bio copied to clipboard", {
-                                icon: "✂️",
-                              });
-                            }}
-                            key={trimmedResponse}
-                          >
-                            <p>{trimmedResponse}</p>
-                          </div>
-                        );
-                      })}
+                      return (
+                        <div
+                          className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
+                          onClick={() => {
+                            navigator.clipboard.writeText(trimmedResponse);
+                            toast("Bio copied to clipboard", {
+                              icon: "✂️",
+                            });
+                          }}
+                          key={trimmedResponse}
+                        >
+                          <p>{trimmedResponse}</p>
+                        </div>
+                      );
+                    })}
                   </div>
                 </>
               )}
@@ -670,7 +626,7 @@ export async function getServerSideProps(context: any): Promise<{ props: ToolPro
       field: true,
     },
   });
-    if (!data) {
+  if (!data) {
     throw new Error('Tool not found');
   }
   return {
