@@ -234,13 +234,26 @@ const Tool: NextPage<Props> = ({ tool_name, display_name, fields, prompt }) => {
     e.preventDefault();
     setGeneratedResponsesList([]);
     setLoading(true);
-    if (tool === 'blog-idea-generator') {
+    /*if (tool === 'blog-idea-generator') {
       formData.prompt_description = `
 Target audience: ${formData.target_audience!} 
 Description: ${formData.description}
 Product name: ${formData.product_name}
       `.trimStart().trimEnd();
+    }*/
+
+    let prompt = '';
+    for (const key in formData) {
+      console.log(key);
+      if (formData.hasOwnProperty(key)) {
+        const propName = key.split("_")
+        .map(word => word[0].toUpperCase() + word.slice(1))
+        .join(" ");
+        prompt += `${propName}: {{${key}}}`;  
+      }
     }
+    console.log(prompt);
+
     console.log(formData.prompt_description);
     const response = await fetch("/api/generate", {
       method: "POST",
@@ -248,8 +261,9 @@ Product name: ${formData.product_name}
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: formData.prompt_description,
+        prompt,
         toolName: tool,
+        formValues: formData,
       }),
     });
     console.log("Edge function returned.");
@@ -661,5 +675,6 @@ export async function getServerSideProps(context: any): Promise<{ props: ToolPro
     },
   };
 }
+
 
 export default Tool;
