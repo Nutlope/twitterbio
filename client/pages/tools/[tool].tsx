@@ -14,6 +14,7 @@ import LoadingDots from "../../components/LoadingDots";
 import ResizablePanel from "../../components/ResizablePanel";
 import prisma from "../../lib/prisma";
 import { tool } from "@prisma/client";
+import { useRouter } from 'next/router';
 
 // interface Props {
 //   schema: ToolSchema;
@@ -77,6 +78,9 @@ const Tool: NextPage<Props> = ({ tool_name, display_name, fields, prompt }) => {
     const { value } = event.target;
     setFormData({ ...formData, [formDataName]: value });
   };
+
+  const router = useRouter();
+  const { tool } = router.query;
 
   // console.log("schema", schema);
   console.log("formData", formData)
@@ -230,14 +234,36 @@ const Tool: NextPage<Props> = ({ tool_name, display_name, fields, prompt }) => {
     e.preventDefault();
     setGeneratedResponsesList([]);
     setLoading(true);
+    /*if (tool === 'blog-idea-generator') {
+      formData.prompt_description = `
+Target audience: ${formData.target_audience!} 
+Description: ${formData.description}
+Product name: ${formData.product_name}
+      `.trimStart().trimEnd();
+    }*/
+
+    let prompt = '';
+    for (const key in formData) {
+      console.log(key);
+      if (formData.hasOwnProperty(key)) {
+        const propName = key.split("_")
+        .map(word => word[0].toUpperCase() + word.slice(1))
+        .join(" ");
+        prompt += `${propName}: {{${key}}}`;  
+      }
+    }
+    console.log(prompt);
+
+    console.log(formData.prompt_description);
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: formData.prompt_description,
-        toolName: "midjourney-prompt-generator",
+        prompt,
+        toolName: tool,
+        formValues: formData,
       }),
     });
     console.log("Edge function returned.");
@@ -367,13 +393,13 @@ const Tool: NextPage<Props> = ({ tool_name, display_name, fields, prompt }) => {
                   </div>
                   <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                     {generatedResponsesList.map((generatedResponse) => {
-                      const trimmedResponse = generatedResponse.trim().replace(/\\n/g, "\n")
+                      const trimmedResponse = generatedResponse.replace(/^.*\n\n/, '').trim().replace(/\\n/g, "\n")
 
 
                       // .substring(generatedBios.indexOf("1") + 3)
                       // .split("2.")
                       // .map((generatedBio) => {
-                      return (
+                      return trimmedResponse !== '' && (
                         <div
                           className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
                           onClick={() => {
@@ -616,11 +642,12 @@ interface ToolProps {
 }
 
 export async function getServerSideProps(context: any): Promise<{ props: ToolProps }> {
-  const { toolName } = context.params;
+  const { tool } = context.params;
+  console.log(tool);
 
   const data = await prisma.tool.findFirst({
     where: {
-      tool_name: "midjourney-prompt-generator",
+      tool_name: tool,
     },
     include: {
       field: true,
@@ -648,5 +675,6 @@ export async function getServerSideProps(context: any): Promise<{ props: ToolPro
     },
   };
 }
+
 
 export default Tool;
