@@ -10,6 +10,7 @@ import Github from "../components/GitHub";
 import Header from "../components/Header";
 import LoadingDots from "../components/LoadingDots";
 import ResizablePanel from "../components/ResizablePanel";
+import Balancer from "react-wrap-balancer";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -86,7 +87,9 @@ const Home: NextPage = () => {
           <p>Star on GitHub</p>
         </a>
         <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900">
+          <Balancer>
           Generate your next Twitter bio in seconds
+          </Balancer>
         </h1>
         <p className="text-slate-500 mt-5">47,118 bios generated so far.</p>
         <div className="max-w-xl w-full">
