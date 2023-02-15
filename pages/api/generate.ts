@@ -1,4 +1,5 @@
-import { OpenAIStream, OpenAIStreamPayload } from "../../utils/OpenAIStream";
+import { CreateCompletionRequest } from "openai";
+import { OpenAIStream } from "../../utils/OpenAIStream";
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing env var from OpenAI");
@@ -17,7 +18,7 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response("No prompt in the request", { status: 400 });
   }
 
-  const payload: OpenAIStreamPayload = {
+  const payload: CreateCompletionRequest = {
     model: "text-davinci-003",
     prompt,
     temperature: 0.7,
