@@ -6,12 +6,12 @@ export default function Footer() {
       <div>
         Powered by{" "}
         <a
-          href="https://openai.com/"
+          href="https://openai.com/blog/chatgpt"
           target="_blank"
           rel="noreferrer"
           className="font-bold hover:underline transition underline-offset-2"
         >
-          OpenAI{" "}
+          ChatGPT{" "}
         </a>
         and{" "}
         <a
