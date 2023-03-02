@@ -88,7 +88,7 @@ const Home: NextPage = () => {
           <Github />
           <p>Star on GitHub</p>
         </a>
-        <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900">
+        <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
           Generate your next Twitter bio using chatGPT
         </h1>
         <p className="text-slate-500 mt-5">47,118 bios generated so far.</p>
