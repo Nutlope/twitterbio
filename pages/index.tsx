@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import DropDown, { VibeType } from "../components/DropDown";
 import Footer from "../components/Footer";
@@ -17,7 +17,13 @@ const Home: NextPage = () => {
   const [vibe, setVibe] = useState<VibeType>("Professional");
   const [generatedBios, setGeneratedBios] = useState<String>("");
 
-  console.log("Streamed response: ", generatedBios);
+  const myRef = useRef<null | HTMLDivElement>(null);
+
+  const scrollToHeader = () => {
+    if (myRef.current !== null) {
+      myRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const prompt =
     vibe === "Funny"
@@ -47,6 +53,10 @@ const Home: NextPage = () => {
       throw new Error(response.statusText);
     }
 
+    setTimeout(() => {
+      scrollToHeader();
+    }, 500);
+
     // This data is a ReadableStream
     const data = response.body;
     if (!data) {
@@ -63,7 +73,7 @@ const Home: NextPage = () => {
       const chunkValue = decoder.decode(value);
       setGeneratedBios((prev) => prev + chunkValue);
     }
-
+    scrollToHeader();
     setLoading(false);
   };
 
@@ -152,7 +162,10 @@ const Home: NextPage = () => {
               {generatedBios && (
                 <>
                   <div>
-                    <h2 className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto">
+                    <h2
+                      className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
+                      ref={myRef}
+                    >
                       Your generated bios
                     </h2>
                   </div>
