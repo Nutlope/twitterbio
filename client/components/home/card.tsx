@@ -15,12 +15,10 @@ export default function Card({
   return (
     <Link href={`/tool/${slug}`} passHref>
       <div
-        className={`relative col-span-1 flex h-40 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md ${
-          large ? "md:col-span-2" : ""
-        }`}
+        className='w-full px-5 min-h-[200px] card flex items-center justify-center bg-white hover:gradient  border border-gray-200 rounded-md shadow-lg py-7'
       >
-        <div className="max-w-lg mx-auto text-center">
-          <h2 className="text-xl font-bold text-transparent capitalize font-display bg-gradient-to-br from-black to-stone-500 bg-clip-text md:text-3xl md:font-normal">
+        <div>
+          <h2 className="text-xl font-bold text-center text-transparent capitalize font-display bg-gradient-to-br from-black to-stone-500 bg-clip-text md:text-xl md:font-normal">
             <Balancer>{displayName}</Balancer>
           </h2>
           {/* <div className="-mt-2 leading-normal prose-sm text-gray-500 md:prose">

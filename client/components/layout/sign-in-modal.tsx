@@ -33,10 +33,10 @@ const SignInModal = ({
             />
           </a>
           <h3 className="text-2xl font-bold font-display">Sign In</h3>
-          <p className="text-sm text-gray-500">
+          {/* <p className="text-sm text-gray-500">
             This is strictly for demo purposes - only your email and profile
             picture will be stored.
-          </p>
+          </p> */}
         </div>
 
         <div className="flex flex-col px-4 py-8 space-y-4 bg-gray-50 md:px-16">

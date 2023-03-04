@@ -1,8 +1,11 @@
 import Link from "next/link";
 import React from "react";
 import Layout from "../../components/layout";
-
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 const Dashboard = () => {
+  const { data: session } = useSession();
+  const { name, email, image } = session?.user || {};
   return (
     <Layout>
       <div className="flex justify-center w-full min-h-screen">
@@ -72,9 +75,9 @@ const Dashboard = () => {
                   />
                 </svg>
               </Link>
-              <Link
+              <button
                 className="inline-flex justify-center p-4 rounded-md smooth-hover text-white/50 hover:bg-gray-800 hover:text-white"
-                href="/"
+                onClick={() => signOut({ redirect: true })}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -88,13 +91,15 @@ const Dashboard = () => {
                     clip-rule="evenodd"
                   />
                 </svg>
-              </Link>
+              </button>
             </div>
           </div>
 
           <div className="flex-1 px-2 sm:px-0">
             <div className="flex items-center justify-between">
-              <h3 className="text-3xl font-extralight text-white/50">Dashboard</h3>
+              <h3 className="text-3xl font-extralight text-white/50">
+                Dashboard
+              </h3>
               <div className="inline-flex items-center space-x-2">
                 <Link
                   className="p-2 bg-gray-900 rounded-md smooth-hover text-white/50 hover:text-white"
@@ -138,19 +143,20 @@ const Dashboard = () => {
             </div>
             <div className="grid grid-cols-1 gap-4 mt-10 mb-10 sm:mb-0 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               <div className="relative flex flex-col items-center px-4 py-10 space-y-2 bg-gray-900 rounded-md cursor-pointer hover:smooth-hover group hover:bg-gray-900/80 sm:py-20">
-                <img
-                  className="object-cover object-center w-20 h-20 rounded-full"
-                  src="https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-                  alt="gaming"
+                <Image
+                  alt={""}
+                  src={
+                    image ||
+                    `https://avatars.dicebear.com/api/micah/${email}.svg`
+                  }
+                  width={70}
+                  height={70}
+                  className="rounded-full"
                 />
                 <h4 className="text-2xl font-bold text-center text-white capitalize">
-                  Hamza
+                  {name}
                 </h4>
-                <p className="text-white/50">Authenticated</p>
-                <p className="absolute inline-flex items-center text-xs top-2 text-white/20">
-                   Online{" "}
-                  <span className="block w-2 h-2 ml-2 bg-red-400 rounded-full group-hover:animate-pulse"></span>
-                </p>
+                {/* <p className="text-white/50">{email}</p> */}
               </div>
             </div>
           </div>

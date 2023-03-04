@@ -11,5 +11,5 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [require("@tailwindcss/forms"), require("@headlessui/tailwindcss")],
+  plugins: [require("@tailwindcss/forms"), require("@headlessui/tailwindcss"),require('@tailwindcss/line-clamp'),],
 };

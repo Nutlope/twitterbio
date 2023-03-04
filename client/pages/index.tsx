@@ -9,6 +9,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const HomePage = ({ data }: any) => {
+
   return (
     <Layout>
       <div className="min-h-[67vh]">
