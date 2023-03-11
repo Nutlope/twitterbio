@@ -13,6 +13,7 @@ const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState("");
   const [vibe, setVibe] = useState<VibeType>("Professional");
+  const [apiKey, setApiKey] = useState("");
   const [generatedBios, setGeneratedBios] = useState<String>("");
 
   const bioRef = useRef<null | HTMLDivElement>(null);
@@ -73,25 +74,15 @@ const Home: NextPage = () => {
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
       <Head>
-        <title>Twitter Bio Generator</title>
+        <title>AI for Medical Coding</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
-        <a
-          className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mb-5"
-          href="https://github.com/Nutlope/twitterbio"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Github />
-          <p>Star on GitHub</p>
-        </a>
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
-          Generate your next Twitter bio using chatGPT
+          Automate medical coding using GPT
         </h1>
-        <p className="text-slate-500 mt-5">47,118 bios generated so far.</p>
+        <p className="text-slate-500 mt-5">Trained with the latest ICD-10 codes.</p>
         <div className="max-w-xl w-full">
           <div className="flex mt-10 items-center space-x-3">
             <Image
@@ -102,9 +93,9 @@ const Home: NextPage = () => {
               className="mb-5 sm:mb-0"
             />
             <p className="text-left font-medium">
-              Copy your current bio{" "}
+              Enter your clinical notes {" "}
               <span className="text-slate-500">
-                (or write a few sentences about yourself)
+                (no special formatting necessary)
               </span>
               .
             </p>
@@ -115,23 +106,32 @@ const Home: NextPage = () => {
             rows={4}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
             placeholder={
-              "e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com."
+              "Copy and paste the clinical note here"
             }
           />
-          <div className="flex mb-5 items-center space-x-3">
+          {/* <div className="flex mb-5 items-center space-x-3">
             <Image src="/2-black.png" width={30} height={30} alt="1 icon" />
-            <p className="text-left font-medium">Select your vibe.</p>
+            <p className="text-left font-medium">Enter your API key below.</p>
           </div>
           <div className="block">
-            <DropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} />
-          </div>
+          <textarea
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+            rows={1}
+            className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
+            placeholder={
+              "Copy and paste your API key here"
+            }
+          />
+            { <DropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} />}
+          </div> */}
 
           {!loading && (
             <button
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
               onClick={(e) => generateBio(e)}
             >
-              Generate your bio &rarr;
+              Generate ICD-10 codes &rarr;
             </button>
           )}
           {loading && (

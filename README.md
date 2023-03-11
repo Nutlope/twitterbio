@@ -1,4 +1,4 @@
-# [TwitterBio.com](https://www.twitterbio.com/)
+# CODEM: AI For Medical Coding
 
 This project generates Twitter bios for you using AI.
 
