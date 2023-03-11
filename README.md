@@ -1,6 +1,6 @@
 # CODEM: AI For Medical Coding
 
-This project generates Twitter bios for you using AI.
+This project uses GPT-3 to automatically identify ICD-10 medical codes for clinical notes.
 
 [![Twitter Bio Generator](./public/screenshot.png)](https://www.twitterbio.com)
 
