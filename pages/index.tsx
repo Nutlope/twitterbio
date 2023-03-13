@@ -156,12 +156,12 @@ const Home: NextPage = () => {
                 {generatedSWOT
                   .split(regex)
                   .filter((section) => section.trim() !== "")
-                  .map((generatedSWOT, index) => {
+                  .map((swot, index) => {
                     return (
                       <div
                         className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border text-left"
                         style={
-                          generatedSWOT[0] != "1"
+                          swot[0] != "1"
                             ? threatsStyle
                             : index == 0
                             ? strengthsStyle
@@ -172,18 +172,20 @@ const Home: NextPage = () => {
                             : threatsStyle
                         }
                         onClick={() => {
-                          navigator.clipboard.writeText(generatedSWOT);
+                          navigator.clipboard.writeText(
+                            `SWOT analysis of ${company}\n\n${generatedSWOT}`
+                          );
                           toast("SWOT copied to clipboard", {
                             icon: "✂️",
                           });
                         }}
-                        key={generatedSWOT}
+                        key={swot}
                       >
                         <h2
                           className="font-bold text-center"
                           key={"title" + index}
                         >
-                          {generatedSWOT[0] != "1"
+                          {swot[0] != "1"
                             ? "Invalid company"
                             : index == 0
                             ? "Strengths"
@@ -193,7 +195,7 @@ const Home: NextPage = () => {
                             ? "Opportunities"
                             : "Threats"}
                         </h2>
-                        {generatedSWOT
+                        {swot
                           .split(regex2)
                           .filter((section) => section.trim() !== "")
                           .map((swot, index) => (
