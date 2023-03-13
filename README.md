@@ -1,8 +1,8 @@
-# [TwitterBio.com](https://www.twitterbio.com/)
+# [swot-generator](https://www.swot-generator.com.com/)
 
-This project generates Twitter bios for you using AI.
+This project generates a SWOT analysis for you using AI.
 
-[![Twitter Bio Generator](./public/screenshot.png)](https://www.twitterbio.com)
+[![Twitter Bio Generator](./public/screenshot.png)](https://www.swot-generator.com)
 
 ## How it works
 
