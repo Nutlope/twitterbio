@@ -23,7 +23,7 @@ const Home: NextPage = () => {
     }
   };
 
-  const prompt = `Generate a SWOT analysis of ${company}, clearly divided by "Strenghts:", "Weaknesses:", "Opportunities:" and "Threats:". Each section should have top 1-5 points summarized.${
+  const prompt = `Generate a SWOT analysis of ${company}, divided by "Strenghts:", "Weaknesses:", "Opportunities:" and "Threats:". Each section have top 1-4 points summarized.${
     company.slice(-1) === "." ? "" : "."
   }`;
 
