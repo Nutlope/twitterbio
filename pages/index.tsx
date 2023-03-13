@@ -194,7 +194,7 @@ const Home: NextPage = () => {
                           .split(regex2)
                           .filter((section) => section.trim() !== "")
                           .map((swot, index) => (
-                            <p>
+                            <p className="p-1">
                               {index + 1}
                               {swot}
                             </p>
