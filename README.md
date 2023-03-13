@@ -2,7 +2,7 @@
 
 This project generates a SWOT analysis for you using AI.
 
-[![Twitter Bio Generator](./public/screenshot.png)](https://www.swot-generator.com)
+[![SWOT Generator](./public/screenshot.png)](https://www.swot-generator.com)
 
 ## How it works
 
