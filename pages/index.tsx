@@ -99,7 +99,7 @@ const Home: NextPage = () => {
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
           Generate your next SWOT analysis using chatGPT
         </h1>
-        <div className="max-w-xl w-full">
+        <div className="w-full">
           <div className="flex mt-10 items-center space-x-3">
             <Image
               src="/1-black.png"
@@ -152,7 +152,7 @@ const Home: NextPage = () => {
                   Your generated SWOT
                 </h2>
               </div>
-              <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+              <div className="grid grid-rows-2 grid-flow-col gap-4 mx-auto">
                 {generatedSWOT
                   .split(regex)
                   .filter((section) => section.trim() !== "")
