@@ -24,11 +24,11 @@ class MyDocument extends Document {
           />
           <meta
             property="og:image"
-            content="https://swot-generator-3rc1h6jy3-mflodmark.vercel.app/og-image.png"
+            content="https://swot-generator-4m7mdfqxn-mflodmark.vercel.app/og-image.png"
           />
           <meta
             name="swot:image"
-            content="https://swot-generator-3rc1h6jy3-mflodmark.vercel.app/og-image.png"
+            content="https://swot-generator-4m7mdfqxn-mflodmark.vercel.app/og-image.png"
           />
         </Head>
         <body>
