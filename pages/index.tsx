@@ -23,7 +23,7 @@ const Home: NextPage = () => {
     }
   };
 
-  const prompt = `Generate a SWOT analysis of ${company}, clearly divided by "Strenghts:", "Weaknesses:", "Opportunities:" and "Threats:". Limit each section by only summarizing the points and limit yourself tp the top 5.${
+  const prompt = `Generate a SWOT analysis of ${company}, clearly divided by "Strenghts:", "Weaknesses:", "Opportunities:" and "Threats:". Each section should have top 1-5 points summarized.${
     company.slice(-1) === "." ? "" : "."
   }`;
 
@@ -179,7 +179,10 @@ const Home: NextPage = () => {
                         }}
                         key={generatedSWOT}
                       >
-                        <h2 className="font-bold text-center">
+                        <h2
+                          className="font-bold text-center"
+                          key={"title" + index}
+                        >
                           {generatedSWOT[0] != "1"
                             ? "Invalid company"
                             : index == 0
@@ -194,7 +197,7 @@ const Home: NextPage = () => {
                           .split(regex2)
                           .filter((section) => section.trim() !== "")
                           .map((swot, index) => (
-                            <p className="p-1">
+                            <p className="p-1" key={index + 1}>
                               {index + 1}
                               {swot}
                             </p>
