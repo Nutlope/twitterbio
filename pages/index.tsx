@@ -159,7 +159,7 @@ const Home: NextPage = () => {
                   .map((generatedSWOT, index) => {
                     return (
                       <div
-                        className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
+                        className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border text-left"
                         style={
                           generatedSWOT[0] != "1"
                             ? threatsStyle
@@ -179,7 +179,7 @@ const Home: NextPage = () => {
                         }}
                         key={generatedSWOT}
                       >
-                        <h2 className="font-bold">
+                        <h2 className="font-bold text-center">
                           {generatedSWOT[0] != "1"
                             ? "Invalid company"
                             : index == 0
