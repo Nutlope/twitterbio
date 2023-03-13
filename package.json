@@ -10,7 +10,7 @@
     "@headlessui/tailwindcss": "^0.1.2",
     "@heroicons/react": "^2.0.13",
     "@tailwindcss/forms": "^0.5.3",
-    "@vercel/analytics": "^0.1.8",
+    "@vercel/analytics": "^0.1.11",
     "eventsource-parser": "^0.0.5",
     "next": "latest",
     "react": "18.2.0",
