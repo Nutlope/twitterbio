@@ -270,7 +270,7 @@ const Home: NextPage = () => {
                           ? opportunitiesStyle
                           : threatsStyle
                       }
-                      className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border text-left"
+                      className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border text-left"
                       onClick={(e) => generateColor(e, c)}
                     >
                       <h2 className="font-bold text-center">{c}</h2>
