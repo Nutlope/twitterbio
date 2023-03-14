@@ -152,7 +152,7 @@ const Home: NextPage = () => {
                   SWOT analysis of {company}
                 </h2>
               </div>
-              <div className="grid grid-rows-2 grid-flow-col gap-4 mx-auto">
+              <div className="grid grid-rows-4 md:grid-rows-2 grid-flow-col gap-4 mx-auto">
                 {generatedSWOT
                   .split(regex)
                   .filter((section) => section.trim() !== "")
