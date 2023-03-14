@@ -11,7 +11,7 @@ export default function Header() {
   return (
     <header
       style={headerStyle}
-      className="flex justify-between items-center w-full border-b-2 pb-7 sm:px-4 px-2 rounded-xl"
+      className="flex justify-between items-center w-full border-b-2 pb-7 sm:px-4 px-2"
     >
       <Link href="/" className="flex space-x-3">
         <Image
