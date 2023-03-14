@@ -77,16 +77,19 @@ const Home: NextPage = () => {
   const threatsStyle = {
     backgroundColor: "#f07972",
   };
+  const headerStyle = {
+    backgroundColor: "#212529",
+  };
 
   return (
-    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
+    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center min-h-screen">
       <Head>
         <title>SWOT Generator</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Header />
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
+      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-8 sm:mt-20">
         <a
           className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mb-5"
           href="https://github.com/mflodmark/swot-generator"
@@ -114,6 +117,7 @@ const Home: NextPage = () => {
           />
           {!loading && (
             <button
+              style={headerStyle}
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
               onClick={(e) => generateSWOT(e)}
             >
