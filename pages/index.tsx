@@ -149,7 +149,7 @@ const Home: NextPage = () => {
                   className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
                   ref={swotRef}
                 >
-                  Your generated SWOT
+                  SWOT analysis of {company}
                 </h2>
               </div>
               <div className="grid grid-rows-2 grid-flow-col gap-4 mx-auto">
