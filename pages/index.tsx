@@ -10,8 +10,11 @@ import { useRef, useState } from "react";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
+  const [loadingColor, setLoadingColor] = useState(false);
   const [company, setCompany] = useState("");
+  const [color, setColor] = useState("");
   const [generatedSWOT, setGeneratedSWOT] = useState<String>("");
+  const [generatedColor, setGeneratedColor] = useState<String>("");
 
   const swotRef = useRef<null | HTMLDivElement>(null);
   const regex = /\b(?:Strengths|Weaknesses|Opportunities|Threats):\s*/g;
@@ -23,13 +26,15 @@ const Home: NextPage = () => {
     }
   };
 
-  const prompt = `Generate a SWOT analysis of ${company}, divided by "Strenghts:", "Weaknesses:", "Opportunities:" and "Threats:". Each section have top 1-4 points summarized.${
-    company.slice(-1) === "." ? "" : "."
-  }`;
+  const promptSWOT = `Generate a SWOT analysis of ${company}, divided by "Strenghts:", "Weaknesses:", "Opportunities:" and "Threats:". Each section have top 1-4 points summarized of max 200 characters. `;
+
+  const promptColor = `Max 500 characters. Give some context on ${company} `;
 
   const generateSWOT = async (e: any) => {
     e.preventDefault();
     setGeneratedSWOT("");
+    setGeneratedColor("");
+    setColor("");
     setLoading(true);
     const response = await fetch("/api/generate", {
       method: "POST",
@@ -37,7 +42,7 @@ const Home: NextPage = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt,
+        prompt: promptSWOT,
       }),
     });
 
@@ -63,6 +68,45 @@ const Home: NextPage = () => {
     }
     scrollToSWOT();
     setLoading(false);
+  };
+
+  const generateColor = async (e: any, c: string) => {
+    e.preventDefault();
+    setColor(c);
+    setGeneratedColor("");
+    setLoadingColor(true);
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: promptColor + c,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    // This data is a ReadableStream
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+    let done = false;
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const chunkValue = decoder.decode(value);
+      setGeneratedColor((prev) => prev + chunkValue);
+    }
+    scrollToSWOT();
+    setLoadingColor(false);
   };
 
   const strengthsStyle = {
@@ -115,7 +159,7 @@ const Home: NextPage = () => {
             className="w-full mt-2 border-2 border-black-400 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-black-400"
             placeholder={"e.g. Amazon, Apple, Alphabet."}
           />
-          {!loading && (
+          {!loading && !loadingColor && (
             <button
               style={headerStyle}
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
@@ -124,14 +168,15 @@ const Home: NextPage = () => {
               Generate your SWOT &rarr;
             </button>
           )}
-          {loading && (
-            <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-              disabled
-            >
-              <LoadingDots color="white" style="large" />
-            </button>
-          )}
+          {loading ||
+            (loadingColor && (
+              <button
+                className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+                disabled
+              >
+                <LoadingDots color="white" style="large" />
+              </button>
+            ))}
         </div>
         <Toaster
           position="top-center"
@@ -205,6 +250,97 @@ const Home: NextPage = () => {
                       </div>
                     );
                   })}
+              </div>
+            </>
+          )}
+        </div>
+        <div className="space-y-10 my-10">
+          {generatedSWOT && !loading && (
+            <div className="grid grid-rows-2 md:grid-rows-1 grid-flow-col gap-4 mx-auto">
+              {["Strengths", "Weaknessess", "Opportunities", "Threats"].map(
+                (c, index) => {
+                  return (
+                    <div
+                      style={
+                        index == 0
+                          ? strengthsStyle
+                          : index == 1
+                          ? weaknessesStyle
+                          : index == 2
+                          ? opportunitiesStyle
+                          : threatsStyle
+                      }
+                      className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border text-left"
+                      onClick={(e) => generateColor(e, c)}
+                    >
+                      <h2 className="font-bold text-center">{c}</h2>
+                      {loadingColor && color === c && (
+                        <LoadingDots color="black" style="large" />
+                      )}
+                      {loadingColor && color !== c && (
+                        <div>
+                          <p>Give me some color</p>
+                        </div>
+                      )}
+                      {!loadingColor && color !== c && (
+                        <div>
+                          <p>Give me some color</p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+              )}
+            </div>
+          )}
+        </div>
+        <div className="space-y-10 my-10">
+          {generatedColor && (
+            <>
+              <div>
+                <h2
+                  className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
+                  ref={swotRef}
+                >
+                  Some color on {color}
+                </h2>
+              </div>
+              <div className="grid grid-rows-4 md:grid-rows-2 grid-flow-col gap-4 mx-auto">
+                {generatedColor.split(regex).map((c, index) => {
+                  return (
+                    <div
+                      className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border text-left"
+                      style={
+                        color === "Strengths"
+                          ? strengthsStyle
+                          : color === "Weaknessess"
+                          ? weaknessesStyle
+                          : color === "Opportunities"
+                          ? opportunitiesStyle
+                          : threatsStyle
+                      }
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          `Some color on ${company} ${color}\n\n${generatedColor}`
+                        );
+                        toast("Color copied to clipboard", {
+                          icon: "✂️",
+                        });
+                      }}
+                      key={c}
+                    >
+                      <h2
+                        className="font-bold text-center"
+                        key={"title" + index}
+                      >
+                        {color}
+                      </h2>
+                      <p className="p-1" key={"color"}>
+                        {c}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             </>
           )}
