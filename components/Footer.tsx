@@ -25,9 +25,25 @@ export default function Footer() {
       </div>
       <div className="flex space-x-4 pb-4 sm:pb-0">
         <Link
+          href="https://linkedin.com/in/markus-flodmark"
+          className="group"
+          aria-label="Linkedin"
+        >
+          <svg
+            aria-hidden="true"
+            className="h-6 w-6 fill-slate-500 group-hover:fill-slate-700"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M19.5 0H.5C.2 0 0 .2 0 .5v19c0 .3.2.5.5.5h19c.3 0 .5-.2.5-.5V.5c0-.3-.2-.5-.5-.5zM6.5 17H3.8v-9h2.7v9zm-1.4-10.5c-.9 0-1.6-.7-1.6-1.6s.7-1.6 1.6-1.6 1.6.7 1.6 1.6-.7 1.6-1.6 1.6zM17 17h-2.7v-4.4c0-1.1-.9-2-2-2s-2 .9-2 2v4.4H9.5v-9h2.6v1c.4-.7 1.3-1.5 2.4-1.5 1.8 0 3 1.2 3 3.5v5.1z"
+              transform="translate(2.5 2.5)"
+            />
+          </svg>
+        </Link>
+        <Link
           href="https://twitter.com/mflodmark"
           className="group"
-          aria-label="TaxPal on Twitter"
+          aria-label="Twitter"
         >
           <svg
             aria-hidden="true"
@@ -39,7 +55,7 @@ export default function Footer() {
         <Link
           href="https://github.com/mflodmark/swot-generator"
           className="group"
-          aria-label="TaxPal on GitHub"
+          aria-label="GitHub"
         >
           <svg
             aria-hidden="true"
