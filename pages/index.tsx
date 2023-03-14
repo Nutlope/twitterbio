@@ -100,14 +100,8 @@ const Home: NextPage = () => {
           Generate your next SWOT analysis using chatGPT
         </h1>
         <div className="w-full">
-          <div className="flex mt-10 items-center space-x-3">
-            <Image
-              src="/1-black.png"
-              width={30}
-              height={30}
-              alt="1 icon"
-              className="mb-5 sm:mb-0"
-            />
+          <div className="flex mt-10 items-center space-x-3 items-center">
+            <Image src="/1-black.png" width={30} height={30} alt="1 icon" />
             <p className="text-left font-medium">
               Add a company name to analyse.
             </p>
