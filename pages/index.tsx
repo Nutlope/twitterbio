@@ -26,9 +26,9 @@ const Home: NextPage = () => {
     }
   };
 
-  const promptSWOT = `Generate a SWOT analysis of ${company}, divided by "Strenghts:", "Weaknesses:", "Opportunities:" and "Threats:". Each section have top 1-4 points summarized of max 200 characters. `;
+  const promptSWOT = `Generate a SWOT analysis of company ${company}, divided by "Strenghts:", "Weaknesses:", "Opportunities:" and "Threats:". Each section have top 1-5 points summarized of max 150 characters. `;
 
-  const promptColor = `Max 500 characters. Give some context on ${company} `;
+  const promptColor = `Max 500 characters. Give some context on company ${company} `;
 
   const generateSWOT = async (e: any) => {
     e.preventDefault();
@@ -256,42 +256,42 @@ const Home: NextPage = () => {
         </div>
         <div className="space-y-10 my-10">
           {generatedSWOT && !loading && (
-            <div className="grid grid-rows-2 md:grid-rows-1 grid-flow-col gap-4 mx-auto">
-              {["Strengths", "Weaknessess", "Opportunities", "Threats"].map(
-                (c, index) => {
-                  return (
-                    <div
-                      style={
-                        index == 0
-                          ? strengthsStyle
-                          : index == 1
-                          ? weaknessesStyle
-                          : index == 2
-                          ? opportunitiesStyle
-                          : threatsStyle
-                      }
-                      className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border text-left"
-                      onClick={(e) => generateColor(e, c)}
-                    >
-                      <h2 className="font-bold text-center">{c}</h2>
-                      {loadingColor && color === c && (
-                        <LoadingDots color="black" style="large" />
-                      )}
-                      {loadingColor && color !== c && (
-                        <div>
-                          <p>Give me some color</p>
-                        </div>
-                      )}
-                      {!loadingColor && color !== c && (
-                        <div>
-                          <p>Give me some color</p>
-                        </div>
-                      )}
-                    </div>
-                  );
-                }
-              )}
-            </div>
+            <>
+              <div>
+                <h2
+                  className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
+                  ref={swotRef}
+                >
+                  Click for more color
+                </h2>
+              </div>
+              <div className="grid grid-rows-2 md:grid-rows-1 grid-flow-col gap-4 mx-auto">
+                {["Strengths", "Weaknessess", "Opportunities", "Threats"].map(
+                  (c, index) => {
+                    return (
+                      <div
+                        style={
+                          index == 0
+                            ? strengthsStyle
+                            : index == 1
+                            ? weaknessesStyle
+                            : index == 2
+                            ? opportunitiesStyle
+                            : threatsStyle
+                        }
+                        className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border text-left"
+                        onClick={(e) => generateColor(e, c)}
+                      >
+                        <h2 className="font-bold text-center">{c}</h2>
+                        {loadingColor && color === c && (
+                          <LoadingDots color="black" style="large" />
+                        )}
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            </>
           )}
         </div>
         <div className="space-y-10 my-10">
