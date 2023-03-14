@@ -17,9 +17,9 @@ export default function Header() {
         <Image
           alt="header text"
           src="/logo.png"
-          className="sm:w-12 sm:h-12 w-8 h-8"
-          width={32}
-          height={32}
+          className="sm:w-20 sm:h-20 w-8 h-8"
+          width={54}
+          height={54}
         />
         <h1
           style={titleStyle}
