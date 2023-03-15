@@ -26,9 +26,9 @@ const Home: NextPage = () => {
     }
   };
 
-  const promptSWOT = `Generate a SWOT analysis of company ${company}, divided by "Strenghts:", "Weaknesses:", "Opportunities:" and "Threats:". Each section have top 1-5 points summarized of max 125 characters. If no company is found return nothing.`;
+  const promptSWOT = `Generate a SWOT analysis of company ${company}, divided by "Strenghts:", "Weaknesses:", "Opportunities:" and "Threats:". Each section have top 1-5 points summarized of max 300 characters. If no company is found return nothing.`;
 
-  const promptColor = `Max 500 characters. Give some context on company ${company} `;
+  const promptColor = `Max 1000 characters. Give some context on company ${company} `;
 
   const generateSWOT = async (e: any) => {
     e.preventDefault();
