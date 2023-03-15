@@ -5,9 +5,10 @@ import Header from "../components/Header";
 import Image from "next/image";
 import LoadingDots from "../components/LoadingDots";
 import type { NextPage } from "next";
-import { Toaster, toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useRef, useState } from "react";
 import GeneratedSwot from "../components/GeneratedSwot";
+import GeneratedColor from "../components/GeneratedColor";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,6 @@ const Home: NextPage = () => {
   const [generatedColor, setGeneratedColor] = useState<String>("");
 
   const swotRef = useRef<null | HTMLDivElement>(null);
-  const regex = /\b(?:Strengths|Weaknesses|Opportunities|Threats):\s*/g;
 
   const scrollToSWOT = () => {
     if (swotRef.current !== null) {
@@ -233,57 +233,16 @@ const Home: NextPage = () => {
             </>
           )}
         </div>
-        <div className="space-y-10 my-10">
-          {generatedColor && (
-            <>
-              <div>
-                <h2
-                  className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
-                  ref={swotRef}
-                >
-                  Some color on {color}
-                </h2>
-              </div>
-              <div className="grid grid-rows-4 md:grid-rows-2 grid-flow-col gap-4 mx-auto">
-                {generatedColor.split(regex).map((c, index) => {
-                  return (
-                    <div
-                      className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border text-left"
-                      style={
-                        color === "Strengths"
-                          ? strengthsStyle
-                          : color === "Weaknessess"
-                          ? weaknessesStyle
-                          : color === "Opportunities"
-                          ? opportunitiesStyle
-                          : threatsStyle
-                      }
-                      onClick={() => {
-                        navigator.clipboard.writeText(
-                          `Some color on ${company} ${color}\n\n${generatedColor}`
-                        );
-                        toast("Color copied to clipboard", {
-                          icon: "✂️",
-                        });
-                      }}
-                      key={c}
-                    >
-                      <h2
-                        className="font-bold text-center"
-                        key={"title" + index}
-                      >
-                        {color}
-                      </h2>
-                      <p className="p-1" key={"color"}>
-                        {c}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            </>
-          )}
-        </div>
+        <GeneratedColor
+          generatedColor={generatedColor}
+          company={company}
+          color={color}
+          swotRef={swotRef}
+          strengthsStyle={strengthsStyle}
+          weaknessesStyle={weaknessesStyle}
+          opportunitiesStyle={opportunitiesStyle}
+          threatsStyle={threatsStyle}
+        ></GeneratedColor>
       </main>
       <Footer />
     </div>
