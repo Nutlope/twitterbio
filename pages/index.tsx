@@ -256,7 +256,7 @@ const Home: NextPage = () => {
           )}
         </div>
         <div className="space-y-10 my-10">
-          {generatedSWOT && !loading && (
+          {generatedSWOT && !loading && !generatedSWOT.includes("SWOT") && (
             <>
               <div>
                 <h2
