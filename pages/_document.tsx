@@ -6,6 +6,7 @@ class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <link rel="icon" href="/favicon.ico" />
+          <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo.png" />
           <meta
             name="description"
             content="Generate your next SWOT analysis in seconds."
