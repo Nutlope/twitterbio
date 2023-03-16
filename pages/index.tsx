@@ -1,50 +1,57 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Toaster, toast } from "react-hot-toast";
-import DropDown, { VibeType } from "../components/DropDown";
+// import DropDown, { VibeType } from "../components/DropDown";
 import Footer from "../components/Footer";
-import Github from "../components/GitHub";
+// import Github from "../components/GitHub";
 import Header from "../components/Header";
 import LoadingDots from "../components/LoadingDots";
+import Link from 'next/link';
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
+  /* State variables that store user input and GPT-3 results */ 
   const [loading, setLoading] = useState(false);
-  const [bio, setBio] = useState("");
-  const [vibe, setVibe] = useState<VibeType>("Professional");
+  const [clinicalNote, setClinicalNote] = useState("");
   const [apiKey, setApiKey] = useState("");
-  const [generatedBios, setGeneratedBios] = useState<String>("");
+  const [icdResults, setIcdResults] = useState("");
 
-  const bioRef = useRef<null | HTMLDivElement>(null);
+  /* Router to navigate between pages*/
+  const router = useRouter();
 
-  const scrollToBios = () => {
-    if (bioRef.current !== null) {
-      bioRef.current.scrollIntoView({ behavior: "smooth" });
+  useEffect(() => {
+    setLoading(false);
+    if (icdResults != "") {
+      if (!icdResults.includes(":")) {
+        alert("A formatting error has occurred!");
+      }
+      router.push({
+        pathname: '/[codes]',
+        query: {
+          codes: icdResults,
+          note: clinicalNote
+        }
+      });
     }
-  };
+  }, [icdResults]);
 
-  const prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". ${
-    vibe === "Funny"
-      ? "Make sure there is a joke in there and it's a little ridiculous."
-      : null
-  }
-      Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${
-    bio.slice(-1) === "." ? "" : "."
-  }`;
-
-  const generateBio = async (e: any) => {
+  /* Calls CRFM api located at api/helm.py using POST method. 
+     Sets the results to icdResults. setLoading is just for visual effects :D */
+  const generateCodes = async (e: any) => {
     e.preventDefault();
-    setGeneratedBios("");
+    setIcdResults("");
     setLoading(true);
-    const response = await fetch("/api/generate", {
+
+    const response = await fetch("/api/helm", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt,
-      }),
+        clinicalNote,
+      }),    
     });
 
     if (!response.ok) {
@@ -65,10 +72,8 @@ const Home: NextPage = () => {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
-      setGeneratedBios((prev) => prev + chunkValue);
+      setIcdResults((prev) => prev + chunkValue);
     }
-    scrollToBios();
-    setLoading(false);
   };
 
   return (
@@ -82,7 +87,7 @@ const Home: NextPage = () => {
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
           Automate medical coding using GPT
         </h1>
-        <p className="text-slate-500 mt-5">Trained with the latest ICD-10 codes.</p>
+        <p className="text-slate-500 mt-5">Works with the latest ICD-10 codes.</p>
         <div className="max-w-xl w-full">
           <div className="flex mt-10 items-center space-x-3">
             <Image
@@ -101,12 +106,12 @@ const Home: NextPage = () => {
             </p>
           </div>
           <textarea
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
+            value={clinicalNote}
+            onChange={(e) => setClinicalNote(e.target.value)}
             rows={4}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
             placeholder={
-              "Copy and paste the clinical note here"
+              "Copy and paste the clinical note here. Please limit notes to 2000 characters."
             }
           />
           {/* <div className="flex mb-5 items-center space-x-3">
@@ -127,66 +132,70 @@ const Home: NextPage = () => {
           </div> */}
 
           {!loading && (
-            <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-              onClick={(e) => generateBio(e)}
-            >
-              Generate ICD-10 codes &rarr;
-            </button>
+            // <Link href={{
+            //   pathname: '/[slug]',
+            //   query: {slug: "/" + icdResults},
+            // }}>
+              <button onClick={(e) => generateCodes(e)} className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full">
+                Generate ICD-10 codes &rarr;
+              </button>
+            // </Link>
           )}
           {loading && (
-            <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-              disabled
-            >
+            // <Link href={{
+            //   pathname: '/[slug]',
+            //   query: {slug: "/" + icdResults},
+            // }}    
+            <button className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              disabled>
               <LoadingDots color="white" style="large" />
-            </button>
+              </button>
           )}
         </div>
-        <Toaster
+        {/* <Toaster
           position="top-center"
           reverseOrder={false}
           toastOptions={{ duration: 2000 }}
         />
         <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
         <div className="space-y-10 my-10">
-          {generatedBios && (
+          {icdResults && (
             <>
               <div>
                 <h2
                   className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
-                  ref={bioRef}
+                  ref={clinicalNoteRef}
                 >
-                  Your generated bios
+                  Your generated ICD-10 codes
                 </h2>
               </div>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
-                {generatedBios
-                  .substring(generatedBios.indexOf("1") + 3)
+                {icdResults
+                  .substring(icdResults.indexOf("1") + 3)
                   .split("2.")
-                  .map((generatedBio) => {
+                  .map((generatedBio) => { 
                     return (
                       <div
                         className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
                         onClick={() => {
-                          navigator.clipboard.writeText(generatedBio);
+                          navigator.clipboard.writeText(icdResults);
                           toast("Bio copied to clipboard", {
                             icon: "✂️",
                           });
                         }}
-                        key={generatedBio}
+                        key={icdResults}
                       >
-                        <p>{generatedBio}</p>
+                        <p>{icdResults}</p>
                       </div>
-                    );
+                    ); 
                   })}
               </div>
             </>
           )}
-        </div>
+        </div>*/}
       </main>
-      <Footer />
-    </div>
+      {/* <Footer /> */}
+    </div> 
   );
 };
 
