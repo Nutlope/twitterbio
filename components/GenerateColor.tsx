@@ -1,4 +1,4 @@
-import LoadingDots from "../components/LoadingDots";
+import LoadingDots from "./LoadingDots";
 
 export default function GenerateColor(props: any) {
   const {

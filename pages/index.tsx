@@ -2,14 +2,13 @@ import Footer from "../components/Footer";
 import Github from "../components/GitHub";
 import Head from "next/head";
 import Header from "../components/Header";
-import Image from "next/image";
-import LoadingDots from "../components/LoadingDots";
 import type { NextPage } from "next";
 import { Toaster } from "react-hot-toast";
 import { useRef, useState } from "react";
 import GeneratedSwot from "../components/GeneratedSwot";
 import GeneratedColor from "../components/GeneratedColor";
 import GenerateColor from "../components/GenerateColor";
+import GenerateSwot from "../components/GenerateSwot";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -122,9 +121,6 @@ const Home: NextPage = () => {
   const threatsStyle = {
     backgroundColor: "#f07972",
   };
-  const headerStyle = {
-    backgroundColor: "#212529",
-  };
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center min-h-screen">
@@ -147,38 +143,13 @@ const Home: NextPage = () => {
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
           Generate your next SWOT analysis using chatGPT
         </h1>
-        <div className="w-full">
-          <div className="flex mt-10 items-center space-x-3 items-center">
-            <Image src="/1-black.png" width={30} height={30} alt="1 icon" />
-            <p className="text-left font-medium">
-              Add a company name to analyse.
-            </p>
-          </div>
-          <input
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            className="w-full mt-2 border-2 border-black-400 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-black-400"
-            placeholder={"e.g. Amazon, Apple, Alphabet."}
-          />
-          {!loading && !loadingColor && (
-            <button
-              style={headerStyle}
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-              onClick={(e) => generateSWOT(e)}
-            >
-              Generate your SWOT &rarr;
-            </button>
-          )}
-          {loading ||
-            (loadingColor && (
-              <button
-                className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-                disabled
-              >
-                <LoadingDots color="white" style="large" />
-              </button>
-            ))}
-        </div>
+        <GenerateSwot
+          company={company}
+          loading={loading}
+          loadingColor={loadingColor}
+          setCompany={setCompany}
+          generateSWOT={generateSWOT}
+        ></GenerateSwot>
         <Toaster
           position="top-center"
           reverseOrder={false}
