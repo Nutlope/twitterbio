@@ -28,8 +28,7 @@ const Home: NextPage = () => {
       ? "Make sure there is a fluency sentence."
       : null
   }
-      Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${
-    bio.slice(-1) === "." ? "" : "."
+      Make sure each generated sentence is less than 160 characters.
   }`;
 
   const generateBio = async (e: any) => {
