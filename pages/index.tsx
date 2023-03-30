@@ -8,6 +8,11 @@ import Footer from "../components/Footer";
 import Github from "../components/GitHub";
 import Header from "../components/Header";
 import LoadingDots from "../components/LoadingDots";
+import {
+  createParser,
+  ParsedEvent,
+  ReconnectInterval,
+} from "eventsource-parser";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -56,15 +61,28 @@ const Home: NextPage = () => {
       return;
     }
 
+    const onParse = (event: ParsedEvent | ReconnectInterval) => {
+      if (event.type === "event") {
+        const data = event.data;
+        try {
+          const text = JSON.parse(data).text ?? ""
+          setGeneratedBios((prev) => prev + text);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
+    // https://web.dev/streams/#the-getreader-and-read-methods
     const reader = data.getReader();
     const decoder = new TextDecoder();
+    const parser = createParser(onParse);
     let done = false;
-
     while (!done) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
-      setGeneratedBios((prev) => prev + chunkValue);
+      parser.feed(chunkValue);
     }
     scrollToBios();
     setLoading(false);
