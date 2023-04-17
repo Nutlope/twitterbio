@@ -79,54 +79,5 @@ const handler = async (req: Request, res: Response) => {
   const stream = await OpenAIStream(essayPayload);
   return new Response(stream);
 }
-  
-
-interface Essay {
-  heading: string;
-  content: string;
-}
-
-async function fetchEssay(url: string) {
-  try {
-		if(!url) {
-			return {heading: "", content: ""}
-		}	
-    
-    const response = await fetch(url)
-    const html = await response.text();
-    const $ = cheerio.load(html);
-    
-    let content: string | undefined = '';
-    let heading: string | undefined = '';
-
-		const publishedPost = $('.single-post')
-    const draftPost = $('.post-editor');
-		
-    if (publishedPost.length) {
-      content = publishedPost
-        ?.first()
-        ?.prop('innerText')
-        ?.trim();
-      heading = $('.post-title')?.first()?.prop('innerText')?.trim();
-    } else if (draftPost.length) {
-      content = draftPost
-        ?.first()
-        ?.prop('innerText')
-        ?.trim();
-      heading = $('.page-title')?.first()?.prop('innerText')?.trim();
-    } else {
-      console.log('No matching content found.');
-      return {heading: "", content: ""}
-    }
-
-    const result = {
-      heading: heading,
-      content: content
-    };
-    return result;
-  } catch (error) {
-    console.error('Error fetching essay:', error);
-  }
-}
 
 export default handler;
