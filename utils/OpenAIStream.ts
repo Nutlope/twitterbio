@@ -27,6 +27,8 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
 
+  console.log("PAYLOAD", payload)
+
   let counter = 0;
 
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -43,6 +45,7 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
       // callback
       function onParse(event: ParsedEvent | ReconnectInterval) {
         if (event.type === "event") {
+          console.log("DATA", event.data)
           const data = event.data;
           // https://beta.openai.com/docs/api-reference/completions/create#completions/create-stream
           if (data === "[DONE]") {
@@ -52,8 +55,12 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
           try {
             const json = JSON.parse(data);
             const text = json.choices[0].delta?.content || "";
+            // TODO check the coutner logic
+           
             if (counter < 2 && (text.match(/\n/) || []).length) {
               // this is a prefix character (i.e., "\n\n"), do nothing
+
+              console.error("heyyyy")
               return;
             }
             const queue = encoder.encode(text);
@@ -75,6 +82,5 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
       }
     },
   });
-
   return stream;
 }
