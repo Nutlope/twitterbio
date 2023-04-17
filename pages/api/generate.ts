@@ -45,7 +45,7 @@ const handler = async (req: Request, res: Response) => {
   
   let vibeType = vibe || "Casual"; // Set a default value for vibeType
   const basePrompt: string = promptMap[vibeType];
-  const prefix: string = `You are a helpful marketing assistant. As if you were the essay author,`
+  const prefix: string = `You are a co-pilot for a successful writer. As if you were the essay author,`
   const request = `${prefix} ${basePrompt}. Essay body: ${essay}`
   
   // const request = `Create one hashtag-free tweet to promote this essay. Write as if you were the essay author. Write the tweet in the same style and voice. Do not use hashtags, mentions or links.`
@@ -69,13 +69,14 @@ const handler = async (req: Request, res: Response) => {
   // const request = `You are a helpful social media guru. No hashtags whatsoever. Using the following essay text, generate 3 promotional Tweets that are likely to go viral. Make sure they capture the essence of the essay. Write the tweets in a first-person voice with the tone and style of the essay:\n\n${essay}\n`;
 
   const essayPayload: OpenAIStreamPayload = {
-    model: "gpt-3.5-turbo",
+    // model: "gpt-3.5-turbo",
+    model: "gpt-4",
     messages: [{ role: "user", content: request }],
     temperature: 0.7,
     top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0,
-    max_tokens: 80,
+    // frequency_penalty: 0,
+    // presence_penalty: 0,
+    max_tokens: 100,
     stream: true,
     n: 1 // TODO check me
   }
