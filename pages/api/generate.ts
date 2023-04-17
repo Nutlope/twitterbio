@@ -36,13 +36,17 @@ const handler = async (req: Request, res: Response) => {
   };
   
   const promptMap: PromptMap = {
-    Professional: "Promote this essay for a LinkedIn audience. Write it in the style and tone of the author. Use first person voice.",
-    Casual: "Create one hashtag-free tweet to promote this essay. Write as if you were the essay author. Write the tweet in the same style and voice. Do not use hashtags, mentions or links.",
-    Funny: "Write a message in first person voice (you are the author of the essay) to promote this essay. Include one or two ridiculous jokes to give it a funny vibe!"
+    Professional: "write an engaging hook for LinkedIn to promote this essay",
+    Casual: "write a Twitter hook in first person voice for this essay. Keep the author's style and tone.",
+    // Casual: "Create one hashtag-free tweet to promote this essay. Write as if you were the essay author. Write the tweet in the same style and voice. Do not use hashtags, mentions or links.",
+    Funny: "write a playful, hilarious message post to promote this essay. Include one ridiculous detail to make it funny"
+    //  first person voice (you are the author of the essay) to promote this essay. Include one or two ridiculous jokes to give it a funny vibe!"
   };
   
   let vibeType = vibe || "Casual"; // Set a default value for vibeType
   const basePrompt: string = promptMap[vibeType];
+  const prefix: string = `You are a helpful marketing assistant. As if you were the essay author,`
+  const request = `${prefix} ${basePrompt}. Essay body: ${essay}`
   
   // const request = `Create one hashtag-free tweet to promote this essay. Write as if you were the essay author. Write the tweet in the same style and voice. Do not use hashtags, mentions or links.`
   // const promptMap = {
@@ -57,7 +61,7 @@ const handler = async (req: Request, res: Response) => {
   
   // let vibeType = vibe?.toLowerCase()
   // const basePrompt: string = promptMap[vibeType] 
-  const request = `${basePrompt}. Essay body: ${essay}`
+  
 
   
   
