@@ -13,16 +13,15 @@ export const config = {
 // 1) Make the 1st request from UI when user clicks button
 // 2) Use the results to call GPT-4 to stream the response. Should still be pretty quick
 
+export type VibeType = "Professional" | "Casual" | "Funny";
+
 const handler = async (req: Request, res: Response) => {
-  const { prompt, url, essay } = (await req.json()) as {
+  const { prompt, url, essay, vibe } = (await req.json()) as {
     essay?: string,
     prompt?: string;
     url?: string;
+    vibe?: VibeType;
   };
-
-  // if (!prompt) {
-  //   return new Response("No prompt in the request", { status: 400 });
-  // }
 
   if (!url) {
     return new Response("No url in the request", { status: 400 });
@@ -32,7 +31,21 @@ const handler = async (req: Request, res: Response) => {
     return new Response("No essay in the request", {status: 400})
   }
   
-  const request = `You are a helpful social media guru. No hashtags whatsoever. Using the following essay text, generate 3 promotional Tweets that are likely to go viral. Make sure they capture the essence of the essay. Write the tweets in a first-person voice with the tone and style of the essay:\n\n${essay}\n`;
+  // const request = `Create one hashtag-free tweet to promote this essay. Write as if you were the essay author. Write the tweet in the same style and voice. Do not use hashtags, mentions or links.`
+  const promptMap = {
+    professional: "Promote this essay for a LinkedIn audience. Write it in the style and tone of the author. Use first person voice.",
+    casual: "Create one hashtag-free tweet to promote this essay. Write as if you were the essay author. Write the tweet in the same style and voice. Do not use hashtags, mentions or links.",
+    funny: "Pretend you are the author of this essay - write a message to promote this essay. Include one or two ridiculous jokes to give it a funny vibe!"
+  }
+
+  let vibeType = vibe?.toLowerCase()
+  const basePrompt: string = promptMap[vibeType] 
+  const request = `${basePrompt}. Essay body: ${essay}`
+
+  
+  
+  // const request = `Create one hashtag-free tweet to promote this essay. Write as if you were the essay author in the same style and voice. Do not use hashtags, mentions or links. Delimit the response with Tweet1: X, Tweet 2: Y etc. Essay body: ${essay}`
+  // const request = `You are a helpful social media guru. No hashtags whatsoever. Using the following essay text, generate 3 promotional Tweets that are likely to go viral. Make sure they capture the essence of the essay. Write the tweets in a first-person voice with the tone and style of the essay:\n\n${essay}\n`;
 
   const essayPayload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",
@@ -41,7 +54,7 @@ const handler = async (req: Request, res: Response) => {
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
-    max_tokens: 400,
+    max_tokens: 80,
     stream: true,
     n: 1 // TODO check me
   }

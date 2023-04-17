@@ -28,6 +28,7 @@ const Home: NextPage = () => {
   const [essayHeading, setEssayHeading] = useState<string>("")
   const [essayContent, setEssayContent] = useState<string>("")
   const [essay, setEssay] = useState({content: "", heading: ""})
+  const [tweets, setTweets] = useState<string[]>([]);
 
   const bioRef = useRef<null | HTMLDivElement>(null);
 
@@ -107,7 +108,7 @@ const Home: NextPage = () => {
 
   const checkAndStreamBabe = async () => {
     if (essayContent && essayHeading) {
-      await streamBabe();
+      await streamBabe(); // generate posts
     }
   };
   
@@ -126,7 +127,7 @@ const Home: NextPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          // essay: bio,
+          vibe,
           essay: essayContent,
           prompt,
           url,
@@ -159,53 +160,16 @@ const Home: NextPage = () => {
         reader.read().then(process);
       });
     };
-    
 
-
-  const generateBio = async (e: any) => {
-    e.preventDefault();
-    setGeneratedBios("");
-    setLoading(true);
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        essay: bio,
-        prompt,
-        url
-      }),
-    });
-
-    if (!response.ok) {
-      let data = response.body
-      const reader = data.getReader();
-      const decoder = new TextDecoder();
-      throw new Error(response.statusText);
-    }
-
-    // This data is a ReadableStream
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
-
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      debugger
-      setGeneratedBios((prev) => prev + chunkValue);
-      console.log("TEXT", chunkValue)
-    }
-    scrollToBios();
-    setLoading(false);
-  };
+    // might be irrelevant
+    useEffect(() => {
+      console.log(generatedBios)
+      const newTweets= formatTweets(generatedBios)
+      console.log(tweets)
+      setTweets(newTweets)
+        // setTweets([...tweets, newTweets])
+    }, [generatedBios])
+     
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
@@ -218,8 +182,7 @@ const Home: NextPage = () => {
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
         Share your insights with the world
         </h1>
-        
-        <p className="text-slate-500 mt-5">47,118 tweets generated so far.</p>
+        <p className="text-slate-500 mt-5">72,317 posts generated so far. Na so.</p>
         <div className="max-w-xl w-full">
         <div className="flex mt-10 items-center space-x-3">
             <Image
@@ -233,40 +196,21 @@ const Home: NextPage = () => {
               Paste your essay link here — Substack only pls!
             </p>
           </div>
-        <input
-            className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-4 pr-3 py-2 my-5 border border-gray-300 rounded-md leading-5 bg-white text-gray-700 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 sm:text-sm transition duration-150 ease-in-out"
-            type="search"
-            autoComplete="on"
-            value={url}
-            placeholder="Paste your essay link here"
-            onChange={(e) => setUrl(e.target.value)}
-          />
-          	{error && <p style={{ color: "red", fontSize: 12 }}>{error}</p>}
-          {/* <div className="flex mt-10 items-center space-x-3">
-            <Image
-              src="/1-black.png"
-              width={30}
-              height={30}
-              alt="1 icon"
-              className="mb-5 sm:mb-0"
+          <div className="flex flex-col">
+            <input
+              className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-4 pr-3 py-2 my-5 border border-gray-300 rounded-md leading-5 bg-white text-gray-700 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 sm:text-sm transition duration-150 ease-in-out"
+              type="search"
+              name="url"
+              autoComplete="url"
+              value={url}
+              placeholder="Paste your essay link here"
+              onChange={(e) => setUrl(e.target.value)}
             />
-            <p className="text-left font-medium">
-              Copy your current bio{" "}
-              <span className="text-slate-500">
-                (or write a few sentences about yourself)
-              </span>
-              .
-            </p>
-          </div>
-          <textarea
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            rows={4}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
-            placeholder={
-              "e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com."
-            }
-          /> */}
+            {error && (
+              <p className="text-red-500 text-sm mt-1 ml-4">{error}</p>
+            )}
+      </div>
+
           <div className="flex mb-5 items-center space-x-3">
             <Image src="/2-black.png" width={30} height={30} alt="1 icon" />
             <p className="text-left font-medium">Select your vibe.</p>
@@ -301,7 +245,6 @@ const Home: NextPage = () => {
         />
         <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
         <div className="space-y-10 my-10">
-        {essayHeading && (<h3>Title: {essayHeading}</h3>)}
           {generatedBios && (
             <>
               <div>
@@ -309,14 +252,22 @@ const Home: NextPage = () => {
                   className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
                   ref={bioRef}
                 >
-                  Your generated bios
+                  Your generated tweets
                 </h2>
+                {essayHeading && (<h3 className="sm:text-2xl text-lg" >Title: {essayHeading}</h3>)}
               </div>
+              
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
-                {generatedBios
-                  .substring(generatedBios.indexOf("1") + 3)
-                  .split("2.")
-                  .map((generatedBio) => {
+                {tweets
+                // .split(/ (?=\d\))/)
+                // .map((str) => str.replace(/^\d\)\s*/, ''))
+                // .map(x => {
+                //   debugger
+                //   return x
+                // })
+                  // .substring(generatedBios.indexOf("1") + 3)
+                  // .split("2.")
+                  .map((generatedBio: string, index: number) => {
                     return (
                       <div
                         className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
@@ -326,7 +277,7 @@ const Home: NextPage = () => {
                             icon: "✂️",
                           });
                         }}
-                        key={generatedBio}
+                        key={`${generatedBio}-${index}`}
                       >
                         <p>{generatedBio}</p>
                       </div>
@@ -341,4 +292,96 @@ const Home: NextPage = () => {
   );
 };
 
+function formatTweets (input: string) {  
+  if (!input) {
+    return [];
+  }
+  const formattedData = input
+    .split(/ (?=Tweet \d:)/)
+    .map((str) => str.replace(/^Tweet \d:\s*/, '').trim());
+
+    debugger
+  return formattedData
+}
+
+//   return input.replace(/\n/g, " ")
+//   .split(/ (?=\d[.)]\s)/)
+//   .map((str) => str.trim())
+// }
+
 export default Home;
+
+
+
+          {/* <div className="flex mt-10 items-center space-x-3">
+            <Image
+              src="/1-black.png"
+              width={30}
+              height={30}
+              alt="1 icon"
+              className="mb-5 sm:mb-0"
+            />
+            <p className="text-left font-medium">
+              Copy your current bio{" "}
+              <span className="text-slate-500">
+                (or write a few sentences about yourself)
+              </span>
+              .
+            </p>
+          </div>
+          <textarea
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
+            rows={4}
+            className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
+            placeholder={
+              "e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com."
+            }
+          /> */}
+
+
+          // const generateBio = async (e: any) => {
+          //   e.preventDefault();
+          //   setGeneratedBios("");
+          //   setLoading(true);
+          //   const response = await fetch("/api/generate", {
+          //     method: "POST",
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //     },
+          //     body: JSON.stringify({
+          //       essay: bio,
+          //       prompt,
+          //       url
+          //     }),
+          //   });
+        
+          //   if (!response.ok) {
+          //     let data = response.body
+          //     const reader = data.getReader();
+          //     const decoder = new TextDecoder();
+          //     throw new Error(response.statusText);
+          //   }
+        
+          //   // This data is a ReadableStream
+          //   const data = response.body;
+          //   if (!data) {
+          //     return;
+          //   }
+        
+          //   const reader = data.getReader();
+          //   const decoder = new TextDecoder();
+          //   let done = false;
+        
+          //   while (!done) {
+          //     const { value, done: doneReading } = await reader.read();
+          //     done = doneReading;
+          //     const chunkValue = decoder.decode(value);
+          //     debugger
+          //     setGeneratedBios((prev) => prev + chunkValue);
+          //     console.log("TEXT", chunkValue)
+          //   }
+          //   scrollToBios();
+          //   setLoading(false);
+          // };
+        
