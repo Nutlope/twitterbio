@@ -30,16 +30,33 @@ const handler = async (req: Request, res: Response) => {
   if(!essay) {
     return new Response("No essay in the request", {status: 400})
   }
+
+  type PromptMap = {
+    [key in VibeType]: string;
+  };
+  
+  const promptMap: PromptMap = {
+    Professional: "Promote this essay for a LinkedIn audience. Write it in the style and tone of the author. Use first person voice.",
+    Casual: "Create one hashtag-free tweet to promote this essay. Write as if you were the essay author. Write the tweet in the same style and voice. Do not use hashtags, mentions or links.",
+    Funny: "Write a message in first person voice (you are the author of the essay) to promote this essay. Include one or two ridiculous jokes to give it a funny vibe!"
+  };
+  
+  let vibeType = vibe || "Casual"; // Set a default value for vibeType
+  const basePrompt: string = promptMap[vibeType];
   
   // const request = `Create one hashtag-free tweet to promote this essay. Write as if you were the essay author. Write the tweet in the same style and voice. Do not use hashtags, mentions or links.`
-  const promptMap = {
-    professional: "Promote this essay for a LinkedIn audience. Write it in the style and tone of the author. Use first person voice.",
-    casual: "Create one hashtag-free tweet to promote this essay. Write as if you were the essay author. Write the tweet in the same style and voice. Do not use hashtags, mentions or links.",
-    funny: "Pretend you are the author of this essay - write a message to promote this essay. Include one or two ridiculous jokes to give it a funny vibe!"
-  }
+  // const promptMap = {
+  //   professional: "Promote this essay for a LinkedIn audience. Write it in the style and tone of the author. Use first person voice.",
+  //   casual: "Create one hashtag-free tweet to promote this essay. Write as if you were the essay author. Write the tweet in the same style and voice. Do not use hashtags, mentions or links.",
+  //   funny: "Pretend you are the author of this essay - write a message to promote this essay. Include one or two ridiculous jokes to give it a funny vibe!"
+  // }
 
-  let vibeType = vibe?.toLowerCase()
-  const basePrompt: string = promptMap[vibeType] 
+  
+  // let vibeType = vibe || "Casual"; // Set a default value for vibeType
+  // const basePrompt: string = promptMap[vibeType];
+  
+  // let vibeType = vibe?.toLowerCase()
+  // const basePrompt: string = promptMap[vibeType] 
   const request = `${basePrompt}. Essay body: ${essay}`
 
   
