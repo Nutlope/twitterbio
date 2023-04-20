@@ -344,19 +344,19 @@ function createTweets (stream: string) {
   return tweets
 }
 
-const CustomTwitterButton = ({ text, index, url }) => {
-  const twitterButton = useMemo(() => {
-    return (
-      <TwitterShareButton
-        key={`tweet-button-${index}`}
-        url={url}
-        options={{ text, dataSize: 'large', size: 'large' }}
-      />
-    );
-  }, [text, index, url]);
+// const CustomTwitterButton = ({ text, index, url }) => {
+//   const twitterButton = useMemo(() => {
+//     return (
+//       <TwitterShareButton
+//         key={`tweet-button-${index}`}
+//         url={url}
+//         options={{ text, dataSize: 'large', size: 'large' }}
+//       />
+//     );
+//   }, [text, index, url]);
 
-  return twitterButton;
-};
+//   return twitterButton;
+// };
 
 function formatTweets(input: string) {
   if (!input) {

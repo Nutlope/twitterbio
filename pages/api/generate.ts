@@ -29,13 +29,13 @@ const handler = async (req: Request, res: Response) => {
     [key in VibeType]: string;
   };
   
-  const promptMap: PromptMap = {
-    professional: "write an engaging hook for LinkedIn to promote this essay",
-    casual: "write a Twitter hook in first person voice for this essay. Keep the author's style and tone.",
-    // Casual: "Create one hashtag-free tweet to promote this essay. Write as if you were the essay author. Write the tweet in the same style and voice. Do not use hashtags, mentions or links.",
-    funny: "write a playful, hilarious message post to promote this essay. Include one ridiculous detail to make it funny"
-    //  first person voice (you are the author of the essay) to promote this essay. Include one or two ridiculous jokes to give it a funny vibe!"
-  };
+  // const promptMap: PromptMap = {
+  //   professional: "write an engaging hook for LinkedIn to promote this essay",
+  //   casual: "write a Twitter hook in first person voice for this essay. Keep the author's style and tone.",
+  //   // Casual: "Create one hashtag-free tweet to promote this essay. Write as if you were the essay author. Write the tweet in the same style and voice. Do not use hashtags, mentions or links.",
+  //   funny: "write a playful, hilarious message post to promote this essay. Include one ridiculous detail to make it funny"
+  //   //  first person voice (you are the author of the essay) to promote this essay. Include one or two ridiculous jokes to give it a funny vibe!"
+  // };
   
   
   // const basePrompt: string = promptMap[vibeType];
