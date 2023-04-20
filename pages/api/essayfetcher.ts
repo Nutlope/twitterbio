@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 async function fetchEssay(url: string) {
     try {
           if(!url) {
-              return {heading: "", content: ""}
+              return {heading: "", content: "", error: "URL is missing"}
             }	
       
       const response = await fetch(url)
@@ -36,6 +36,7 @@ async function fetchEssay(url: string) {
       
       let content: string | undefined = '';
       let heading: string | undefined = '';
+      let error: string = ""
   
           const publishedPost = $('.single-post')
       const draftPost = $('.post-editor');
@@ -54,12 +55,15 @@ async function fetchEssay(url: string) {
         heading = $('.page-title')?.first()?.prop('innerText')?.trim();
       } else {
         console.log('No matching content found.');
-        return {heading: "", content: ""}
+        error = "Hmmm no content found. Can you double check the URL? Make sure it's a Substack newsletter"
+        heading = ""
+        content = ""
       }
   
       const result = {
         heading: heading,
-        content: content
+        content: content,
+        error: error
       };
       return result;
     } catch (error) {
