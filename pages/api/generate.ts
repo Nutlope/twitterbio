@@ -46,13 +46,14 @@ const handler = async (req: Request, res: Response) => {
   const { temperature, max_tokens, message } = getPlatformSettings(vibeType, essay);
 
 const essayPayload: OpenAIStreamPayload = {
-  model: "gpt-4",
+  model: "gpt-3.5-turbo",
+  // model: "gpt-4",
   messages: [{ role: "user", content: message }],
   temperature,
   top_p: 1,
   max_tokens,
   stream: true,
-  n: 1,
+  n: 1, // should always be 1. You can ask for more posts in the prompt itself. Just multiply the max_tokens so that you have num_posts * tokens_per_post === max_tokens
 };
 
 console.log("PAYLOAD", essayPayload)
@@ -75,6 +76,7 @@ export default handler;
 
 
 function getPlatformSettings(platform: VibeType, essayBody: string) {
+  const numPosts = 3
   const platformConfigs = {
     professional: {
       temperature: 0.5,
@@ -83,8 +85,8 @@ function getPlatformSettings(platform: VibeType, essayBody: string) {
     },
     twitter: {
       temperature: 0.7,
-      max_tokens: 60,
-      message: `Create a short and catchy tweet in the first-person perspective about this essay, as if the author is speaking. Maintain the author's voice and limit hashtags and emojis. Use a maximum of two emojis. Make it engaging for increased virality:`,
+      max_tokens: 60 * numPosts,
+      message: `Create three short and catchy tweets in the first-person perspective about this essay, as if the author is speaking. Maintain the author's voice and limit hashtags and emojis. Use a maximum of two emojis. Make it engaging for increased virality. Do this three times and clearly label each tweet with "1.", "2." and "3.":`,
       // message: `Create a short and catchy tweet in the first-person perspective about this essay, as if the author is speaking. Maintain the author's voice and limit hashtags and emojis, using no more than one emoji. Make it engaging for increased virality:`,
     },
     funny: {

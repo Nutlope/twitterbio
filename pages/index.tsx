@@ -153,6 +153,9 @@ const Home: NextPage = () => {
 
     reader.read().then(function process({ done, value }) {
       if (done) {
+        // console.log(generatedBios)
+        // debugger
+        
         setLoading(false);
         scrollToBios();
         return;
@@ -166,14 +169,18 @@ const Home: NextPage = () => {
     });
   };
 
-  // might be irrelevant
+  // TODO might be irrelevant
   useEffect(() => {
-    console.log(generatedBios);
-    const newTweets = formatTweets(generatedBios);
-    console.log(tweets);
-    setTweets(newTweets);
+    // console.log(generatedBios);
+    // const newTweets = formatTweets(generatedBios);
+    // const newTweets = [...tweets, generatedBios]
+
+    const tweets = createTweets(generatedBios)
+    setTweets(tweets);
     // setTweets([...tweets, newTweets])
   }, [generatedBios]);
+
+  debugger
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
@@ -264,7 +271,9 @@ const Home: NextPage = () => {
               </div>
 
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+                {/* {createTweets(generatedBios)  */}
                 {tweets
+                //  This used to be {tweets}
                   // .substring(generatedBios.indexOf("1") + 3)
                   // .split("2.")
                   .map((generatedBio: string, index: number) => {
@@ -324,6 +333,16 @@ const Home: NextPage = () => {
     </div>
   );
 };
+
+function createTweets (stream: string) {
+  let tweets = []
+  for (let i=0; i < 3; i++) {
+    let string = (i + 1).toString()
+    let tweet = stream.substring(stream.indexOf(string) + 3)
+    tweets.push(tweet)
+  }
+  return tweets
+}
 
 const CustomTwitterButton = ({ text, index, url }) => {
   const twitterButton = useMemo(() => {
