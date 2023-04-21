@@ -5,7 +5,7 @@ import { useRef, useState, useEffect, useMemo } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import DropDown, { VibeType } from "../components/DropDown";
 import LoadingDots from "../components/LoadingDots";
-import { TwitterShareButton} from 'react-twitter-embed';
+import { TwitterShareButton } from "react-twitter-embed";
 
 function isURL(url: string) {
   try {
@@ -15,6 +15,8 @@ function isURL(url: string) {
     return false;
   }
 }
+
+console.log(process.env.NODE_ENV);
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -66,7 +68,10 @@ const Home: NextPage = () => {
   };
 
   const fetchEssay = async (e: any) => {
-    // TODO if not URL or not Valid URL // do not proceed
+    // Clear existing tweets and generatedBios
+    setGeneratedBios("");
+    setTweets([]);
+
     if (!isValidURL(url)) {
       return;
     }
@@ -91,9 +96,9 @@ const Home: NextPage = () => {
       }
 
       const essayBody = await response.json();
-      
-      if(essayBody.error) {
-        setError(essayBody.error)
+
+      if (essayBody.error) {
+        setError(essayBody.error);
       }
 
       const newEssay = {
@@ -153,9 +158,6 @@ const Home: NextPage = () => {
 
     reader.read().then(function process({ done, value }) {
       if (done) {
-        // console.log(generatedBios)
-        // debugger
-        
         setLoading(false);
         scrollToBios();
         return;
@@ -175,24 +177,21 @@ const Home: NextPage = () => {
     // const newTweets = formatTweets(generatedBios);
     // const newTweets = [...tweets, generatedBios]
 
-    const tweets = createTweets(generatedBios)
+    const tweets = createTweets(generatedBios);
     setTweets(tweets);
     // setTweets([...tweets, newTweets])
   }, [generatedBios]);
 
-  debugger
-
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
       <Head>
-        <title>Twitter Bio Generator</title>
+        <title>Essence</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
           Share your insights with the world
         </h1>
-        {/* <p className="text-slate-500 mt-5">72,317 posts generated so far. Na so.</p> */}
         <p className="text-slate-500 mt-5">
           Spend your time writing banger essays...we'll handle the tweets.
         </p>
@@ -211,7 +210,7 @@ const Home: NextPage = () => {
           </div>
           <div className="flex flex-col">
             <input
-              className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-4 pr-3 py-2 my-5 border border-gray-300 rounded-md leading-5 bg-white text-gray-700 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 sm:text-sm transition duration-150 ease-in-out"
+              className="focus:ring-purple-500 focus:border-purple-500 block w-full pl-4 pr-3 py-2 my-5 border border-gray-300 rounded-md leading-5 bg-white text-gray-700 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 sm:text-sm transition duration-150 ease-in-out"
               type="search"
               name="url"
               autoComplete="url"
@@ -232,17 +231,17 @@ const Home: NextPage = () => {
 
           {!loading && (
             <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              className="bg-purple-800 rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-purple-800/80 w-full"
               // onClick={(e) => generateBio(e)}
               // onClick={(e) => streamBabe(e)}
               onClick={(e) => fetchEssay(e)}
             >
-              Generate tweets &rarr;
+              Generate posts &rarr;
             </button>
           )}
           {loading && (
             <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              className="bg-purple-800 rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-purple-800/80 w-full"
               disabled
             >
               <LoadingDots color="white" style="large" />
@@ -266,14 +265,13 @@ const Home: NextPage = () => {
                   Your generated posts
                 </h2>
                 {essayHeading && (
-                  <h3 className="sm:text-2xl text-lg">Title: {essayHeading}</h3>
+                  <h3 className="sm:text-2xl text-lg">Essay: {essayHeading}</h3>
                 )}
               </div>
 
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
-                {/* {createTweets(generatedBios)  */}
                 {tweets
-                //  This used to be {tweets}
+                  //  This used to be {tweets}
                   // .substring(generatedBios.indexOf("1") + 3)
                   // .split("2.")
                   .map((generatedBio: string, index: number) => {
@@ -334,14 +332,27 @@ const Home: NextPage = () => {
   );
 };
 
-function createTweets (stream: string) {
-  let tweets = []
-  for (let i=0; i < 3; i++) {
-    let string = (i + 1).toString()
-    let tweet = stream.substring(stream.indexOf(string) + 3)
-    tweets.push(tweet)
+// function createTweets(stream: string) {
+//   let tweets = [];
+//   for (let i = 0; i < 3; i++) {
+//     let string = (i + 1).toString();
+//     let tweet = stream.substring(stream.indexOf(string) + 3);
+//     tweets.push(tweet);
+//   }
+//   return tweets;
+// }
+
+function createTweets(stream: string) {
+  const tweetRegex = /(\d+\.\s)([^]*?)(?=\s\d+\.|$)/g;
+  const tweets = [];
+  let match;
+
+  while ((match = tweetRegex.exec(stream)) !== null) {
+    const tweet = match[2].trim();
+    tweets.push(tweet);
   }
-  return tweets
+
+  return tweets;
 }
 
 // const CustomTwitterButton = ({ text, index, url }) => {
@@ -366,7 +377,6 @@ function formatTweets(input: string) {
     .split(/ (?=Tweet \d:)/)
     .map((str) => str.replace(/^Tweet \d:\s*/, "").trim());
 
-  debugger;
   return formattedData;
 }
 

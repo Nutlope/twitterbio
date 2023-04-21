@@ -11,23 +11,19 @@ function classNames(...classes: string[]) {
 }
 
 function capitalize(str: string) {
-  if (typeof str !== 'string' || str.length === 0) {
-    return '';
+  if (typeof str !== "string" || str.length === 0) {
+    return "";
   }
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-
 export type VibeType = "twitter" | "professional" | "funny";
+let vibes: VibeType[] = ["twitter", "professional", "funny"];
 
 interface DropDownProps {
   vibe: VibeType;
   setVibe: (vibe: VibeType) => void;
 }
-
-let vibes: VibeType[] = ["twitter", "professional", "funny"];
-
-
 
 export default function DropDown({ vibe, setVibe }: DropDownProps) {
   return (
@@ -45,7 +41,6 @@ export default function DropDown({ vibe, setVibe }: DropDownProps) {
           />
         </Menu.Button>
       </div>
-
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"
