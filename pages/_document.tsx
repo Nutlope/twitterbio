@@ -1,6 +1,7 @@
 import Document, { Head, Html, Main, NextScript } from "next/document";
 
 class MyDocument extends Document {
+  // TODO update this whole document
   render() {
     return (
       <Html lang="en">
