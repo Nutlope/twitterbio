@@ -2,13 +2,12 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRef, useState, useEffect, useMemo, MouseEventHandler } from "react";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import DropDown, { VibeType } from "../components/DropDown";
 import LoadingDots from "../components/LoadingDots";
 import { TwitterShareButton } from "react-twitter-embed";
 import debounce from "lodash.debounce";
-import { postAPI, getAPI } from "../utils/fetch";
-import { debug } from "console";
+import { postAPI } from "../utils/fetch";
 import { streamingAPI } from "../utils/streaming";
 
 function isURL(url: string) {
