@@ -6,6 +6,10 @@ import { Toaster, toast } from "react-hot-toast";
 import DropDown, { VibeType } from "../components/DropDown";
 import LoadingDots from "../components/LoadingDots";
 import { TwitterShareButton } from "react-twitter-embed";
+import debounce from "lodash.debounce";
+import { postAPI, getAPI } from "../utils/fetch";
+import { debug } from "console";
+import { streamingAPI } from "../utils/streaming";
 
 function isURL(url: string) {
   try {
@@ -16,8 +20,6 @@ function isURL(url: string) {
   }
 }
 
-console.log(process.env.NODE_ENV);
-
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState("");
@@ -27,16 +29,24 @@ const Home: NextPage = () => {
   // ESSENCE state
   const [url, setUrl] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [streamingError, setStreamingError] = useState<string>("");
   const [essayHeading, setEssayHeading] = useState<string>("");
   const [essayContent, setEssayContent] = useState<string>("");
   const [essay, setEssay] = useState({ content: "", heading: "" });
   const [tweets, setTweets] = useState<string[]>([]);
 
-  const bioRef = useRef<null | HTMLDivElement>(null);
+  const postsRef = useRef<null | HTMLDivElement>(null);
 
-  const scrollToBios = () => {
-    if (bioRef.current !== null) {
-      bioRef.current.scrollIntoView({ behavior: "smooth" });
+  // const scrollToPosts = () => {
+  //   if (postsRef.current !== null) {
+  //     postsRef.current.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // };
+
+  const scrollToPosts = () => {
+    if (postsRef.current !== null) {
+      const lastPost = postsRef.current.lastChild as HTMLElement;
+      lastPost.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -53,13 +63,17 @@ const Home: NextPage = () => {
     bio.slice(-1) === "." ? "" : "."
   }`;
 
+  function isSubstackDraft(url: string) {
+    const pattern = /^https:\/\/[\w.-]+\/publish\/post\/\d+$/;
+    return pattern.test(url);
+  }
+
   const isValidURL = (url: string) => {
     if (!isURL(url)) {
-      setError("Please enter a valid Substack URL");
+      setError("Please enter a valid Substack URL.");
       return false;
-    } else if (url.includes("publish")) {
-      // potential bug here, use regex
-      setError("Please enter a published post. We don't work with drafts yet");
+    } else if (isSubstackDraft(url)) {
+      setError("Please enter a published post. We don't work with drafts yet.");
       return false;
     } else {
       setError("");
@@ -79,96 +93,151 @@ const Home: NextPage = () => {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      const response = await fetch("/api/essayfetcher", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          url,
-        }),
-      });
+    const { data, error } = await postAPI({
+      url: "/api/essayfetcher",
+      data: { url },
+    });
 
-      if (!response.ok) {
-        console.error(response);
-        throw new Error(response.statusText);
-      }
+    debugger;
 
-      const essayBody = await response.json();
-
-      if (essayBody.error) {
-        setError(essayBody.error);
-      }
-
-      const newEssay = {
-        ...essay,
-        content: essayBody?.content,
-        heading: essayBody?.heading,
-      };
-      setEssay(newEssay);
-      // TODO remove above
-      setEssayContent(essayBody?.content);
-      setEssayHeading(essayBody?.heading);
-      setLoading(false);
-    } catch (e) {
-      console.error(e);
+    if (error) {
+      console.error(error);
+      setError(error);
     }
+
+    const newEssay = {
+      ...essay,
+      content: data?.content,
+      heading: data?.heading,
+    };
+
+    setEssay(newEssay);
+    setLoading(false);
   };
 
+  //   try {
+  //     const response = await fetch("/api/essayfetcher", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         url,
+  //       }),
+  //     });
+
+  //     if (!response.ok) {
+  //       console.error(response);
+  //       throw new Error(response.statusText);
+  //     }
+
+  //     const essayBody = await response.json();
+
+  //     if (essayBody.error) {
+  //       setError(essayBody.error);
+  //     }
+
+  //     const newEssay = {
+  //       ...essay,
+  //       content: essayBody?.content,
+  //       heading: essayBody?.heading,
+  //     };
+  //     setEssay(newEssay);
+  //     // TODO remove above
+  //     // setEssayContent(essayBody?.content);
+  //     // setEssayHeading(essayBody?.heading);
+  //     setLoading(false);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
+
   const checkAndStreamBabe = async () => {
-    if (essayContent && essayHeading) {
+    const { content, heading } = essay;
+    if (content && heading) {
       await streamBabe(); // generate posts
     }
   };
 
   useEffect(() => {
-    checkAndStreamBabe();
-  }, [essayContent, essayHeading]);
+    // checkAndStreamBabe();
+    callStreamingAPI();
+  }, [essay.content, essay.heading]);
+
+  const callStreamingAPI = () => {
+    if (essay.content) {
+      streamingAPI({
+        url: "/api/generate",
+        onDataChunk: (chunk) => {
+          setGeneratedBios((prev) => prev + chunk);
+        },
+        onDataEnd: () => {
+          setLoading(false);
+          scrollToPosts();
+        },
+        onError: (error: any) => {
+          console.error("Streaming API error:", error);
+          setStreamingError(error);
+        },
+        options: {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            vibe,
+            essay: essay.content,
+            url,
+          }),
+        },
+      });
+    }
+  };
 
   const streamBabe = async () => {
-    // const streamBabe = async (e: any) => {
-    // e.preventDefault();
     setGeneratedBios("");
     setLoading(true);
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+
+    const { data, error } = await postAPI({
+      url: "/api/generate",
+      data: {
         vibe,
-        essay: essayContent,
-        prompt,
+        essay: essay?.content,
         url,
-      }),
+      },
+      timeout: Infinity,
     });
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    const data = response.body;
-    if (!data) {
+    if (error) {
+      setLoading(false);
+      console.error("Error:", error);
       return;
     }
 
-    const reader = data.getReader();
+    const responseBody = data;
+    if (!responseBody) {
+      return;
+    }
+
+    const reader = responseBody.getReader();
     const decoder = new TextDecoder("utf-8");
 
-    reader.read().then(function process({ done, value }) {
-      if (done) {
-        setLoading(false);
-        scrollToBios();
-        return;
-      }
+    reader
+      .read()
+      .then(function process({ done, value }: { done: boolean; value: any }) {
+        if (done) {
+          setLoading(false);
+          scrollToPosts();
+          return;
+        }
 
-      if (value) {
-        const decodedValue = decoder.decode(value, { stream: !done });
-        setGeneratedBios((prev) => prev + decodedValue);
-      }
-      reader.read().then(process);
-    });
+        if (value) {
+          const decodedValue = decoder.decode(value, { stream: !done });
+          setGeneratedBios((prev) => prev + decodedValue);
+          // scrollToPosts();
+        }
+        reader.read().then(process);
+      });
   };
 
   // TODO might be irrelevant
@@ -181,6 +250,12 @@ const Home: NextPage = () => {
     setTweets(tweets);
     // setTweets([...tweets, newTweets])
   }, [generatedBios]);
+
+  // useEffect(() => {
+  //   if (postsRef.current !== null) {
+  //     postsRef.current.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // }, [generatedBios]);
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
@@ -231,98 +306,52 @@ const Home: NextPage = () => {
 
           {!loading && (
             <button
-              className="bg-purple-800 rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-purple-800/80 w-full"
+              className="bg-amber-500 rounded-xl text-slate font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-purple-800/80 w-full"
               // onClick={(e) => generateBio(e)}
               // onClick={(e) => streamBabe(e)}
-              onClick={(e) => fetchEssay(e)}
+              onClick={debounce((e: Event) => fetchEssay(e), 1000)}
             >
               Generate posts &rarr;
             </button>
           )}
           {loading && (
             <button
-              className="bg-purple-800 rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-purple-800/80 w-full"
+              className="bg-amber-600 rounded-xl text-slate font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-purple-800/80 w-full"
               disabled
             >
               <LoadingDots color="white" style="large" />
             </button>
           )}
         </div>
-        <Toaster
-          position="top-center"
-          reverseOrder={false}
-          toastOptions={{ duration: 2000 }}
-        />
+
         <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
         <div className="space-y-10 my-10">
           {generatedBios && (
             <>
               <div>
-                <h2
-                  className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
-                  ref={bioRef}
-                >
+                <h2 className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto">
                   Your generated posts
                 </h2>
                 {essayHeading && (
-                  <h3 className="sm:text-2xl text-lg">Essay: {essayHeading}</h3>
+                  <h3 className="sm:text-2xl text-lg mt-2">
+                    Essay: {essayHeading}
+                  </h3>
                 )}
               </div>
 
-              <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
-                {tweets
-                  //  This used to be {tweets}
-                  // .substring(generatedBios.indexOf("1") + 3)
-                  // .split("2.")
-                  .map((generatedBio: string, index: number) => {
-                    return (
-                      <div
-                        className="bg-white rounded-xl shadow-md p-8 hover:bg-gray-100 transition cursor-copy border text-center"
-                        onClick={() => {
-                          navigator.clipboard.writeText(generatedBio);
-                          toast("Bio copied to clipboard", {
-                            icon: "✂️",
-                          });
-                        }}
-                        key={`${generatedBio}-${index}`}
-                      >
-                        <p>{generatedBio}</p>
-                        <div className="flex justify-between mt-4">
-                          <div className="flex justify-center">
-                            <button
-                              className="bg-green-500 text-white rounded-lg px-2 py-1 mr-2"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                console.log("handleUpvote");
-                              }}
-                            >
-                              👍
-                            </button>
-                            <button
-                              className="bg-red-500 text-white rounded-lg px-2 py-1"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                console.log("handleDownvote");
-                              }}
-                            >
-                              👎
-                            </button>
-                          </div>
-                          <button
-                            className="bg-blue-500 text-white rounded-lg px-4 py-1"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              console.log("button clicked");
-                            }}
-                          >
-                            Post on Twitter
-                          </button>
-                          {/* <CustomTwitterButton index={index} url={url} text={generatedBio}/> */}
-                          {/* <TwitterShareButton key={`tweet-button-${index}`}url={url} options={{text:generatedBio, dataSize: "large", size: "large"}}/> */}
-                        </div>
-                      </div>
-                    );
-                  })}
+              <div
+                className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto"
+                ref={postsRef}
+              >
+                {tweets.map((generatedPost: string, index: number) => {
+                  return (
+                    <GeneratedPost
+                      key={`${generatedPost}-${index}`}
+                      index={index}
+                      generatedPost={generatedPost}
+                    />
+                  );
+                })}
               </div>
             </>
           )}
@@ -332,15 +361,66 @@ const Home: NextPage = () => {
   );
 };
 
-// function createTweets(stream: string) {
-//   let tweets = [];
-//   for (let i = 0; i < 3; i++) {
-//     let string = (i + 1).toString();
-//     let tweet = stream.substring(stream.indexOf(string) + 3);
-//     tweets.push(tweet);
-//   }
-//   return tweets;
-// }
+const GeneratedPost = ({
+  generatedPost,
+  index,
+}: {
+  generatedPost: string;
+  index: number;
+}) => {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (ref.current !== null) {
+      ref.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [generatedPost]);
+
+  return (
+    <div
+      className="bg-white rounded-xl shadow-md p-8 hover:bg-gray-100 transition cursor-copy border text-center"
+      ref={ref}
+      key={`${generatedPost}-${index}`}
+    >
+      <p>{generatedPost}</p>
+      <div className="flex justify-between mt-4">
+        <div className="flex justify-center">
+          <button
+            className="bg-purple-500 text-white rounded-lg px-2 py-1 mr-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              toast.success("Upvote counted");
+            }}
+          >
+            👍
+          </button>
+          <button
+            className="bg-gray-500 text-white rounded-lg px-2 py-1"
+            onClick={(e) => {
+              e.stopPropagation();
+              toast.success("Downvote counted");
+            }}
+          >
+            👎
+          </button>
+        </div>
+        <button
+          className="bg-purple-800 text-white rounded-lg px-4 py-1"
+          onClick={(e) => {
+            e.stopPropagation();
+
+            navigator.clipboard.writeText(generatedPost);
+            toast("Bio copied to clipboard", {
+              icon: "✂️",
+            });
+          }}
+        >
+          Copy
+        </button>
+      </div>
+    </div>
+  );
+};
 
 function createTweets(stream: string) {
   const tweetRegex = /(\d+\.\s)([^]*?)(?=\s\d+\.|$)/g;
@@ -354,6 +434,8 @@ function createTweets(stream: string) {
 
   return tweets;
 }
+
+export default Home;
 
 // const CustomTwitterButton = ({ text, index, url }) => {
 //   const twitterButton = useMemo(() => {
@@ -369,19 +451,15 @@ function createTweets(stream: string) {
 //   return twitterButton;
 // };
 
-function formatTweets(input: string) {
-  if (!input) {
-    return [];
-  }
-  const formattedData = input
-    .split(/ (?=Tweet \d:)/)
-    .map((str) => str.replace(/^Tweet \d:\s*/, "").trim());
-
-  return formattedData;
-}
-
-export default Home;
-
+// function createTweets(stream: string) {
+//   let tweets = [];
+//   for (let i = 0; i < 3; i++) {
+//     let string = (i + 1).toString();
+//     let tweet = stream.substring(stream.indexOf(string) + 3);
+//     tweets.push(tweet);
+//   }
+//   return tweets;
+// }
 {
   /* <div className="flex mt-10 items-center space-x-3">
             <Image
@@ -408,6 +486,17 @@ export default Home;
               "e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com."
             }
           /> */
+
+  function formatTweets(input: string) {
+    if (!input) {
+      return [];
+    }
+    const formattedData = input
+      .split(/ (?=Tweet \d:)/)
+      .map((str) => str.replace(/^Tweet \d:\s*/, "").trim());
+
+    return formattedData;
+  }
 }
 
 // const generateBio = async (e: any) => {
@@ -451,6 +540,6 @@ export default Home;
 //     setGeneratedBios((prev) => prev + chunkValue);
 //     console.log("TEXT", chunkValue)
 //   }
-//   scrollToBios();
+//   scrollToPosts();
 //   setLoading(false);
 // };

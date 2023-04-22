@@ -16,39 +16,19 @@ const handler = async (req: Request, res: Response) => {
     vibe?: VibeType;
   };
 
-  if (!url) {
-    return new Response("No url in the request", { status: 400 });
-  }
-
   if (!essay) {
     return new Response("No essay in the request", { status: 400 });
   }
 
-  type PromptMap = {
-    [key in VibeType]: string;
-  };
-
-  // const promptMap: PromptMap = {
-  //   professional: "write an engaging hook for LinkedIn to promote this essay",
-  //   casual: "write a Twitter hook in first person voice for this essay. Keep the author's style and tone.",
-  //   // Casual: "Create one hashtag-free tweet to promote this essay. Write as if you were the essay author. Write the tweet in the same style and voice. Do not use hashtags, mentions or links.",
-  //   funny: "write a playful, hilarious message post to promote this essay. Include one ridiculous detail to make it funny"
-  //   //  first person voice (you are the author of the essay) to promote this essay. Include one or two ridiculous jokes to give it a funny vibe!"
-  // };
-
-  // const basePrompt: string = promptMap[vibeType];
-  // const prefix: string = `You are a co-pilot for a successful writer. As if you were the essay author,`
-  // const request = `${prefix} ${basePrompt}. Essay body: ${essay}`
-
-  let vibeType = vibe || "twitter";
+  const vibeType = vibe || "twitter";
   const { temperature, max_tokens, message } = getPlatformSettings(
     vibeType,
     essay
   );
 
   const essayPayload: OpenAIStreamPayload = {
-    model: "gpt-3.5-turbo",
-    // model: "gpt-4",
+    // model: "gpt-3.5-turbo",
+    model: "gpt-4",
     messages: [{ role: "user", content: message }],
     temperature,
     top_p: 1,
@@ -58,16 +38,6 @@ const handler = async (req: Request, res: Response) => {
   };
 
   console.log("PAYLOAD", essayPayload);
-
-  // const essayPayload: OpenAIStreamPayload = {
-  //   model: "gpt-4", // gpt-3.5-turbo
-  //   messages: [{ role: "user", content: request }],
-  //   temperature: 0.7,
-  //   top_p: 1,
-  //   max_tokens: 100,
-  //   stream: true,
-  //   n: 1 // TODO check me
-  // }
 
   const stream = await OpenAIStream(essayPayload);
   return new Response(stream);
@@ -81,18 +51,17 @@ function getPlatformSettings(platform: VibeType, essayBody: string) {
     professional: {
       temperature: 0.5,
       max_tokens: 250,
-      message: `Write a LinkedIn post about this essay in the first-person perspective, as if the author is speaking. Preserve the author's voice and minimize the use of hashtags and emojis. Aim for virality:`,
+      message: `Create ${numPosts} short and snappy LinkedIn posts in the first-person perspective about this essay, as if the author is speaking. Main the author's voice and style. Aim for virality.  Do this three times and clearly label each tweet with "1.", "2." and "3." :`,
     },
     twitter: {
       temperature: 0.7,
       max_tokens: 60 * numPosts,
-      message: `Create three short and catchy tweets in the first-person perspective about this essay, as if the author is speaking. Maintain the author's voice and limit hashtags and emojis. Use a maximum of two emojis. Make it engaging for increased virality. Do this three times and clearly label each tweet with "1.", "2." and "3.":`,
-      // message: `Create a short and catchy tweet in the first-person perspective about this essay, as if the author is speaking. Maintain the author's voice and limit hashtags and emojis, using no more than one emoji. Make it engaging for increased virality:`,
+      message: `Create ${numPosts} short and catchy tweets in the first-person perspective about this essay, as if the author is speaking. Maintain the author's voice, limit hashtags and emojis and keep each tweet length to a maximum of 280 characters. Use a maximum of two emojis. Make it engaging for increased virality. Do this three times and clearly label each tweet with "1.", "2." and "3.":`,
     },
     funny: {
       temperature: 0.9,
       max_tokens: 200,
-      message: `Write a light-hearted and funny post in the first-person perspective about this essay, as if the author is speaking. Stay true to the author's voice and avoid excessive use of hashtags and emojis. Aim for a viral effect:`,
+      message: `Create ${numPosts} light-hearted and funny posts in the first-person perspective about this essay, as if the author is speaking. Stay true to the author's voice and avoid excessive use of hashtags and emojis. Aim for a viral effect. Do this three times and clearly label each tweet with "1.", "2." and "3."`,
     },
   };
 
@@ -107,6 +76,10 @@ function getPlatformSettings(platform: VibeType, essayBody: string) {
     message,
   };
 }
+
+// const basePrompt: string = promptMap[vibeType];
+// const prefix: string = `You are a co-pilot for a successful writer. As if you were the essay author,`
+// const request = `${prefix} ${basePrompt}. Essay body: ${essay}`
 
 // const request = `Create one hashtag-free tweet to promote this essay. Write as if you were the essay author. Write the tweet in the same style and voice. Do not use hashtags, mentions or links.`
 // const promptMap = {
