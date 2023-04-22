@@ -48,7 +48,7 @@ async function fetchEssay(url: string) {
       heading = $(".post-title")?.first()?.prop("innerText")?.trim();
     } else if (draftPost.length) {
       content = draftPost?.first()?.prop("innerText")?.trim();
-      debugger;
+
       heading = $(".page-title")?.first()?.prop("innerText")?.trim();
     } else {
       console.log("No matching content found.");
@@ -57,8 +57,6 @@ async function fetchEssay(url: string) {
       heading = "";
       content = "";
     }
-
-    debugger;
 
     const result = {
       heading: heading,

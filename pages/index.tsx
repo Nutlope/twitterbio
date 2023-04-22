@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useState, useEffect, useMemo, MouseEventHandler } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import DropDown, { VibeType } from "../components/DropDown";
 import LoadingDots from "../components/LoadingDots";
@@ -97,8 +97,6 @@ const Home: NextPage = () => {
       url: "/api/essayfetcher",
       data: { url },
     });
-
-    debugger;
 
     if (error) {
       console.error(error);
@@ -309,7 +307,7 @@ const Home: NextPage = () => {
               className="bg-amber-500 rounded-xl text-slate font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-purple-800/80 w-full"
               // onClick={(e) => generateBio(e)}
               // onClick={(e) => streamBabe(e)}
-              onClick={debounce((e: Event) => fetchEssay(e), 1000)}
+              onClick={debounce((e: any) => fetchEssay(e), 1000)}
             >
               Generate posts &rarr;
             </button>
@@ -368,7 +366,7 @@ const GeneratedPost = ({
   generatedPost: string;
   index: number;
 }) => {
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (ref.current !== null) {
@@ -486,17 +484,15 @@ export default Home;
               "e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com."
             }
           /> */
-
-  function formatTweets(input: string) {
-    if (!input) {
-      return [];
-    }
-    const formattedData = input
-      .split(/ (?=Tweet \d:)/)
-      .map((str) => str.replace(/^Tweet \d:\s*/, "").trim());
-
-    return formattedData;
-  }
+  // function formatTweets(input: string) {
+  //   if (!input) {
+  //     return [];
+  //   }
+  //   const formattedData = input
+  //     .split(/ (?=Tweet \d:)/)
+  //     .map((str) => str.replace(/^Tweet \d:\s*/, "").trim());
+  //   return formattedData;
+  // }
 }
 
 // const generateBio = async (e: any) => {
