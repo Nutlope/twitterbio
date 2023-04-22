@@ -7,6 +7,7 @@ import DropDown, { VibeType } from "../components/DropDown";
 import LoadingDots from "../components/LoadingDots";
 import { TwitterShareButton } from "react-twitter-embed";
 import debounce from "lodash.debounce";
+
 import { postAPI } from "../utils/fetch";
 import { streamingAPI } from "../utils/streaming";
 
@@ -21,7 +22,6 @@ function isURL(url: string) {
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
-  const [bio, setBio] = useState("");
   const [vibe, setVibe] = useState<VibeType>("twitter");
   const [generatedBios, setGeneratedBios] = useState<string>("");
 
@@ -29,38 +29,18 @@ const Home: NextPage = () => {
   const [url, setUrl] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [streamingError, setStreamingError] = useState<string>("");
-  const [essayHeading, setEssayHeading] = useState<string>("");
-  const [essayContent, setEssayContent] = useState<string>("");
+
   const [essay, setEssay] = useState({ content: "", heading: "" });
   const [tweets, setTweets] = useState<string[]>([]);
 
   const postsRef = useRef<null | HTMLDivElement>(null);
 
-  // const scrollToPosts = () => {
-  //   if (postsRef.current !== null) {
-  //     postsRef.current.scrollIntoView({ behavior: "smooth" });
-  //   }
-  // };
-
   const scrollToPosts = () => {
     if (postsRef.current !== null) {
-      const lastPost = postsRef.current.lastChild as HTMLElement;
-      lastPost.scrollIntoView({ behavior: "smooth" });
+      const lastPost = postsRef?.current?.lastChild as HTMLElement;
+      lastPost?.scrollIntoView({ behavior: "smooth" });
     }
   };
-
-  // TODO Validation
-  // number of generated tweets
-  // make the dropdown vibe work
-
-  const prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". ${
-    vibe === "funny"
-      ? "Make sure there is a joke in there and it's a little ridiculous."
-      : null
-  }
-      Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${
-    bio.slice(-1) === "." ? "" : "."
-  }`;
 
   function isSubstackDraft(url: string) {
     const pattern = /^https:\/\/[\w.-]+\/publish\/post\/\d+$/;
@@ -112,43 +92,6 @@ const Home: NextPage = () => {
     setLoading(false);
   };
 
-  //   try {
-  //     const response = await fetch("/api/essayfetcher", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         url,
-  //       }),
-  //     });
-
-  //     if (!response.ok) {
-  //       console.error(response);
-  //       throw new Error(response.statusText);
-  //     }
-
-  //     const essayBody = await response.json();
-
-  //     if (essayBody.error) {
-  //       setError(essayBody.error);
-  //     }
-
-  //     const newEssay = {
-  //       ...essay,
-  //       content: essayBody?.content,
-  //       heading: essayBody?.heading,
-  //     };
-  //     setEssay(newEssay);
-  //     // TODO remove above
-  //     // setEssayContent(essayBody?.content);
-  //     // setEssayHeading(essayBody?.heading);
-  //     setLoading(false);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
-
   const checkAndStreamBabe = async () => {
     const { content, heading } = essay;
     if (content && heading) {
@@ -190,6 +133,8 @@ const Home: NextPage = () => {
       });
     }
   };
+
+  // not used atm
 
   const streamBabe = async () => {
     setGeneratedBios("");
@@ -239,10 +184,6 @@ const Home: NextPage = () => {
 
   // TODO might be irrelevant
   useEffect(() => {
-    // console.log(generatedBios);
-    // const newTweets = formatTweets(generatedBios);
-    // const newTweets = [...tweets, generatedBios]
-
     const tweets = createTweets(generatedBios);
     setTweets(tweets);
     // setTweets([...tweets, newTweets])
@@ -257,7 +198,7 @@ const Home: NextPage = () => {
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
       <Head>
-        <title>Essence</title>
+        <title>Essence - we capture the essence of your essays</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
@@ -291,6 +232,9 @@ const Home: NextPage = () => {
               onChange={(e) => setUrl(e.target.value)}
             />
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+            {streamingError && (
+              <p className="text-red-500 text-sm mt-1">{streamingError}</p>
+            )}
           </div>
 
           <div className="flex mb-5 items-center space-x-3">
@@ -303,7 +247,7 @@ const Home: NextPage = () => {
 
           {!loading && (
             <button
-              className="bg-amber-500 rounded-xl text-slate font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-purple-800/80 w-full"
+              className="bg-purple-900 rounded-xl text-white text-slate font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-purple-700/80 w-full"
               // onClick={(e) => generateBio(e)}
               // onClick={(e) => streamBabe(e)}
               onClick={debounce((e: any) => fetchEssay(e), 1000)}
@@ -313,7 +257,7 @@ const Home: NextPage = () => {
           )}
           {loading && (
             <button
-              className="bg-amber-600 rounded-xl text-slate font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-purple-800/80 w-full"
+              className="bg-purple-900 rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-purple-700/80 w-full"
               disabled
             >
               <LoadingDots color="white" style="large" />
@@ -329,9 +273,9 @@ const Home: NextPage = () => {
                 <h2 className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto">
                   Your generated posts
                 </h2>
-                {essayHeading && (
+                {essay?.heading && (
                   <h3 className="sm:text-2xl text-lg mt-2">
-                    Essay: {essayHeading}
+                    Essay: {essay.heading}
                   </h3>
                 )}
               </div>
@@ -341,13 +285,15 @@ const Home: NextPage = () => {
                 ref={postsRef}
               >
                 {tweets.map((generatedPost: string, index: number) => {
-                  return (
-                    <GeneratedPost
-                      key={`${generatedPost}-${index}`}
-                      index={index}
-                      generatedPost={generatedPost}
-                    />
-                  );
+                  if (index < 3) {
+                    return (
+                      <GeneratedPost
+                        key={`${generatedPost}-${index}`}
+                        index={index}
+                        generatedPost={generatedPost}
+                      />
+                    );
+                  }
                 })}
               </div>
             </>
@@ -383,31 +329,45 @@ const GeneratedPost = ({
       <div className="flex justify-between mt-4">
         <div className="flex justify-center">
           <button
-            className="bg-purple-500 text-white rounded-lg px-2 py-1 mr-2"
+            className="bg-yellow-400 text-white rounded-lg px-2 py-1 mr-2"
             onClick={(e) => {
               e.stopPropagation();
+              console.log("yam");
               toast.success("Upvote counted");
             }}
           >
-            👍
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="w-5 h-5"
+            >
+              <path d="M1 8.25a1.25 1.25 0 112.5 0v7.5a1.25 1.25 0 11-2.5 0v-7.5zM11 3V1.7c0-.268.14-.526.395-.607A2 2 0 0114 3c0 .995-.182 1.948-.514 2.826-.204.54.166 1.174.744 1.174h2.52c1.243 0 2.261 1.01 2.146 2.247a23.864 23.864 0 01-1.341 5.974C17.153 16.323 16.072 17 14.9 17h-3.192a3 3 0 01-1.341-.317l-2.734-1.366A3 3 0 006.292 15H5V8h.963c.685 0 1.258-.483 1.612-1.068a4.011 4.011 0 012.166-1.73c.432-.143.853-.386 1.011-.814.16-.432.248-.9.248-1.388z" />
+            </svg>
           </button>
           <button
-            className="bg-gray-500 text-white rounded-lg px-2 py-1"
+            className="bg-yellow-400 text-white rounded-lg px-2 py-1"
             onClick={(e) => {
               e.stopPropagation();
               toast.success("Downvote counted");
             }}
           >
-            👎
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="w-5 h-5"
+            >
+              <path d="M18.905 12.75a1.25 1.25 0 01-2.5 0v-7.5a1.25 1.25 0 112.5 0v7.5zM8.905 17v1.3c0 .268-.14.526-.395.607A2 2 0 015.905 17c0-.995.182-1.948.514-2.826.204-.54-.166-1.174-.744-1.174h-2.52c-1.242 0-2.26-1.01-2.146-2.247.193-2.08.652-4.082 1.341-5.974C2.752 3.678 3.833 3 5.005 3h3.192a3 3 0 011.342.317l2.733 1.366A3 3 0 0013.613 5h1.292v7h-.963c-.684 0-1.258.482-1.612 1.068a4.012 4.012 0 01-2.165 1.73c-.433.143-.854.386-1.012.814-.16.432-.248.9-.248 1.388z" />
+            </svg>
           </button>
         </div>
         <button
-          className="bg-purple-800 text-white rounded-lg px-4 py-1"
+          className="bg-purple-900 text-white rounded-lg px-4 py-1"
           onClick={(e) => {
             e.stopPropagation();
-
             navigator.clipboard.writeText(generatedPost);
-            toast("Bio copied to clipboard", {
+            toast("Post copied to clipboard", {
               icon: "✂️",
             });
           }}
@@ -433,108 +393,3 @@ function createTweets(stream: string) {
 }
 
 export default Home;
-
-// const CustomTwitterButton = ({ text, index, url }) => {
-//   const twitterButton = useMemo(() => {
-//     return (
-//       <TwitterShareButton
-//         key={`tweet-button-${index}`}
-//         url={url}
-//         options={{ text, dataSize: 'large', size: 'large' }}
-//       />
-//     );
-//   }, [text, index, url]);
-
-//   return twitterButton;
-// };
-
-// function createTweets(stream: string) {
-//   let tweets = [];
-//   for (let i = 0; i < 3; i++) {
-//     let string = (i + 1).toString();
-//     let tweet = stream.substring(stream.indexOf(string) + 3);
-//     tweets.push(tweet);
-//   }
-//   return tweets;
-// }
-{
-  /* <div className="flex mt-10 items-center space-x-3">
-            <Image
-              src="/1-black.png"
-              width={30}
-              height={30}
-              alt="1 icon"
-              className="mb-5 sm:mb-0"
-            />
-            <p className="text-left font-medium">
-              Copy your current bio{" "}
-              <span className="text-slate-500">
-                (or write a few sentences about yourself)
-              </span>
-              .
-            </p>
-          </div>
-          <textarea
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            rows={4}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
-            placeholder={
-              "e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com."
-            }
-          /> */
-  // function formatTweets(input: string) {
-  //   if (!input) {
-  //     return [];
-  //   }
-  //   const formattedData = input
-  //     .split(/ (?=Tweet \d:)/)
-  //     .map((str) => str.replace(/^Tweet \d:\s*/, "").trim());
-  //   return formattedData;
-  // }
-}
-
-// const generateBio = async (e: any) => {
-//   e.preventDefault();
-//   setGeneratedBios("");
-//   setLoading(true);
-//   const response = await fetch("/api/generate", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       essay: bio,
-//       prompt,
-//       url
-//     }),
-//   });
-
-//   if (!response.ok) {
-//     let data = response.body
-//     const reader = data.getReader();
-//     const decoder = new TextDecoder();
-//     throw new Error(response.statusText);
-//   }
-
-//   // This data is a ReadableStream
-//   const data = response.body;
-//   if (!data) {
-//     return;
-//   }
-
-//   const reader = data.getReader();
-//   const decoder = new TextDecoder();
-//   let done = false;
-
-//   while (!done) {
-//     const { value, done: doneReading } = await reader.read();
-//     done = doneReading;
-//     const chunkValue = decoder.decode(value);
-//     debugger
-//     setGeneratedBios((prev) => prev + chunkValue);
-//     console.log("TEXT", chunkValue)
-//   }
-//   scrollToPosts();
-//   setLoading(false);
-// };
