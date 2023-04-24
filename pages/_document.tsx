@@ -24,7 +24,7 @@ class MyDocument extends Document {
           <meta name="twitter:title" content="Twitter Bio Generator" />
           <meta
             name="twitter:description"
-            content="Generate your next Twitter bio in seconds."
+            content="Turn your essays into short-form content in seconds."
           />
           <meta
             property="og:image"
