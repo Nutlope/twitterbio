@@ -54,9 +54,10 @@ function getPlatformSettings(platform: VibeType, essayBody: string) {
       message: `Create ${numPosts} short and snappy LinkedIn posts in the first-person perspective about this essay, as if the author is speaking. Main the author's voice and style. Aim for virality.  Do this three times and clearly label each tweet with "1.", "2." and "3." :`,
     },
     twitter: {
-      temperature: 0.7,
+      temperature: 0.9, // used to be 0.7
       max_tokens: 60 * numPosts,
-      message: `Create ${numPosts} short and catchy tweets in the first-person perspective about this essay, as if the author is speaking. Maintain the author's voice, limit hashtags and emojis and keep each tweet length to a maximum of 280 characters. Use a maximum of two emojis. Make it engaging for increased virality. Do this three times and clearly label each tweet with "1.", "2." and "3.":`,
+      message: `"Generate {numPosts} short and catchy tweets that capture the essence of the author's essay. Use the author's voice and keep each tweet length to a maximum of 280 characters. Incorporate relevant keywords and hashtags to increase visibility. Do this three times and clearly label each tweet with "1.", "2." and "3.":`,
+      // message: `Create ${numPosts} short and catchy tweets in the first-person perspective about this essay, as if the author is speaking. Maintain the author's voice, limit hashtags and emojis and keep each tweet length to a maximum of 280 characters. Use a maximum of two emojis. Make it engaging for increased virality. Do this three times and clearly label each tweet with "1.", "2." and "3.":`,
     },
     funny: {
       temperature: 0.9,
