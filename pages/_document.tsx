@@ -10,7 +10,7 @@ class MyDocument extends Document {
             name="description"
             content="Generate your next Twitter bio in seconds."
           />
-          <meta property="og:site_name" content="twitterbio.com" />
+          <meta property="og:site_name" content="twitterbio.io" />
           <meta
             property="og:description"
             content="Generate your next Twitter bio in seconds."
@@ -24,11 +24,11 @@ class MyDocument extends Document {
           />
           <meta
             property="og:image"
-            content="https://twitterbio.com/og-image.png"
+            content="https://twitterbio.io/og-image.png"
           />
           <meta
             name="twitter:image"
-            content="https://twitterbio.com/og-image.png"
+            content="https://twitterbio.io/og-image.png"
           />
         </Head>
         <body>
