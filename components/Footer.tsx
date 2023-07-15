@@ -1,33 +1,31 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 export default function Footer() {
   return (
     <footer className="text-center h-16 sm:h-20 w-full sm:pt-2 pt-4 border-t mt-5 flex sm:flex-row flex-col justify-between items-center px-3 space-y-3 sm:mb-0 mb-3">
       <div>
-        Powered by{" "}
+        Powered by{' '}
         <a
           href="https://openai.com/blog/chatgpt"
           target="_blank"
-          rel="noreferrer"
           className="font-bold hover:underline transition underline-offset-2"
         >
-          ChatGPT{" "}
+          ChatGPT{' '}
         </a>
-        and{" "}
+        and{' '}
         <a
-          href="https://vercel.com/"
+          href="https://sdk.vercel.ai/docs"
           target="_blank"
-          rel="noreferrer"
           className="font-bold hover:underline transition underline-offset-2"
         >
-          Vercel Edge Functions.
+          Vercel AI SDK
         </a>
       </div>
       <div className="flex space-x-4 pb-4 sm:pb-0">
         <Link
           href="https://twitter.com/nutlope"
           className="group"
-          aria-label="TaxPal on Twitter"
+          aria-label="Nutlope Twitter"
         >
           <svg
             aria-hidden="true"
@@ -39,7 +37,7 @@ export default function Footer() {
         <Link
           href="https://github.com/Nutlope/twitterbio"
           className="group"
-          aria-label="TaxPal on GitHub"
+          aria-label="GitHub"
         >
           <svg
             aria-hidden="true"
