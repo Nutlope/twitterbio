@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useRef, useState, ChangeEvent } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import DropDown, { VibeType } from '../components/DropDown';
 import Footer from '../components/Footer';
@@ -10,7 +10,7 @@ import Header from '../components/Header';
 import { useChat } from 'ai/react';
 
 export default function Page() {
-  const [bio, setBio] = useState('');
+  const bio = useRef<string | null>(null);
   const [vibe, setVibe] = useState<VibeType>('Professional');
   const bioRef = useRef<null | HTMLDivElement>(null);
 
@@ -24,7 +24,7 @@ export default function Page() {
     useChat({
       body: {
         vibe,
-        bio,
+        bio: bio.current,
       },
       onResponse() {
         scrollToBios();
@@ -32,8 +32,12 @@ export default function Page() {
     });
 
   const onSubmit = (e: any) => {
-    setBio(input);
     handleSubmit(e);
+  };
+
+  const handleInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    bio.current = e.target.value;
+		handleInputChange(e);
   };
 
   const lastMessage = messages[messages.length - 1];
@@ -75,7 +79,7 @@ export default function Page() {
           </div>
           <textarea
             value={input}
-            onChange={handleInputChange}
+            onChange={handleInput}
             rows={4}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
             placeholder={
