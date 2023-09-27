@@ -6,7 +6,7 @@ const title = "Twitter Event Generator";
 const description = "Generate your next Twitter bio in seconds.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://twitterbio.io"),
+  metadataBase: new URL("https://events-ai.vercel.app"),
   title,
   description,
   openGraph: {
