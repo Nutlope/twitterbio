@@ -11,7 +11,7 @@ const openai = new OpenAIApi(config);
 export const runtime = "edge";
 
 export async function POST(req: Request) {
-  const { bio } = await req.json();
+  const { event } = await req.json();
 
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
         role: "user",
         content: `Translate the following into iCal format. If the year is not specified, pick the closest future date from September 23, 2023. Do not include any explanation or extra words.
         
-        ${bio}${bio.slice(-1) === "." ? "" : "."}`,
+        ${event}${event.slice(-1) === "." ? "" : "."}`,
       },
     ],
   });

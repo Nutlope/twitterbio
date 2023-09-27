@@ -9,32 +9,32 @@ import Header from "../components/Header";
 import { useChat } from "ai/react";
 
 export default function Page() {
-  const [bio, setBio] = useState("");
-  const bioRef = useRef<null | HTMLDivElement>(null);
+  const [event, setEvent] = useState("");
+  const eventRef = useRef<null | HTMLDivElement>(null);
 
-  const scrollToBios = () => {
-    if (bioRef.current !== null) {
-      bioRef.current.scrollIntoView({ behavior: "smooth" });
+  const scrollToEvents = () => {
+    if (eventRef.current !== null) {
+      eventRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const { input, handleInputChange, handleSubmit, isLoading, messages } =
     useChat({
       body: {
-        bio,
+        event,
       },
       onResponse() {
-        scrollToBios();
+        scrollToEvents();
       },
     });
 
   const onSubmit = (e: any) => {
-    setBio(input);
+    setEvent(input);
     handleSubmit(e);
   };
 
   const lastMessage = messages[messages.length - 1];
-  const generatedBios =
+  const generatedEvents =
     lastMessage?.role === "assistant" ? lastMessage.content : null;
 
   return (
@@ -106,12 +106,12 @@ export default function Page() {
         />
         <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
         <output className="space-y-10 my-10">
-          {generatedBios && (
+          {generatedEvents && (
             <>
               <div>
                 <h2
                   className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
-                  ref={bioRef}
+                  ref={eventRef}
                 >
                   Your generated event
                 </h2>
@@ -120,8 +120,8 @@ export default function Page() {
                 <div
                   className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border"
                   onClick={() => {
-                    // download file from generatedBios as .ics
-                    const unescaped = generatedBios.replace(/\\,/g, ",");
+                    // download file from generatedEvents as .ics
+                    const unescaped = generatedEvents.replace(/\\,/g, ",");
                     const element = document.createElement("a");
                     const file = new Blob([unescaped], {
                       type: "text/plain",
@@ -131,9 +131,9 @@ export default function Page() {
                     document.body.appendChild(element); // Required for this to work in FireFox
                     element.click();
                   }}
-                  key={generatedBios}
+                  key={generatedEvents}
                 >
-                  <code>{generatedBios}</code>
+                  <code>{generatedEvents}</code>
                 </div>
               </div>
             </>
