@@ -2,8 +2,8 @@ import { Analytics } from "@vercel/analytics/react";
 import { Metadata } from "next";
 import "../styles/globals.css";
 
-const title = "Twitter Event Generator";
-const description = "Generate your next Twitter bio in seconds.";
+const title = "events.ai";
+const description = "Generate an event from anything using AI.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://events-ai.vercel.app"),
