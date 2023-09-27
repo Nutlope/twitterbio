@@ -3,30 +3,36 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.7",
-    "@headlessui/tailwindcss": "^0.1.2",
-    "@heroicons/react": "^2.0.13",
-    "@tailwindcss/forms": "^0.5.3",
-    "@vercel/analytics": "^0.1.8",
-    "ai": "^2.1.21",
-    "next": "^13.4.10",
-    "openai-edge": "^1.2.0",
+    "@headlessui/react": "^1.7.17",
+    "@headlessui/tailwindcss": "^0.2.0",
+    "@heroicons/react": "^2.0.18",
+    "@tailwindcss/forms": "^0.5.6",
+    "@vercel/analytics": "^1.0.2",
+    "ai": "^2.2.13",
+    "next": "^13.5.3",
+    "openai-edge": "^1.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.42.0",
+    "react-hook-form": "^7.46.2",
     "react-hot-toast": "^2.4.1",
     "react-use-measure": "^2.1.1"
   },
   "devDependencies": {
-    "@types/node": "18.11.3",
-    "@types/react": "18.0.21",
-    "@types/react-dom": "18.0.6",
-    "autoprefixer": "^10.4.12",
-    "postcss": "^8.4.18",
-    "tailwindcss": "^3.2.4",
-    "typescript": "4.9.4"
+    "@types/node": "20.7.0",
+    "@types/react": "18.2.23",
+    "@types/react-dom": "18.2.8",
+    "autoprefixer": "^10.4.16",
+    "eslint": "8.50.0",
+    "eslint-config-next": "13.5.3",
+    "postcss": "^8.4.30",
+    "tailwindcss": "^3.3.3",
+    "typescript": "5.2.2"
+  },
+  "engines": {
+    "node": ">=18.18.0"
   }
 }
