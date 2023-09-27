@@ -118,7 +118,7 @@ export default function Page() {
                     const unescaped = lastAssistantMessage.replace(/\\,/g, ",");
                     const element = document.createElement("a");
                     const file = new Blob([unescaped], {
-                      type: "text/plain",
+                      type: "text/calendar",
                     });
                     element.href = URL.createObjectURL(file);
                     element.download = "event.ics";
