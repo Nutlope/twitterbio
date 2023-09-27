@@ -11,7 +11,14 @@ const openai = new OpenAIApi(config);
 export const runtime = "edge";
 
 export async function POST(req: Request) {
-  const { event } = await req.json();
+  const { messages } = await req.json();
+  const userMessages = messages.filter(
+    (message: { role: string }) => message.role === "user"
+  );
+  const lastUserMessage =
+    userMessages?.[userMessages.length - 1]?.content || null;
+
+  console.log("this is the last user message", lastUserMessage);
 
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
@@ -21,8 +28,8 @@ export async function POST(req: Request) {
       {
         role: "user",
         content: `Translate the following into iCal format. If the year is not specified, pick the closest future date from September 23, 2023. Do not include any explanation or extra words.
-        
-        ${event}${event.slice(-1) === "." ? "" : "."}`,
+
+        ${lastUserMessage}`,
       },
     ],
   });

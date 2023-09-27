@@ -9,7 +9,6 @@ import Header from "../components/Header";
 import { useChat } from "ai/react";
 
 export default function Page() {
-  const [event, setEvent] = useState("");
   const eventRef = useRef<null | HTMLDivElement>(null);
 
   const scrollToEvents = () => {
@@ -20,22 +19,24 @@ export default function Page() {
 
   const { input, handleInputChange, handleSubmit, isLoading, messages } =
     useChat({
-      body: {
-        event,
-      },
       onResponse() {
         scrollToEvents();
       },
     });
 
   const onSubmit = (e: any) => {
-    setEvent(input);
     handleSubmit(e);
   };
 
-  const lastMessage = messages[messages.length - 1];
-  const generatedEvents =
-    lastMessage?.role === "assistant" ? lastMessage.content : null;
+  const userMessages = messages.filter((message) => message.role === "user");
+  const assistantMessages = messages.filter(
+    (message) => message.role === "assistant"
+  );
+
+  const lastUserMessage =
+    userMessages?.[userMessages.length - 1]?.content || null;
+  const lastAssistantMessage =
+    assistantMessages?.[userMessages.length - 1]?.content || null;
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
@@ -56,13 +57,6 @@ export default function Page() {
         <p className="text-slate-500 mt-5">42,069 events generated so far.</p>
         <form className="max-w-xl w-full" onSubmit={onSubmit}>
           <div className="flex mt-10 items-center space-x-3">
-            <Image
-              src="/1-black.png"
-              width={30}
-              height={30}
-              alt="1 icon"
-              className="mb-5 sm:mb-0"
-            />
             <p className="text-left font-medium">
               Paste event info{" "}
               <span className="text-slate-500">(or describe your event)</span>.
@@ -106,7 +100,7 @@ export default function Page() {
         />
         <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
         <output className="space-y-10 my-10">
-          {generatedEvents && (
+          {lastAssistantMessage && (
             <>
               <div>
                 <h2
@@ -121,7 +115,7 @@ export default function Page() {
                   className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border"
                   onClick={() => {
                     // download file from generatedEvents as .ics
-                    const unescaped = generatedEvents.replace(/\\,/g, ",");
+                    const unescaped = lastAssistantMessage.replace(/\\,/g, ",");
                     const element = document.createElement("a");
                     const file = new Blob([unescaped], {
                       type: "text/plain",
@@ -131,9 +125,9 @@ export default function Page() {
                     document.body.appendChild(element); // Required for this to work in FireFox
                     element.click();
                   }}
-                  key={generatedEvents}
+                  key={lastAssistantMessage}
                 >
-                  <code>{generatedEvents}</code>
+                  <code>{lastAssistantMessage}</code>
                 </div>
               </div>
             </>
