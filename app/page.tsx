@@ -109,6 +109,9 @@ export default function Page() {
                 >
                   Your generated event
                 </h2>
+                <p className="text-slate-500 mt-1">
+                  Event will be in iCal format. Click to add to your calendar.
+                </p>
               </div>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                 <div
