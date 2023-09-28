@@ -136,10 +136,10 @@ export default function Page() {
   });
 
   const handlePaste = async (e: any) => {
-    e.preventDefault();
-
     // Check if the clipboard contains HTML
     if (e.clipboardData && e.clipboardData.types.indexOf("text/html") > -1) {
+      e.preventDefault();
+
       // Get HTML content from clipboard
       const htmlContent = e.clipboardData.getData("text/html");
 
