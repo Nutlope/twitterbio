@@ -8,6 +8,30 @@ import Header from "../components/Header";
 import { useChat } from "ai/react";
 import ICAL from "ical.js";
 import { AddToCalendarButton } from "add-to-calendar-button-react";
+import test from "node:test";
+import { set } from "react-hook-form";
+
+const SAMPLE_ICS = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+BEGIN:VEVENT
+DTSTART;TZID=PDT:20231004T191500
+DTEND;TZID=PDT:20231004T204500
+RRULE:FREQ=WEEKLY;COUNT=5
+SUMMARY:Yoga Foundations Workshop at People's Yoga
+END:VEVENT
+END:VCALENDAR
+`;
+
+type ICSJson = {
+  startDate: string;
+  endDate: string;
+  summary: string;
+  location: string;
+  details: string;
+  rrule: { freq?: string; count?: number };
+  timezone?: string;
+};
 
 function convertIcsToJson(icsData: any) {
   // Parse the .ics data
@@ -15,13 +39,7 @@ function convertIcsToJson(icsData: any) {
   const comp = new ICAL.Component(jcalData);
 
   // Initialize an array to hold the events
-  const events: {
-    startDate: string;
-    endDate: string;
-    summary: string;
-    location: string;
-    details: string;
-  }[] = [];
+  const events: ICSJson[] = [];
 
   // Iterate over each event component
   comp.getAllSubcomponents("vevent").forEach((vevent: any) => {
@@ -33,6 +51,8 @@ function convertIcsToJson(icsData: any) {
     const startDate = event.startDate.toString();
     const endDate = event.endDate.toString();
     const details = event.description;
+    const rrule = event.component.getFirstPropertyValue("rrule");
+    const timezone = event.startDate.timezone;
 
     // Create a JSON object for the event and add it to the array
     events.push({
@@ -41,11 +61,49 @@ function convertIcsToJson(icsData: any) {
       startDate,
       endDate,
       details,
+      rrule,
+      timezone,
     });
   });
 
   // You can now work with this JSON object or stringify it
   return events;
+}
+
+function icsJsonToAddToCalendarButtonProps(icsJson: ICSJson) {
+  const input = icsJson;
+  const { summary, location } = icsJson;
+  const description = icsJson.details;
+  const startDate = input.startDate.split("T")[0];
+  const startTime = input.startDate.split("T")[1].substring(0, 5);
+  const endDate = input.endDate.split("T")[0];
+  const endTime = input.endDate.split("T")[1].substring(0, 5);
+  const timeZone = input.timezone;
+  const rrule = input.rrule;
+
+  return {
+    name: summary,
+    description: description,
+    options: ["Apple", "Google"] as
+      | (
+          | "Apple"
+          | "Google"
+          | "iCal"
+          | "Microsoft365"
+          | "MicrosoftTeams"
+          | "Outlook.com"
+          | "Yahoo"
+        )[]
+      | undefined,
+    location: location,
+    startDate: startDate,
+    endDate: endDate,
+    startTime: startTime,
+    endTime: endTime,
+    timeZone: timeZone,
+    recurrence: rrule.freq,
+    recurrence_count: rrule.count,
+  };
 }
 
 function generateGoogleCalendarURL(event: {
@@ -75,6 +133,7 @@ export default function Page() {
   const [googleCalendarUrl, setGoogleCalendarUrl] = useState<string | null>(
     null
   );
+  const [finished, setFinished] = useState(false);
   const eventRef = useRef<null | HTMLDivElement>(null);
 
   const scrollToEvents = () => {
@@ -88,16 +147,13 @@ export default function Page() {
       onResponse() {
         scrollToEvents();
       },
-      onFinish(message) {
-        debugger;
-        const json = convertIcsToJson(message.content);
-        setEvent(json[0]);
-        const googleCalendarUrl = generateGoogleCalendarURL(json[0]);
-        setGoogleCalendarUrl(googleCalendarUrl);
+      onFinish() {
+        setFinished(true);
       },
     });
 
   const onSubmit = (e: any) => {
+    setFinished(false);
     handleSubmit(e);
   };
 
@@ -108,8 +164,16 @@ export default function Page() {
 
   const lastUserMessage =
     userMessages?.[userMessages.length - 1]?.content || null;
+  // const lastAssistantMessage =
+  //   assistantMessages?.[userMessages.length - 1]?.content || null;
   const lastAssistantMessage =
-    assistantMessages?.[userMessages.length - 1]?.content || null;
+    assistantMessages?.[userMessages.length - 1]?.content || SAMPLE_ICS;
+
+  const addToCalendarButtonProps = finished
+    ? icsJsonToAddToCalendarButtonProps(
+        convertIcsToJson(lastAssistantMessage)[0]
+      )
+    : null;
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
@@ -173,27 +237,12 @@ export default function Page() {
         />
         <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
         <output className="space-y-10 my-10">
-          {lastAssistantMessage && (
+          {finished && (
             <>
-              <div>
-                <h2
-                  className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
-                  ref={eventRef}
-                >
-                  Your generated event
-                </h2>
-                {event && (
-                  <AddToCalendarButton
-                    name={event.summary || ""}
-                    options={["Apple", "Google"]}
-                    location={event.location || ""}
-                    startDate={event.startDate || ""}
-                    endDate={event.endDate || ""}
-                    startTime="22:30"
-                    endTime="23:30"
-                    timeZone="America/Los_Angeles"
-                  ></AddToCalendarButton>
-                )}
+              <div className="flex justify-center">
+                <AddToCalendarButton
+                  {...addToCalendarButtonProps}
+                ></AddToCalendarButton>
               </div>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                 <div
@@ -213,6 +262,26 @@ export default function Page() {
                   key={lastAssistantMessage}
                 >
                   <code>{lastAssistantMessage}</code>
+                </div>
+              </div>
+              <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+                <div className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border">
+                  <p>ICSJson</p>
+                  <code>
+                    {JSON.stringify(
+                      convertIcsToJson(lastAssistantMessage),
+                      null,
+                      2
+                    )}
+                  </code>
+                </div>
+              </div>
+              <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+                <div className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border">
+                  <p>AddToCalendarButton</p>
+                  <code>
+                    {JSON.stringify(addToCalendarButtonProps, null, 2)}
+                  </code>
                 </div>
               </div>
             </>

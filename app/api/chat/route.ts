@@ -37,7 +37,7 @@ export async function POST(req: Request) {
         role: "system",
         content: `You parse calendar events from the provided text into iCal format based on the following information:
         - For calculating relative dates/times, it is currently September 27, 2023
-        - Include timezone (use PDT (GMT-7) if not specified)
+        - Include timezone (use America/Los Angles if not specified)
         - Always include an end time
         - Do not include timezone for full day events
         - Do not include placeholders or extraneous text`,
