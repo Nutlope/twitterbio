@@ -1,6 +1,6 @@
 # events.ai
 
-Generate an event from anything using AI
+Paste anything, get calendar events
 
 ## How it works
 

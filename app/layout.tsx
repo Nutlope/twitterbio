@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import "../styles/globals.css";
 
 const title = "events.ai";
-const description = "Generate an event from anything using AI.";
+const description = "Paste anything, get calendar events.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://events-ai.vercel.app"),

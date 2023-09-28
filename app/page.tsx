@@ -190,7 +190,7 @@ export default function Page() {
           <p>Star on GitHub</p>
         </a>
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
-          Generate an event from anything using AI
+          Paste anything, get calendar events
         </h1>
         <p className="text-slate-500 mt-5">42,069 events generated so far.</p>
         <form className="max-w-xl w-full" onSubmit={onSubmit}>
@@ -207,9 +207,7 @@ export default function Page() {
             onChange={handleInputChange}
             rows={4}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
-            placeholder={
-              "e.g. Join us for a virtual event on Thursday, October 14th at 2:00pm ET. We'll be discussing the future of AI and how it will impact our lives."
-            }
+            placeholder={"Try pasting any event info, or describe your event."}
           />
 
           {!isLoading && (
