@@ -2,11 +2,11 @@ import { Analytics } from "@vercel/analytics/react";
 import { Metadata } from "next";
 import "../styles/globals.css";
 
-const title = "events.ai";
+const title = "timetime.cc";
 const description = "Paste anything, get calendar events.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://events-ai.vercel.app"),
+  metadataBase: new URL("https://www.timetime.cc/"),
   title,
   description,
   openGraph: {
