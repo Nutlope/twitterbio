@@ -21,7 +21,7 @@ export default function Header() {
         </svg>
 
         <h1 className="sm:text-4xl text-2xl font-bold ml-2 tracking-tight">
-          events.ai
+          timetime.cc
         </h1>
       </Link>
     </header>
