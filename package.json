@@ -23,7 +23,8 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.46.2",
     "react-hot-toast": "^2.4.1",
-    "react-use-measure": "^2.1.1"
+    "react-use-measure": "^2.1.1",
+    "turndown": "^7.1.2"
   },
   "devDependencies": {
     "@types/node": "20.7.0",
