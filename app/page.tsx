@@ -135,7 +135,7 @@ export default function Page() {
     },
   });
 
-  const handlePaste = async (e) => {
+  const handlePaste = async (e: any) => {
     e.preventDefault();
 
     // Check if the clipboard contains HTML
