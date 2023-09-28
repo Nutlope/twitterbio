@@ -1,5 +1,6 @@
 import { Configuration, OpenAIApi } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
+import { kv } from "@vercel/kv";
 
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({
@@ -12,6 +13,14 @@ export const runtime = "edge";
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
+  const key = JSON.stringify(messages); // come up with a key based on the request
+
+  // Check if we have a cached response
+  const cached = await kv.get(key);
+  if (cached) {
+    return new Response(cached as any);
+  }
+
   const userMessages = messages.filter(
     (message: { role: string }) => message.role === "user"
   );
@@ -41,7 +50,13 @@ export async function POST(req: Request) {
   });
 
   // Convert the response into a friendly text-stream
-  const stream = OpenAIStream(response);
-  // Respond with the stream
+  const stream = OpenAIStream(response, {
+    async onCompletion(completion) {
+      // Cache the response. Note that this will also cache function calls.
+      await kv.set(key, completion);
+      await kv.expire(key, 60 * 60);
+    },
+  });
+
   return new StreamingTextResponse(stream);
 }

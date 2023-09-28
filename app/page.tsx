@@ -1,14 +1,80 @@
 "use client";
 
-import Image from "next/image";
 import { useRef, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import Footer from "../components/Footer";
 import Github from "../components/GitHub";
 import Header from "../components/Header";
 import { useChat } from "ai/react";
+import ICAL from "ical.js";
+import { AddToCalendarButton } from "add-to-calendar-button-react";
+
+function convertIcsToJson(icsData: any) {
+  // Parse the .ics data
+  const jcalData = ICAL.parse(icsData);
+  const comp = new ICAL.Component(jcalData);
+
+  // Initialize an array to hold the events
+  const events: {
+    startDate: string;
+    endDate: string;
+    summary: string;
+    location: string;
+    details: string;
+  }[] = [];
+
+  // Iterate over each event component
+  comp.getAllSubcomponents("vevent").forEach((vevent: any) => {
+    const event = new ICAL.Event(vevent);
+
+    // Extract data from the event
+    const summary = event.summary;
+    const location = event.location;
+    const startDate = event.startDate.toString();
+    const endDate = event.endDate.toString();
+    const details = event.description;
+
+    // Create a JSON object for the event and add it to the array
+    events.push({
+      summary,
+      location,
+      startDate,
+      endDate,
+      details,
+    });
+  });
+
+  // You can now work with this JSON object or stringify it
+  return events;
+}
+
+function generateGoogleCalendarURL(event: {
+  startDate: string;
+  endDate: string;
+  summary: string;
+  location: string;
+  details: string;
+}) {
+  const start = encodeURIComponent(event.startDate);
+  const end = encodeURIComponent(event.endDate);
+  const summary = encodeURIComponent(event.summary);
+  const location = encodeURIComponent(event.location);
+  const details = encodeURIComponent(event.details);
+
+  return `https://www.google.com/calendar/render?action=TEMPLATE&text=${summary}&dates=${start}/${end}&details=${details}&location=${location}`;
+}
 
 export default function Page() {
+  const [event, setEvent] = useState<{
+    startDate: string;
+    endDate: string;
+    summary: string;
+    location: string;
+    details: string;
+  } | null>(null);
+  const [googleCalendarUrl, setGoogleCalendarUrl] = useState<string | null>(
+    null
+  );
   const eventRef = useRef<null | HTMLDivElement>(null);
 
   const scrollToEvents = () => {
@@ -21,6 +87,13 @@ export default function Page() {
     useChat({
       onResponse() {
         scrollToEvents();
+      },
+      onFinish(message) {
+        debugger;
+        const json = convertIcsToJson(message.content);
+        setEvent(json[0]);
+        const googleCalendarUrl = generateGoogleCalendarURL(json[0]);
+        setGoogleCalendarUrl(googleCalendarUrl);
       },
     });
 
@@ -109,9 +182,18 @@ export default function Page() {
                 >
                   Your generated event
                 </h2>
-                <p className="text-slate-500 mt-1">
-                  Click to add to your calendar!
-                </p>
+                {event && (
+                  <AddToCalendarButton
+                    name={event.summary || ""}
+                    options={["Apple", "Google"]}
+                    location={event.location || ""}
+                    startDate={event.startDate || ""}
+                    endDate={event.endDate || ""}
+                    startTime="22:30"
+                    endTime="23:30"
+                    timeZone="America/Los_Angeles"
+                  ></AddToCalendarButton>
+                )}
               </div>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                 <div
