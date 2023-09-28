@@ -18,18 +18,24 @@ export async function POST(req: Request) {
   const lastUserMessage =
     userMessages?.[userMessages.length - 1]?.content || null;
 
-  console.log("this is the last user message", lastUserMessage);
-
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
     model: "gpt-4",
+
     stream: true,
     messages: [
       {
+        role: "system",
+        content: `You parse calendar events from the provided text into iCal format based on the following information:
+        - For calculating relative dates/times, it is currently September 27, 2023
+        - Include timezone (use PDT (GMT-7) if not specified)
+        - Always include an end time
+        - Do not include timezone for full day events
+        - Do not include placeholders or extraneous text`,
+      },
+      {
         role: "user",
-        content: `Translate the following into iCal format. If the year is not specified, pick the closest future date from September 23, 2023. Do not include any explanation or extra words.
-
-        ${lastUserMessage}`,
+        content: lastUserMessage,
       },
     ],
   });
