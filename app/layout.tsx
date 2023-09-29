@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     description,
     locale: "en_US",
     type: "website",
+    images: ["https://www.timetime.cc/api/og"],
   },
   twitter: {
     card: "summary_large_image",
