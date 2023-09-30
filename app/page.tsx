@@ -321,7 +321,7 @@ export default function Page() {
                 ))}
               </div>
               <button
-                className="bg-red-700 rounded-xl text-white font-medium px-4 py-2 hover:bg-red-800 w-min fixed bottom-8 right-8"
+                className="bg-red-700 rounded-xl text-white font-medium px-4 py-2 hover:bg-red-800 w-max fixed bottom-5 right-3"
                 onClick={() =>
                   reportIssue(
                     generateIssueTitle(lastUserMessage),
@@ -336,7 +336,7 @@ export default function Page() {
               >
                 Report issue &rarr;
               </button>
-              {true && (
+              {isDev && (
                 <>
                   <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                     <div className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border">
