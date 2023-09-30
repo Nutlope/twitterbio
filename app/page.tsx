@@ -1,9 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Toaster, toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import Footer from "../components/Footer";
-import Github from "../components/GitHub";
 import Header from "../components/Header";
 import { useChat } from "ai/react";
 import ICAL from "ical.js";
