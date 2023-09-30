@@ -34,37 +34,41 @@ type ICSJson = {
 };
 
 function convertIcsToJson(icsData: any) {
-  // Parse the .ics data
-  const jcalData = ICAL.parse(icsData);
-  const comp = new ICAL.Component(jcalData);
-
   // Initialize an array to hold the events
   const events: ICSJson[] = [];
 
-  // Iterate over each event component
-  comp.getAllSubcomponents("vevent").forEach((vevent: any) => {
-    const event = new ICAL.Event(vevent);
+  try {
+    // Parse the .ics data
+    const jcalData = ICAL.parse(icsData);
+    const comp = new ICAL.Component(jcalData);
 
-    // Extract data from the event
-    const summary = event.summary;
-    const location = event.location || undefined;
-    const startDate = event.startDate.toString();
-    const endDate = event.endDate.toString();
-    const details = event.description || undefined;
-    const rrule = event.component.getFirstPropertyValue("rrule");
-    const timezone = event.startDate.timezone;
+    // Iterate over each event component
+    comp.getAllSubcomponents("vevent").forEach((vevent: any) => {
+      const event = new ICAL.Event(vevent);
 
-    // Create a JSON object for the event and add it to the array
-    events.push({
-      summary,
-      location,
-      startDate,
-      endDate,
-      details,
-      rrule,
-      timezone,
+      // Extract data from the event
+      const summary = event.summary;
+      const location = event.location || undefined;
+      const startDate = event.startDate.toString();
+      const endDate = event.endDate.toString();
+      const details = event.description || undefined;
+      const rrule = event.component.getFirstPropertyValue("rrule");
+      const timezone = event.startDate.timezone;
+
+      // Create a JSON object for the event and add it to the array
+      events.push({
+        summary,
+        location,
+        startDate,
+        endDate,
+        details,
+        rrule,
+        timezone,
+      });
     });
-  });
+  } catch (e) {
+    console.log(e);
+  }
 
   // You can now work with this JSON object or stringify it
   return events;
