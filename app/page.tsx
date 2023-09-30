@@ -255,13 +255,13 @@ export default function Page() {
             rows={4}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
             placeholder={
-              "Paste a description from a website, a text message form a friend, or anything else. Or you can describe your event."
+              "Paste a description from a website, a text message from a friend, or anything else. Or you can describe your event."
             }
           />
           <div className="flex items-center space-x-3">
             <p className="text-left">
               <span className="text-slate-500">
-                Currently takes about 5 seconds to make your event... hopefully
+                Currently takes 5+ seconds to make your events... hopefully
                 faster soon!
               </span>
             </p>
