@@ -48,10 +48,10 @@ function convertIcsToJson(icsData: any) {
 
     // Extract data from the event
     const summary = event.summary;
-    const location = event.location;
+    const location = event.location || undefined;
     const startDate = event.startDate.toString();
     const endDate = event.endDate.toString();
-    const details = event.description;
+    const details = event.description || undefined;
     const rrule = event.component.getFirstPropertyValue("rrule");
     const timezone = event.startDate.timezone;
 
