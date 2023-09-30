@@ -15,6 +15,12 @@ export async function POST(req: Request) {
   const { messages } = await req.json();
   const key = JSON.stringify(messages); // come up with a key based on the request
 
+  // Get current date in Month, Day, Year format
+  const today = new Date();
+  const month = today.toLocaleString("default", { month: "long" });
+  const day = today.getDate();
+  const year = today.getFullYear();
+
   // Check if we have a cached response
   const cached = await kv.get(key);
   if (cached) {
@@ -36,11 +42,12 @@ export async function POST(req: Request) {
       {
         role: "system",
         content: `You parse calendar events from the provided text into iCal format based on the following information:
-        - For calculating relative dates/times, it is currently September 27, 2023
+        - For calculating relative dates/times, it is currently ${month} ${day}, ${year}
         - Include timezone (use America/Los Angles if not specified)
         - Always include an end time
         - Do not include timezone for full day events
-        - Do not include placeholders or extraneous text`,
+        - Do not include placeholders or extraneous text
+        `,
       },
       {
         role: "user",
