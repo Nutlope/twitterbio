@@ -8,6 +8,7 @@ import { useChat } from "ai/react";
 import ICAL from "ical.js";
 import { AddToCalendarButton } from "add-to-calendar-button-react";
 import TurndownService from "turndown";
+import { set } from "react-hook-form";
 
 const turndownService = new TurndownService();
 
@@ -139,6 +140,9 @@ function generateIssueTitle(input: string) {
 }
 
 export default function Page() {
+  const [issueStatus, setIssueStatus] = useState<
+    "idle" | "submitting" | "submitted" | "error"
+  >("idle");
   const [finished, setFinished] = useState(false);
   const eventRef = useRef<null | HTMLDivElement>(null);
   const textareaRef = useRef(null);
@@ -183,6 +187,7 @@ export default function Page() {
 
   const onSubmit = (e: any) => {
     setFinished(false);
+    setIssueStatus("idle");
     handleSubmit(e);
   };
 
@@ -207,6 +212,7 @@ export default function Page() {
   const isDev = process.env.NODE_ENV === "development";
 
   const reportIssue = async (title: string, description: string) => {
+    setIssueStatus("submitting");
     const response = await fetch("/api/bug", {
       method: "POST",
       headers: {
@@ -219,8 +225,10 @@ export default function Page() {
 
     if (data.issue.success) {
       console.log("Successfully created issue:", data.issue);
+      setIssueStatus("submitted");
     } else {
       console.log("Error creating issue:", data);
+      setIssueStatus("error");
     }
   };
 
@@ -320,22 +328,44 @@ export default function Page() {
                   </div>
                 ))}
               </div>
-              <button
-                className="bg-red-700 rounded-xl text-white font-medium px-4 py-2 hover:bg-red-800 w-max fixed bottom-5 right-3"
-                onClick={() =>
-                  reportIssue(
-                    generateIssueTitle(lastUserMessage),
-                    generateIssueDescription(
-                      lastUserMessage,
-                      lastAssistantMessage,
-                      convertIcsToJson(lastAssistantMessage),
-                      addToCalendarButtonPropsArray
+              {issueStatus === "submitting" && (
+                <button
+                  className="bg-red-700 rounded-xl text-white font-medium px-4 py-2 w-40 fixed bottom-5 right-3"
+                  disabled
+                >
+                  <span className="loading">
+                    <span style={{ backgroundColor: "white" }} />
+                    <span style={{ backgroundColor: "white" }} />
+                    <span style={{ backgroundColor: "white" }} />
+                  </span>
+                </button>
+              )}
+              {issueStatus === "idle" && (
+                <button
+                  className="bg-red-700 rounded-xl text-white font-medium px-4 py-2 hover:bg-red-800 w-40 fixed bottom-5 right-3"
+                  onClick={() =>
+                    reportIssue(
+                      generateIssueTitle(lastUserMessage),
+                      generateIssueDescription(
+                        lastUserMessage,
+                        lastAssistantMessage,
+                        convertIcsToJson(lastAssistantMessage),
+                        addToCalendarButtonPropsArray
+                      )
                     )
-                  )
-                }
-              >
-                Report issue &rarr;
-              </button>
+                  }
+                >
+                  Report issue &rarr;
+                </button>
+              )}
+              {issueStatus === "submitted" && (
+                <button
+                  className="bg-red-700 rounded-xl text-white font-medium px-4 py-2 w-40 fixed bottom-5 right-3"
+                  disabled
+                >
+                  ✔︎ Reported
+                </button>
+              )}
               {isDev && (
                 <>
                   <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
