@@ -330,7 +330,7 @@ export default function Page() {
               </div>
               {issueStatus === "submitting" && (
                 <button
-                  className="bg-red-700 rounded-xl text-white font-medium px-4 py-2 w-40 fixed bottom-5 right-3"
+                  className="bg-red-700 z-50 rounded-xl text-white font-medium px-4 py-2 w-40 fixed bottom-5 right-3"
                   disabled
                 >
                   <span className="loading">
@@ -342,7 +342,7 @@ export default function Page() {
               )}
               {issueStatus === "idle" && (
                 <button
-                  className="bg-red-700 rounded-xl text-white font-medium px-4 py-2 hover:bg-red-800 w-40 fixed bottom-5 right-3"
+                  className="bg-red-700 z-50 rounded-xl text-white font-medium px-4 py-2 hover:bg-red-800 w-40 fixed bottom-5 right-3"
                   onClick={() =>
                     reportIssue(
                       generateIssueTitle(lastUserMessage),
@@ -360,7 +360,7 @@ export default function Page() {
               )}
               {issueStatus === "submitted" && (
                 <button
-                  className="bg-red-700 rounded-xl text-white font-medium px-4 py-2 w-40 fixed bottom-5 right-3"
+                  className="bg-red-700 z-50 rounded-xl text-white font-medium px-4 py-2 w-40 fixed bottom-5 right-3"
                   disabled
                 >
                   ✔︎ Reported
