@@ -88,7 +88,15 @@ function icsJsonToAddToCalendarButtonProps(icsJson: ICSJson) {
   const rrule = input.rrule;
 
   return {
-    options: ["Apple", "Google"] as
+    options: [
+      "Apple",
+      "Google",
+      "iCal",
+      "Microsoft365",
+      "MicrosoftTeams",
+      "Outlook.com",
+      "Yahoo",
+    ] as
       | (
           | "Apple"
           | "Google"

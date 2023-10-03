@@ -28,6 +28,12 @@ export function AddToCalendarCard({
 
   return (
     <div className="bg-white rounded-xl shadow-md p-4 border max-w-lg mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+      <div
+        className="col-span-full flex justify-center"
+        onClick={initialProps?.onClick}
+      >
+        <AddToCalendarButton {...updatedProps} />
+      </div>
       <div className="col-span-full">
         <label
           htmlFor="name"
@@ -89,12 +95,6 @@ export function AddToCalendarCard({
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
-      </div>
-      <div
-        className="col-span-full flex justify-center"
-        onClick={initialProps?.onClick}
-      >
-        <AddToCalendarButton {...updatedProps} />
       </div>
     </div>
   );

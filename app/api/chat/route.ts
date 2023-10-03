@@ -45,9 +45,10 @@ export async function POST(req: Request) {
         - For calculating relative dates/times, it is currently ${month} ${day}, ${year}
         - Include timezone (use America/Los Angles if not specified)
         - Always include an end time
+        - Include contact information in description
         - Do not include timezone for full day events
         - Do not include placeholders or extraneous text
-        - Do not include invitees
+        - Exclude PRODID, VERSION, CALSCALE, and METHOD from the output
         `,
       },
       {
