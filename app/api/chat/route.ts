@@ -47,6 +47,7 @@ export async function POST(req: Request) {
         - Always include an end time
         - Do not include timezone for full day events
         - Do not include placeholders or extraneous text
+        - Do not include invitees
         `,
       },
       {

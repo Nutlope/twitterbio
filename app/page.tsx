@@ -6,12 +6,10 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { useChat } from "ai/react";
 import ICAL from "ical.js";
-import {
-  AddToCalendarButton,
-  AddToCalendarButtonType,
-} from "add-to-calendar-button-react";
+import { AddToCalendarButtonType } from "add-to-calendar-button-react";
 import TurndownService from "turndown";
 import { trackGoal } from "fathom-client";
+import { AddToCalendarCard } from "../components/AddToCalendarCard";
 
 const turndownService = new TurndownService();
 
@@ -142,31 +140,6 @@ function generateIssueTitle(input: string) {
   return `🐛: ${input.substring(0, 20)}...`;
 }
 
-function AddToCalendarCard(props: AddToCalendarButtonType & { onClick: any }) {
-  return (
-    <div
-      className="bg-white rounded-xl shadow-md p-4 border max-w-md"
-      key={props.name}
-    >
-      {/* Styled list of name, time, location */}
-      <p className="text-lg font-bold">{props.name}</p>
-      <p className="text-sm text-gray-500">
-        📅 {props.startDate} {props.startTime} - {props.endDate} {props.endTime}
-      </p>
-      {props.recurrence && (
-        <p className="text-sm text-gray-500">🔄 {props.recurrence}</p>
-      )}
-      {props.location && (
-        <p className="text-sm text-gray-500">📍 {props.location}</p>
-      )}
-      {props.description && <p className="py-2">{props.description}</p>}
-      <div className="flex justify-center p-2" onClick={props?.onClick}>
-        <AddToCalendarButton {...props} />
-      </div>
-    </div>
-  );
-}
-
 export default function Page() {
   const [issueStatus, setIssueStatus] = useState<
     "idle" | "submitting" | "submitted" | "error"
@@ -277,8 +250,8 @@ export default function Page() {
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
       <Header />
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
-        <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
+      <main className="flex flex-1 w-full flex-col items-center justify-center px-4 mt-12 sm:mt-20">
+        <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 text-center">
           Paste anything, get calendar events
         </h1>
         <p className="text-slate-500 mt-5">1,312 events generated so far.</p>
@@ -340,13 +313,18 @@ export default function Page() {
           {finished && (
             <>
               <div className="flex justify-center gap-4 flex-wrap">
-                {addToCalendarButtonPropsArray?.map((props) => (
+                {addToCalendarButtonPropsArray?.map((props, index) => (
                   <AddToCalendarCard
                     {...props}
                     key={props.name}
                     onClick={() => {
                       !trackedAddToCalendarGoal && trackGoal("BQ3VFDBF", 1);
                       setTrackedAddToCalendarGoal(true);
+                    }}
+                    setAddToCalendarButtonProps={(props) => {
+                      const newArray = [...addToCalendarButtonPropsArray];
+                      newArray[index] = props;
+                      setCalendarButtonPropsArray(newArray);
                     }}
                   />
                 ))}
