@@ -9,6 +9,7 @@ import ICAL from "ical.js";
 import { AddToCalendarButton } from "add-to-calendar-button-react";
 import TurndownService from "turndown";
 import { set } from "react-hook-form";
+import { trackGoal } from "fathom-client";
 
 const turndownService = new TurndownService();
 
@@ -186,6 +187,7 @@ export default function Page() {
   };
 
   const onSubmit = (e: any) => {
+    trackGoal("WBJDUXPZ", 1);
     setFinished(false);
     setIssueStatus("idle");
     handleSubmit(e);
@@ -224,6 +226,7 @@ export default function Page() {
     const data = await response.json();
 
     if (data.issue.success) {
+      trackGoal("B2ZT84YS", 0);
       console.log("Successfully created issue:", data.issue);
       setIssueStatus("submitted");
     } else {
@@ -322,7 +325,10 @@ export default function Page() {
                     {props.description && (
                       <p className="py-2">{props.description}</p>
                     )}
-                    <div className="flex justify-center p-2">
+                    <div
+                      className="flex justify-center p-2"
+                      onClick={() => trackGoal("BQ3VFDBF", 1)}
+                    >
                       <AddToCalendarButton {...props} />
                     </div>
                   </div>
