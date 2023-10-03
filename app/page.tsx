@@ -8,7 +8,6 @@ import { useChat } from "ai/react";
 import ICAL from "ical.js";
 import { AddToCalendarButton } from "add-to-calendar-button-react";
 import TurndownService from "turndown";
-import { set } from "react-hook-form";
 import { trackGoal } from "fathom-client";
 
 const turndownService = new TurndownService();
@@ -145,6 +144,8 @@ export default function Page() {
     "idle" | "submitting" | "submitted" | "error"
   >("idle");
   const [finished, setFinished] = useState(false);
+  const [trackedAddToCalendarGoal, setTrackedAddToCalendarGoal] =
+    useState(false);
   const eventRef = useRef<null | HTMLDivElement>(null);
   const textareaRef = useRef(null);
 
@@ -189,6 +190,7 @@ export default function Page() {
   const onSubmit = (e: any) => {
     trackGoal("WBJDUXPZ", 1);
     setFinished(false);
+    setTrackedAddToCalendarGoal(false);
     setIssueStatus("idle");
     handleSubmit(e);
   };
@@ -327,7 +329,10 @@ export default function Page() {
                     )}
                     <div
                       className="flex justify-center p-2"
-                      onClick={() => trackGoal("BQ3VFDBF", 1)}
+                      onClick={() => {
+                        !trackedAddToCalendarGoal && trackGoal("BQ3VFDBF", 1);
+                        setTrackedAddToCalendarGoal(true);
+                      }}
                     >
                       <AddToCalendarButton {...props} />
                     </div>
