@@ -10,7 +10,7 @@ function TrackPageView() {
 
   // Load the Fathom script on mount
   useEffect(() => {
-    load(process.env.FATHOM_TRACKING_CODE!, {
+    load(process.env.NEXT_PUBLIC_FATHOM_SITE_ID!, {
       includedDomains: ["timetime.cc", "www.timetime.cc"],
       auto: false,
     });
