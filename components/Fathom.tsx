@@ -1,4 +1,3 @@
-// Fathom.tsx
 "use client";
 
 import { load, trackPageview } from "fathom-client";
@@ -8,16 +7,23 @@ import { usePathname, useSearchParams } from "next/navigation";
 function TrackPageView() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  // Load the Fathom script on mount
   useEffect(() => {
-    load(process.env.FATHOM_TRACKING_CODE || "", {
+    load(process.env.FATHOM_TRACKING_CODE!, {
       includedDomains: ["timetime.cc", "www.timetime.cc"],
+      auto: false,
     });
   }, []);
 
+  // Record a pageview when route changes
   useEffect(() => {
-    trackPageview();
+    if (!pathname) return;
 
-    // Record a pageview when route changes
+    trackPageview({
+      url: pathname + searchParams.toString(),
+      referrer: document.referrer,
+    });
   }, [pathname, searchParams]);
 
   return null;
