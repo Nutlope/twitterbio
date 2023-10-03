@@ -31,8 +31,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
         <Fathom />
+        {children}
       </body>
     </html>
   );
