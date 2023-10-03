@@ -1,3 +1,5 @@
+"use client";
+
 import { Metadata } from "next";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
