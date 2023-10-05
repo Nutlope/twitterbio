@@ -13,7 +13,8 @@ RRULE:FREQ=WEEKLY;COUNT=5
 SUMMARY:Yoga Foundations Workshop at People's Yoga
 END:VEVENT
 END:VCALENDAR
-`;
+` as string;
+
 type ICSJson = {
   startDate: string;
   endDate: string;
@@ -23,6 +24,7 @@ type ICSJson = {
   rrule: { freq?: string; count?: number };
   timezone?: string;
 };
+
 export function convertIcsToJson(icsData: any) {
   // Initialize an array to hold the events
   const events: ICSJson[] = [];
@@ -63,6 +65,7 @@ export function convertIcsToJson(icsData: any) {
   // You can now work with this JSON object or stringify it
   return events;
 }
+
 export function icsJsonToAddToCalendarButtonProps(icsJson: ICSJson) {
   const input = icsJson;
   const { summary, location } = icsJson;
@@ -107,6 +110,21 @@ export function icsJsonToAddToCalendarButtonProps(icsJson: ICSJson) {
     recurrence_count: rrule?.count || undefined,
   };
 }
+
+export function generatedIcsArrayToEvents(input: string) {
+  try {
+    const events = convertIcsToJson(input);
+    // to calendar button props
+    const addToCalendarButtonPropsArray = events.map((event) =>
+      icsJsonToAddToCalendarButtonProps(event)
+    );
+    return addToCalendarButtonPropsArray;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+}
+
 function encodeAsMarkdownCodeBlock(object: any, stringify = true) {
   return "```\n" + stringify
     ? JSON.stringify(object, null, 2)

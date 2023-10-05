@@ -10,25 +10,228 @@ import { trackGoal } from "fathom-client";
 import { AddToCalendarCard } from "../components/AddToCalendarCard";
 import {
   convertIcsToJson,
-  icsJsonToAddToCalendarButtonProps,
   turndownService,
   SAMPLE_ICS,
   generateIssueTitle,
   generateIssueDescription,
+  generatedIcsArrayToEvents,
 } from "../utils/utils";
 
+type Status = "idle" | "submitting" | "submitted" | "error";
+
+function Form({
+  handleInputChange,
+  handlePaste,
+  input,
+  isLoading,
+  onSubmit,
+}: {
+  handleInputChange: (e: any) => void;
+  handlePaste: (e: any) => Promise<void>;
+  input: string;
+  isLoading: boolean;
+  onSubmit: (e: any) => void;
+}) {
+  return (
+    <form className="max-w-xl w-full" onSubmit={onSubmit}>
+      <div className="flex mt-10 items-center space-x-3">
+        <p className="text-left font-medium">
+          Paste event info{" "}
+          <span className="text-slate-500">(or describe your event)</span>.
+        </p>
+      </div>
+      <textarea
+        onPaste={handlePaste}
+        value={input}
+        onChange={handleInputChange}
+        rows={4}
+        className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
+        placeholder={
+          "Paste a description from a website, a text message from a friend, or anything else. Or you can describe your event."
+        }
+      />
+      <div className="flex items-center space-x-3">
+        <p className="text-left">
+          <span className="text-slate-500">
+            Currently takes 5+ seconds to make your events... hopefully faster
+            soon!
+          </span>
+        </p>
+      </div>
+
+      {!isLoading && (
+        <button
+          className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+          type="submit"
+        >
+          Generate your event &rarr;
+        </button>
+      )}
+      {isLoading && (
+        <button
+          className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+          disabled
+        >
+          <span className="loading">
+            <span style={{ backgroundColor: "white" }} />
+            <span style={{ backgroundColor: "white" }} />
+            <span style={{ backgroundColor: "white" }} />
+          </span>
+        </button>
+      )}
+    </form>
+  );
+}
+
+function Output({
+  events,
+  finished,
+  isDev,
+  issueStatus,
+  lastAssistantMessage,
+  lastUserMessage,
+  reportIssue,
+  setEvents,
+  setTrackedAddToCalendarGoal,
+  trackedAddToCalendarGoal,
+}: {
+  events: AddToCalendarButtonType[] | null;
+  finished: boolean;
+  isDev: boolean;
+  issueStatus: Status;
+  lastAssistantMessage: string;
+  lastUserMessage: string;
+  reportIssue: (title: string, description: string) => Promise<void>;
+  setEvents: (events: AddToCalendarButtonType[] | null) => void;
+  setTrackedAddToCalendarGoal: (trackedAddToCalendarGoal: boolean) => void;
+  trackedAddToCalendarGoal: boolean;
+}) {
+  return (
+    <output className="space-y-10 my-10">
+      {finished && (
+        <>
+          <div className="flex justify-center gap-4 flex-wrap">
+            {events?.map((props, index) => (
+              <AddToCalendarCard
+                {...props}
+                key={props.name}
+                onClick={() => {
+                  !trackedAddToCalendarGoal && trackGoal("BQ3VFDBF", 1);
+                  setTrackedAddToCalendarGoal(true);
+                }}
+                setAddToCalendarButtonProps={(props) => {
+                  const newArray = [...events];
+                  newArray[index] = props;
+                  setEvents(newArray);
+                }}
+              />
+            ))}
+          </div>
+          {issueStatus === "submitting" && (
+            <button
+              className="bg-red-700 z-50 rounded-xl text-white font-medium px-4 py-2 w-40 fixed bottom-5 right-3"
+              disabled
+            >
+              <span className="loading">
+                <span style={{ backgroundColor: "white" }} />
+                <span style={{ backgroundColor: "white" }} />
+                <span style={{ backgroundColor: "white" }} />
+              </span>
+            </button>
+          )}
+          {issueStatus === "idle" && (
+            <button
+              className="bg-red-700 z-50 rounded-xl text-white font-medium px-4 py-2 hover:bg-red-800 w-40 fixed bottom-5 right-3"
+              onClick={() =>
+                reportIssue(
+                  generateIssueTitle(lastUserMessage),
+                  generateIssueDescription(
+                    lastUserMessage,
+                    lastAssistantMessage,
+                    convertIcsToJson(lastAssistantMessage),
+                    events
+                  )
+                )
+              }
+            >
+              Report issue &rarr;
+            </button>
+          )}
+          {issueStatus === "submitted" && (
+            <button
+              className="bg-red-700 z-50 rounded-xl text-white font-medium px-4 py-2 w-40 fixed bottom-5 right-3"
+              disabled
+            >
+              ✔︎ Reported
+            </button>
+          )}
+          {isDev && (
+            <>
+              <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+                <div className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border">
+                  <p>Prompt</p>
+                  <p>{lastUserMessage}</p>
+                </div>
+              </div>
+              <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+                <div
+                  className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border"
+                  onClick={() => {
+                    // download file from generatedEvents as .ics
+                    const unescaped = lastAssistantMessage.replace(/\\,/g, ",");
+                    const element = document.createElement("a");
+                    const file = new Blob([unescaped], {
+                      type: "text/calendar",
+                    });
+                    element.href = URL.createObjectURL(file);
+                    element.download = "event.ics";
+                    document.body.appendChild(element); // Required for this to work in FireFox
+                    element.click();
+                  }}
+                  key={lastAssistantMessage}
+                >
+                  <p>Generated by ChatGPT</p>
+                  <code>{lastAssistantMessage}</code>
+                </div>
+              </div>
+              <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+                <div className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border">
+                  <p>ICSJson</p>
+                  <code>
+                    {JSON.stringify(
+                      convertIcsToJson(lastAssistantMessage),
+                      null,
+                      2
+                    )}
+                  </code>
+                </div>
+              </div>
+              {events?.map((props) => (
+                <div
+                  className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto"
+                  key={`code-${props.name}`}
+                >
+                  <div className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border">
+                    <p>AddToCalendarButtonProps</p>
+                    <code>{JSON.stringify(props, null, 2)}</code>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+        </>
+      )}
+    </output>
+  );
+}
+
 export default function Page() {
-  const [issueStatus, setIssueStatus] = useState<
-    "idle" | "submitting" | "submitted" | "error"
-  >("idle");
+  const [issueStatus, setIssueStatus] = useState<Status>("idle");
   const [finished, setFinished] = useState(false);
-  const [addToCalendarButtonPropsArray, setCalendarButtonPropsArray] = useState<
-    AddToCalendarButtonType[] | null
-  >(null);
+  const [events, setEvents] = useState<AddToCalendarButtonType[] | null>(null);
   const [trackedAddToCalendarGoal, setTrackedAddToCalendarGoal] =
     useState(false);
   const eventRef = useRef<null | HTMLDivElement>(null);
-  const textareaRef = useRef(null);
 
   const scrollToEvents = () => {
     if (eventRef.current !== null) {
@@ -52,14 +255,11 @@ export default function Page() {
     },
   });
 
-  // set calendar button props array using effect when finished
+  // set events when changing from not finished to finished
   useEffect(() => {
     if (finished) {
-      const icsJson = convertIcsToJson(lastAssistantMessage);
-      const calendarButtonPropsArray = icsJson.map((ics) =>
-        icsJsonToAddToCalendarButtonProps(ics)
-      );
-      setCalendarButtonPropsArray(calendarButtonPropsArray);
+      const events = generatedIcsArrayToEvents(lastAssistantMessage);
+      setEvents(events);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finished]);
@@ -88,20 +288,6 @@ export default function Page() {
     handleSubmit(e);
   };
 
-  const userMessages = messages.filter((message) => message.role === "user");
-  const assistantMessages = messages.filter(
-    (message) => message.role === "assistant"
-  );
-
-  const lastUserMessage =
-    userMessages?.[userMessages.length - 1]?.content || "";
-  // const lastAssistantMessage =
-  //   assistantMessages?.[userMessages.length - 1]?.content || null;
-  const lastAssistantMessage =
-    assistantMessages?.[userMessages.length - 1]?.content || SAMPLE_ICS;
-
-  const isDev = process.env.NODE_ENV === "development";
-
   const reportIssue = async (title: string, description: string) => {
     setIssueStatus("submitting");
     const response = await fetch("/api/bug", {
@@ -124,6 +310,20 @@ export default function Page() {
     }
   };
 
+  const userMessages = messages.filter((message) => message.role === "user");
+  const assistantMessages = messages.filter(
+    (message) => message.role === "assistant"
+  );
+
+  const lastUserMessage =
+    userMessages?.[userMessages.length - 1]?.content || "";
+  // const lastAssistantMessage =
+  //   assistantMessages?.[userMessages.length - 1]?.content || null;
+  const lastAssistantMessage =
+    assistantMessages?.[userMessages.length - 1]?.content || SAMPLE_ICS;
+
+  const isDev = process.env.NODE_ENV === "development";
+
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
       <Header />
@@ -132,178 +332,31 @@ export default function Page() {
           Paste anything, get calendar events
         </h1>
         <p className="text-slate-500 mt-5">1,312 events generated so far.</p>
-        <form className="max-w-xl w-full" onSubmit={onSubmit}>
-          <div className="flex mt-10 items-center space-x-3">
-            <p className="text-left font-medium">
-              Paste event info{" "}
-              <span className="text-slate-500">(or describe your event)</span>.
-            </p>
-          </div>
-          <textarea
-            ref={textareaRef}
-            onPaste={handlePaste}
-            value={input}
-            onChange={handleInputChange}
-            rows={4}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
-            placeholder={
-              "Paste a description from a website, a text message from a friend, or anything else. Or you can describe your event."
-            }
-          />
-          <div className="flex items-center space-x-3">
-            <p className="text-left">
-              <span className="text-slate-500">
-                Currently takes 5+ seconds to make your events... hopefully
-                faster soon!
-              </span>
-            </p>
-          </div>
-
-          {!isLoading && (
-            <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-              type="submit"
-            >
-              Generate your event &rarr;
-            </button>
-          )}
-          {isLoading && (
-            <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-              disabled
-            >
-              <span className="loading">
-                <span style={{ backgroundColor: "white" }} />
-                <span style={{ backgroundColor: "white" }} />
-                <span style={{ backgroundColor: "white" }} />
-              </span>
-            </button>
-          )}
-        </form>
+        <Form
+          handleInputChange={handleInputChange}
+          handlePaste={handlePaste}
+          input={input}
+          isLoading={isLoading}
+          onSubmit={onSubmit}
+        />
         <Toaster
           position="top-center"
           reverseOrder={false}
           toastOptions={{ duration: 2000 }}
         />
         <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
-        <output className="space-y-10 my-10">
-          {finished && (
-            <>
-              <div className="flex justify-center gap-4 flex-wrap">
-                {addToCalendarButtonPropsArray?.map((props, index) => (
-                  <AddToCalendarCard
-                    {...props}
-                    key={props.name}
-                    onClick={() => {
-                      !trackedAddToCalendarGoal && trackGoal("BQ3VFDBF", 1);
-                      setTrackedAddToCalendarGoal(true);
-                    }}
-                    setAddToCalendarButtonProps={(props) => {
-                      const newArray = [...addToCalendarButtonPropsArray];
-                      newArray[index] = props;
-                      setCalendarButtonPropsArray(newArray);
-                    }}
-                  />
-                ))}
-              </div>
-              {issueStatus === "submitting" && (
-                <button
-                  className="bg-red-700 z-50 rounded-xl text-white font-medium px-4 py-2 w-40 fixed bottom-5 right-3"
-                  disabled
-                >
-                  <span className="loading">
-                    <span style={{ backgroundColor: "white" }} />
-                    <span style={{ backgroundColor: "white" }} />
-                    <span style={{ backgroundColor: "white" }} />
-                  </span>
-                </button>
-              )}
-              {issueStatus === "idle" && (
-                <button
-                  className="bg-red-700 z-50 rounded-xl text-white font-medium px-4 py-2 hover:bg-red-800 w-40 fixed bottom-5 right-3"
-                  onClick={() =>
-                    reportIssue(
-                      generateIssueTitle(lastUserMessage),
-                      generateIssueDescription(
-                        lastUserMessage,
-                        lastAssistantMessage,
-                        convertIcsToJson(lastAssistantMessage),
-                        addToCalendarButtonPropsArray
-                      )
-                    )
-                  }
-                >
-                  Report issue &rarr;
-                </button>
-              )}
-              {issueStatus === "submitted" && (
-                <button
-                  className="bg-red-700 z-50 rounded-xl text-white font-medium px-4 py-2 w-40 fixed bottom-5 right-3"
-                  disabled
-                >
-                  ✔︎ Reported
-                </button>
-              )}
-              {isDev && (
-                <>
-                  <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
-                    <div className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border">
-                      <p>Prompt</p>
-                      <p>{lastUserMessage}</p>
-                    </div>
-                  </div>
-                  <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
-                    <div
-                      className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border"
-                      onClick={() => {
-                        // download file from generatedEvents as .ics
-                        const unescaped = lastAssistantMessage.replace(
-                          /\\,/g,
-                          ","
-                        );
-                        const element = document.createElement("a");
-                        const file = new Blob([unescaped], {
-                          type: "text/calendar",
-                        });
-                        element.href = URL.createObjectURL(file);
-                        element.download = "event.ics";
-                        document.body.appendChild(element); // Required for this to work in FireFox
-                        element.click();
-                      }}
-                      key={lastAssistantMessage}
-                    >
-                      <p>Generated by ChatGPT</p>
-                      <code>{lastAssistantMessage}</code>
-                    </div>
-                  </div>
-                  <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
-                    <div className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border">
-                      <p>ICSJson</p>
-                      <code>
-                        {JSON.stringify(
-                          convertIcsToJson(lastAssistantMessage),
-                          null,
-                          2
-                        )}
-                      </code>
-                    </div>
-                  </div>
-                  {addToCalendarButtonPropsArray?.map((props) => (
-                    <div
-                      className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto"
-                      key={`code-${props.name}`}
-                    >
-                      <div className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-pointer border">
-                        <p>AddToCalendarButtonProps</p>
-                        <code>{JSON.stringify(props, null, 2)}</code>
-                      </div>
-                    </div>
-                  ))}
-                </>
-              )}
-            </>
-          )}
-        </output>
+        <Output
+          events={events}
+          finished={finished}
+          isDev={isDev}
+          issueStatus={issueStatus}
+          lastAssistantMessage={lastAssistantMessage}
+          lastUserMessage={lastUserMessage}
+          reportIssue={reportIssue}
+          setEvents={setEvents}
+          setTrackedAddToCalendarGoal={setTrackedAddToCalendarGoal}
+          trackedAddToCalendarGoal={trackedAddToCalendarGoal}
+        />
       </main>
       <Footer />
     </div>
