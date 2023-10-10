@@ -6,11 +6,11 @@ import Form from './form';
  */
 export default function Page() {
   return (
-    <section className="w-full h-screen flex items-center justify-center py-12 md:py-24 lg:py-32">
+    <section className="w-full h-screen flex items-center justify-center py-12">
       <div className="container space-y-12 px-4 md:px-6 mx-auto max-w-[800px]">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl max-w-[550px]">
-            Generate your next Twitter bio using ChatGPT
+            Generate your next social bio using ChatGPT
           </h2>
           <p className="max-w-[900px] text-zinc-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-zinc-400">
             47,118 bios generated so far.

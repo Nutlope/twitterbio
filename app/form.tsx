@@ -21,7 +21,6 @@ export default function Form() {
   const bioRef = useRef<null | HTMLDivElement>(null);
 
   const onSubmit = (e: any) => {
-    setBio(input);
     handleSubmit(e);
   };
 
@@ -31,7 +30,12 @@ export default function Form() {
     }
   };
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+  const onInputChange = (e: any) => {
+    handleInputChange(e);
+    setBio(e.target.value);
+  };
+
+  const { messages, input, handleSubmit, handleInputChange, isLoading } =
     useChat({
       api: '/api/chat',
       body: {
@@ -54,8 +58,8 @@ export default function Form() {
           → Describe yourself
         </p>
         <textarea
-          value={input}
-          onChange={handleInputChange}
+          defaultValue={input}
+          onChange={onInputChange}
           rows={4}
           className="border border-zinc-200 rounded-lg px-4 py-4 w-full dark:border-zinc-800 focus:border-black focus:ring-black"
           placeholder={
