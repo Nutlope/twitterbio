@@ -6,27 +6,31 @@
     "start": "next start"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.7",
-    "@headlessui/tailwindcss": "^0.1.2",
-    "@heroicons/react": "^2.0.13",
-    "@tailwindcss/forms": "^0.5.3",
-    "@vercel/analytics": "^0.1.8",
-    "ai": "^2.1.21",
-    "next": "^13.4.10",
-    "openai-edge": "^1.2.0",
+    "@radix-ui/react-select": "^2.0.0",
+    "@radix-ui/react-slot": "^1.0.2",
+    "@tailwindcss/forms": "^0.5.6",
+    "@vercel/analytics": "^1.1.0",
+    "ai": "^2.2.14",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "lucide-react": "^0.284.0",
+    "next": "^13.5.4",
+    "openai": "^4.11.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.42.0",
+    "react-hook-form": "^7.47.0",
     "react-hot-toast": "^2.4.1",
-    "react-use-measure": "^2.1.1"
+    "react-use-measure": "^2.1.1",
+    "tailwind-merge": "^1.14.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@types/node": "18.11.3",
-    "@types/react": "18.0.21",
-    "@types/react-dom": "18.0.6",
-    "autoprefixer": "^10.4.12",
-    "postcss": "^8.4.18",
-    "tailwindcss": "^3.2.4",
-    "typescript": "4.9.4"
+    "@types/node": "20.8.4",
+    "@types/react": "18.2.27",
+    "@types/react-dom": "18.2.12",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.3",
+    "typescript": "5.2.2"
   }
 }
