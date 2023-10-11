@@ -125,11 +125,12 @@ export function generatedIcsArrayToEvents(input: string) {
   }
 }
 
-function encodeAsMarkdownCodeBlock(object: any, stringify = true) {
-  return "```\n" + stringify
-    ? JSON.stringify(object, null, 2)
-    : object + "\n```";
+function encodeAsMarkdownCodeBlock(object: any, stringify = true): string {
+  return (
+    "```\n" + (stringify ? JSON.stringify(object, null, 2) : object) + "\n```"
+  );
 }
+
 export function generateIssueDescription(
   input: string,
   lastAssistantMessage: string,
