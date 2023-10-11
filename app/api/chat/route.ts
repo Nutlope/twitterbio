@@ -45,10 +45,12 @@ export async function POST(req: Request) {
         - For calculating relative dates/times, it is currently ${month} ${day}, ${year}
         - Include timezone (use America/Los Angles if not specified)
         - Always include an end time
+        - Always include a SUMMARY
         - Include contact information in description
         - Do not include timezone for full day events
         - Do not include placeholders or extraneous text
         - Exclude PRODID, VERSION, CALSCALE, and METHOD from the output
+        - If the event is a flight, format the SUMMARY as: ✈️ [Flight Number] ([Departure Airport Code] to [Arrival Airport Code])
         `,
       },
       {
