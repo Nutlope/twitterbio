@@ -53,7 +53,7 @@ function Form({
       <div className="flex items-center space-x-3">
         <p className="text-left">
           <span className="text-slate-500">
-            Currently takes 5+ seconds to make your events... hopefully faster
+            ⏳ Currently takes about 5+ seconds per events... hopefully faster
             soon!
           </span>
         </p>
