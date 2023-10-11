@@ -18,12 +18,20 @@ export function AddToCalendarCard({
   const [name, setName] = useState(initialProps.name);
   const [location, setLocation] = useState(initialProps.location);
   const [description, setDescription] = useState(initialProps.description);
+  const [startDate, setStartDate] = useState(initialProps.startDate);
+  const [startTime, setStartTime] = useState(initialProps.startTime);
+  const [endDate, setEndDate] = useState(initialProps.endDate);
+  const [endTime, setEndTime] = useState(initialProps.endTime);
 
   const updatedProps = {
     ...initialProps,
     name,
     location,
     description,
+    startDate,
+    startTime,
+    endDate,
+    endTime,
   };
 
   return (
@@ -54,10 +62,50 @@ export function AddToCalendarCard({
           </div>
         </div>
       </div>
-      <p className="text-sm text-gray-500 col-span-full">
-        📅 {initialProps.startDate} {initialProps.startTime} -{" "}
-        {initialProps.endDate} {initialProps.endTime}
-      </p>
+      <div className="col-span-full">
+        <label
+          htmlFor="startDate"
+          className="block text-sm font-medium leading-6 text-gray-900"
+        >
+          Start Date
+        </label>
+        <input
+          type="date"
+          name="startDate"
+          id="startDate"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <input
+          type="time"
+          name="startTime"
+          id="startTime"
+          value={startTime}
+          onChange={(e) => setStartTime(e.target.value)}
+        />
+      </div>
+      <div className="col-span-full">
+        <label
+          htmlFor="endDate"
+          className="block text-sm font-medium leading-6 text-gray-900"
+        >
+          End Date
+        </label>
+        <input
+          type="date"
+          name="endDate"
+          id="endDate"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
+        <input
+          type="time"
+          name="endTime"
+          id="endTime"
+          value={endTime}
+          onChange={(e) => setEndTime(e.target.value)}
+        />
+      </div>
       <div className="col-span-full">
         <label
           htmlFor="location"
