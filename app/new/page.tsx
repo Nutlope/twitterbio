@@ -194,7 +194,8 @@ export default function Page() {
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center px-4 mt-12 sm:mt-20">
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 text-center">
-          Text +18332822877, get calendar events.
+          Text <a href="tel:+15154201312">+1 515 420 1312</a> get calendar
+          events.
         </h1>
         <p className="text-slate-500 mt-5">1,312 events generated so far.</p>
         <Output
