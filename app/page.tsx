@@ -313,6 +313,11 @@ export default function Page() {
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{ duration: 2000 }}
+      />
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center px-4 mt-12 sm:mt-20">
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 text-center">
@@ -325,11 +330,6 @@ export default function Page() {
           input={input}
           isLoading={isLoading}
           onSubmit={onSubmit}
-        />
-        <Toaster
-          position="top-center"
-          reverseOrder={false}
-          toastOptions={{ duration: 2000 }}
         />
         <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
         <Output

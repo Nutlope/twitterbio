@@ -5,6 +5,7 @@ import {
   AddToCalendarButton,
   AddToCalendarButtonType,
 } from "add-to-calendar-button-react";
+import { SaveButton } from "./SaveButton";
 
 type AddToCalendarCardProps = AddToCalendarButtonType & {
   onClick: any;
@@ -166,6 +167,7 @@ export function AddToCalendarCard({
             />
           </div>
         </div>
+        <SaveButton {...updatedProps} />
       </div>
     </div>
   );

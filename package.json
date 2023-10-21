@@ -19,6 +19,7 @@
     "@vercel/kv": "^0.2.3",
     "add-to-calendar-button-react": "^2.4.3",
     "ai": "^2.2.13",
+    "clsx": "^2.0.0",
     "fathom-client": "^3.5.0",
     "ical.js": "^1.5.0",
     "ical2json": "^3.1.2",

@@ -1,4 +1,4 @@
-import { UserButton } from "@clerk/nextjs";
+import { SignInButton, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 
 export default function Header() {
@@ -24,9 +24,10 @@ export default function Header() {
           timetime.cc
         </h1>
       </Link>
-      <div>
-        <UserButton afterSignOutUrl="/" />
-      </div>
+      <UserButton afterSignOutUrl="/" />
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
     </header>
   );
 }
