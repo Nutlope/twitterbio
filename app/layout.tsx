@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import "../styles/globals.css";
 import Fathom from "../components/Fathom";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const title = "timetime.cc";
 const description = "Paste anything, get calendar events.";
@@ -29,11 +30,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
-        <Fathom />
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body>
+          <Fathom />
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
