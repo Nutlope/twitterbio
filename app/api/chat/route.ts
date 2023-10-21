@@ -43,9 +43,12 @@ export async function POST(req: Request) {
         role: "system",
         content: `You parse calendar events from the provided text into iCal format based on the following information:
         - For calculating relative dates/times, it is currently ${month} ${day}, ${year}
-        - Include timezone (use America/Los Angles if not specified)
-        - Always include an end time
+        - Include timezone (use America/Los Angeles if not specified)
+        - Always include start with a BEGIN:VCALENDAR and end with an END:VCALENDAR
+        - Always include DTSTART and DTEND
         - Always include a SUMMARY
+        - Include a DESCRIPTION based on the following rules
+          - Provide a summary of event details appropriate for a calendar invite
         - Include contact information in description
         - Do not include timezone for full day events
         - Do not include placeholders or extraneous text
