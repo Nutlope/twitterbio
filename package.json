@@ -1,12 +1,15 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"npm run db\" \"next dev\"",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db": "pscale connect timetime dev --port 3309",
+    "db-prod": "pscale connect timetime main --port 3309"
   },
   "dependencies": {
+    "@clerk/nextjs": "^4.25.6",
     "@headlessui/react": "^1.7.17",
     "@headlessui/tailwindcss": "^0.2.0",
     "@heroicons/react": "^2.0.18",
@@ -33,6 +36,7 @@
     "@types/react": "18.2.23",
     "@types/react-dom": "18.2.8",
     "autoprefixer": "^10.4.16",
+    "concurrently": "^8.2.2",
     "encoding": "^0.1.13",
     "eslint": "8.50.0",
     "eslint-config-next": "13.5.3",
