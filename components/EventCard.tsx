@@ -2,7 +2,7 @@
 
 import { AddToCalendarButton } from "add-to-calendar-button-react";
 import { AddToCalendarButtonProps } from "add-to-calendar-button-react/dist/AddToCalendarButton";
-import { getDateInfo } from "../utils/utils";
+import { getDateInfoUTC } from "../utils/utils";
 import { DeleteButton } from "./DeleteButton";
 
 type EventCardProps = {
@@ -13,8 +13,8 @@ type EventCardProps = {
 
 export default function EventCard(props: EventCardProps) {
   const { id, event } = props;
-  const startDateInfo = getDateInfo(event.startDate!);
-  const endDateInfo = getDateInfo(event.endDate!);
+  const startDateInfo = getDateInfoUTC(event.startDate!);
+  const endDateInfo = getDateInfoUTC(event.endDate!);
   const spansMultipleDays = startDateInfo?.day !== endDateInfo?.day;
 
   return (

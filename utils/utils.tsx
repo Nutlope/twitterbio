@@ -212,3 +212,56 @@ export function getDateInfo(dateString: string): DateInfo | null {
 
   return { month, monthName, day, year, dayOfWeek };
 }
+export function getDateInfoUTC(dateString: string): DateInfo | null {
+  // Validate input
+  const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+  if (!datePattern.test(dateString)) {
+    console.error("Invalid date format. Use YYYY-MM-DD.");
+    return null;
+  }
+
+  // Create a Date object in UTC
+  const date = new Date(`${dateString}T00:00:00Z`);
+
+  // Check if date is valid
+  if (isNaN(date.getTime())) {
+    console.error("Invalid date.");
+    return null;
+  }
+
+  // Get month, day, and year
+  const month = date.getUTCMonth() + 1; // Months are zero-based
+  const day = date.getUTCDate();
+  const year = date.getUTCFullYear();
+
+  // Get day of the week
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const dayOfWeek = daysOfWeek[date.getUTCDay()];
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "Jul",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const monthName = monthNames[date.getUTCMonth()];
+
+  return { month, monthName, day, year, dayOfWeek };
+}

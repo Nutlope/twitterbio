@@ -1,20 +1,15 @@
-import { auth } from "@clerk/nextjs";
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
-import { db } from "../../lib/db";
-import EventCard from "../../components/EventCard";
 import { AddToCalendarButtonProps } from "add-to-calendar-button-react/dist/AddToCalendarButton";
+import EventCard from "../../../components/EventCard";
+import Header from "../../../components/Header";
+import { db } from "../../../lib/db";
+import Footer from "../../../components/Footer";
+import { clerkClient } from "@clerk/nextjs";
+import { UserInfo } from "../../../components/UserInfo";
 
-export default async function Page() {
-  const { userId } = auth();
-
-  if (!userId) {
-    return null;
-  }
-
+export default async function Page({ params }: { params: { userId: string } }) {
   const events = await db.event.findMany({
     where: {
-      userId: userId,
+      userId: params.userId,
     },
     select: {
       id: true,
@@ -26,10 +21,14 @@ export default async function Page() {
     },
   });
 
+  const user = await clerkClient.users.getUser(params.userId);
+
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
       <Header />
       <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-center px-4 mt-12 sm:mt-20">
+        <UserInfo user={user} />
+        <div className="p-2"></div>
         {events.length === 0 ? (
           <p className="text-gray-500 text-lg">No events found.</p>
         ) : (
@@ -44,7 +43,6 @@ export default async function Page() {
             ))}
           </ul>
         )}
-        {userId}
       </main>
       <Footer />
     </div>

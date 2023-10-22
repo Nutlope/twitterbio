@@ -1,12 +1,14 @@
 "use client";
+
 import React from "react";
 import { AddToCalendarButtonType } from "add-to-calendar-button-react";
-import { SignedIn } from "@clerk/nextjs";
+import { SignedIn, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import clsx from "clsx";
 
 export function SaveButton(props: AddToCalendarButtonType) {
+  const { user } = useUser();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -34,7 +36,7 @@ export function SaveButton(props: AddToCalendarButtonType) {
     // This forces a cache invalidation.
     router.refresh();
 
-    router.push(`/events`);
+    router.push(`/events/${user?.id || ""}`);
   }
 
   return (
