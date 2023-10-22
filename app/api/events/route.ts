@@ -6,6 +6,10 @@ const eventCreateSchema = z.object({
   event: z.any(), //TODO: add validation
 });
 
+const eventDeleteSchema = z.object({
+  id: z.number(),
+});
+
 export async function GET() {
   try {
     const { userId } = auth();
@@ -49,6 +53,34 @@ export async function POST(req: Request) {
       },
       select: {
         id: true,
+      },
+    });
+
+    return new Response(JSON.stringify(post));
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return new Response(JSON.stringify(error.issues), { status: 422 });
+    }
+
+    return new Response(null, { status: 500 });
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const { userId } = auth();
+
+    if (!userId) {
+      return new Response("Unauthorized", { status: 403 });
+    }
+
+    const json = await req.json();
+    const body = eventDeleteSchema.parse(json);
+
+    const post = await db.event.delete({
+      where: {
+        id: body.id,
+        userId: userId,
       },
     });
 

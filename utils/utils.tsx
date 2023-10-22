@@ -150,3 +150,65 @@ ${encodeAsMarkdownCodeBlock(addToCalendarButtonPropsArray)}
 export function generateIssueTitle(input: string) {
   return `🐛: ${input.substring(0, 20)}...`;
 }
+
+type DateInfo = {
+  month: number;
+  day: number;
+  year: number;
+  dayOfWeek: string;
+  monthName: string;
+};
+
+export function getDateInfo(dateString: string): DateInfo | null {
+  // Validate input
+  const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+  if (!datePattern.test(dateString)) {
+    console.error("Invalid date format. Use YYYY-MM-DD.");
+    return null;
+  }
+
+  // Create a Date object
+  const date = new Date(dateString);
+
+  // Check if date is valid
+  if (isNaN(date.getTime())) {
+    console.error("Invalid date.");
+    return null;
+  }
+
+  // Get month, day, and year
+  const month = date.getMonth() + 1; // Months are zero-based
+  const day = date.getDate();
+  const year = date.getFullYear();
+
+  // Get day of the week
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const dayOfWeek = daysOfWeek[date.getDay()];
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "Jul",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const monthName = monthNames[date.getMonth()];
+
+  return { month, monthName, day, year, dayOfWeek };
+}
