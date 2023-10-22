@@ -6,7 +6,8 @@
     "start": "next start",
     "lint": "next lint",
     "db": "pscale connect timetime dev --port 3309",
-    "db-prod": "pscale connect timetime main --port 3309"
+    "db-prod": "pscale connect timetime main --port 3309",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.25.6",
