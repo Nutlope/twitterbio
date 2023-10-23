@@ -14,15 +14,13 @@ export async function GET() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
           backgroundColor: "#fff",
         }}
       >
-        <h1 tw="text-6xl font-bold text-slate-900 text-center">Now: ⌨️✨📅</h1>
-        <p>
-          Paste event info <span className="font-semibold">&rarr;</span> clean,
-          calendarable event
-        </p>
-        <h2 tw="text-3xl font-bold text-slate-900 text-center opacity-70">
+        <h1 tw="text-7xl font-bold text-slate-900 text-center">Now: ⌨️✨📅</h1>
+        <p>Paste event info ➡️ clean, calendarable event</p>
+        <h2 tw="text-4xl font-bold text-slate-900 text-center opacity-70">
           Soon: 📣🫂🎉
         </h2>
         <p tw="text-sm opacity-70">Create, collect, curate & share events</p>
