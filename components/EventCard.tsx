@@ -2,10 +2,11 @@
 
 import { AddToCalendarButton } from "add-to-calendar-button-react";
 import { AddToCalendarButtonProps } from "add-to-calendar-button-react/dist/AddToCalendarButton";
-import { getDateInfoUTC } from "../utils/utils";
+import { translateToHtml, getDateInfoUTC } from "../utils/utils";
 import { DeleteButton } from "./DeleteButton";
 import Link from "next/link";
 import clsx from "clsx";
+import { Suspense } from "react";
 
 type EventCardProps = {
   userId: string;
@@ -112,13 +113,16 @@ export default function EventCard(props: EventCardProps) {
           <div className="p-0.5"></div>
           <div className="flex min-w-0 gap-x-4">
             <div className="min-w-0 flex-auto">
-              <p
-                className={clsx("mt-1 text-sm leading-6 text-gray-600", {
-                  "line-clamp-2": !singleEvent,
-                })}
-              >
-                {event.description}
-              </p>
+              <Suspense fallback={<div></div>}>
+                <p
+                  className={clsx("mt-1 text-sm leading-6 text-gray-600", {
+                    "line-clamp-2": !singleEvent,
+                  })}
+                  dangerouslySetInnerHTML={{
+                    __html: translateToHtml(event.description!),
+                  }}
+                ></p>
+              </Suspense>
             </div>
           </div>
         </LinkOrNot>

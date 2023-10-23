@@ -30,7 +30,7 @@ export function AddToCalendarCard({
     name,
     location,
     description: link
-      ? description + "\n\n" + `[url]${link}|Source[/url]`
+      ? description + "\n\n" + `[url]${link}|More Info[/url]`
       : description,
     startDate,
     startTime,
