@@ -16,6 +16,7 @@ import {
   generateIssueDescription,
   generatedIcsArrayToEvents,
 } from "../utils/utils";
+import Link from "next/link";
 
 type Status = "idle" | "submitting" | "submitted" | "error";
 
@@ -51,12 +52,33 @@ function Form({
         }
       />
       {!isLoading && (
-        <button
-          className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-          type="submit"
-        >
-          Generate your event &rarr;
-        </button>
+        <>
+          <button
+            className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+            type="submit"
+          >
+            Generate your event &rarr;
+          </button>
+          <p className="text-center mt-4">
+            <span className="text-slate-500">
+              Or look at a sample{" "}
+              <a
+                href="/user_2X3xAXHdaKKG8RLZqm72wb119Yj/events/4"
+                className="font-bold text-slate-900"
+              >
+                event
+              </a>{" "}
+              or{" "}
+              <Link
+                href="/user_2X9kPFHoj4O6EHsHDTHRsbxyS8X/events"
+                className="font-bold text-slate-900"
+              >
+                list
+              </Link>
+              .
+            </span>
+          </p>
+        </>
       )}
       {isLoading && (
         <>
@@ -71,13 +93,11 @@ function Form({
             </span>
           </button>
           <div className="p-1"></div>
-          <div className="flex items-center space-x-3">
-            <p className="text-center">
-              <span className="text-slate-500">
-                ⏳ Be patient, takes ~5 seconds/event.
-              </span>
-            </p>
-          </div>
+          <p className="text-center">
+            <span className="text-slate-500">
+              ⏳ Be patient, takes ~5 seconds/event.
+            </span>
+          </p>
         </>
       )}
     </form>
