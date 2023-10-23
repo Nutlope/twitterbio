@@ -41,19 +41,31 @@ export async function POST(req: Request) {
     messages: [
       {
         role: "system",
-        content: `You parse calendar events from the provided text into iCal format based on the following information:
+        content: `You parse calendar events from the provided text into iCal format and return the iCal file. Use the following rules:
         - For calculating relative dates/times, it is currently ${month} ${day}, ${year}
         - Include timezone (use America/Los Angeles if not specified)
-        - Always include start with a BEGIN:VCALENDAR and end with an END:VCALENDAR
-        - Always include DTSTART and DTEND
-        - Always include a SUMMARY
-        - Include a DESCRIPTION based on the following rules
-          - Provide a summary of event details appropriate for a calendar invite
-        - Include contact information in description
         - Do not include timezone for full day events
+        - ALWAYS INCLUDE THE FOLLOWING FIELDS:
+          - BEGIN:VCALENDAR
+          - END: VCALENDAR
+        - FOR EACH EVENT, THE FOLLOWING FIELDS ARE REQUIRED:
+          - DTSTART
+          - DTEND
+          - SUMMARY
+            - If the event is a flight, format as: ✈️ [Flight Number] ([Departure Airport Code] to [Arrival Airport Code])
+        - FOR EACH EVENT, INCLUDE THE FOLLOWING FIELDS IF AVAILABLE:
+          - DESCRIPTION
+            - Summarize event details appropriately for a calendar invite
+              - Event details should be summarized in a way that is easy to read and understand
+              - Add a link to the original event if available
+            - If a contact for questions or logisitics is provided, include their name and contact information
+          - LOCATION
+        - FOR EACH EVENT, THE FOLLOWING FIELDS ARE NOT ALLOWED:
+          - PRODID
+          - VERSION
+          - CALSCALE
+          - METHOD
         - Do not include placeholders or extraneous text
-        - Exclude PRODID, VERSION, CALSCALE, and METHOD from the output
-        - If the event is a flight, format the SUMMARY as: ✈️ [Flight Number] ([Departure Airport Code] to [Arrival Airport Code])
         `,
       },
       {
