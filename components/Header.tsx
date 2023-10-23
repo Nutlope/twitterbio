@@ -1,7 +1,17 @@
-import { SignInButton, SignedOut, UserButton } from "@clerk/nextjs";
+"use client";
+
+import {
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
 import Link from "next/link";
 
 export default function Header() {
+  const { user } = useUser();
+
   return (
     <header className="flex justify-between items-center w-full mt-5 border-b-2 pb-7 sm:px-4 px-2">
       <Link href="/" className="flex space-x-3">
@@ -24,10 +34,21 @@ export default function Header() {
           timetime.cc
         </h1>
       </Link>
-      <UserButton afterSignOutUrl="/" />
-      <SignedOut>
-        <SignInButton />
-      </SignedOut>
+      {/* Link to events */}
+      <div className="flex gap-4 place-items-center">
+        <SignedIn>
+          <Link
+            href={`/${user?.id}/events`}
+            className=" text-black hover:text-black/80 font-bold"
+          >
+            Events
+          </Link>
+        </SignedIn>
+        <UserButton afterSignOutUrl="/" />
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+      </div>
     </header>
   );
 }
