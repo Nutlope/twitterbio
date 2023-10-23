@@ -21,7 +21,6 @@ export async function POST(req: Request) {
   const day = today.getDate();
   const year = today.getFullYear();
 
-  Check if we have a cached response
   const cached = await kv.get(key);
   if (cached) {
     return new Response(cached as any);
