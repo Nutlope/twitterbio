@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   const day = today.getDate();
   const year = today.getFullYear();
 
-  // Check if we have a cached response
+  Check if we have a cached response
   const cached = await kv.get(key);
   if (cached) {
     return new Response(cached as any);
@@ -42,6 +42,9 @@ export async function POST(req: Request) {
       {
         role: "system",
         content: `You parse calendar events from the provided text into iCal format and return the iCal file. Use the following rules:
+        # General
+        - ONLY RETURN A VALID ICAL FILE
+        - DO NOT RETURN ADDITIONAL INFORMATION
         # Time
         - For calculating relative dates/times, it is currently ${month} ${day}, ${year}
         - Include timezone (use America/Los Angeles if not specified)
@@ -63,14 +66,17 @@ export async function POST(req: Request) {
           - VERSION
           - CALSCALE
           - METHOD
-        - Do not include placeholders or extraneous text
-        # Special Instructions
+        # Field Content
         - DESCRIPTION
-          - Please use the following structure as appropriate for the event type. Make sure to keep the details general and do not add any specific information that hasn't been provided.
-          - Provide a short description of the event, its significance, and what attendees can expect.
-          - (if relevant) Provide a general agenda format that is commonly used for this type of event.
+          - Provide a short description of the event, its significance, and what attendees can expect, from the perspective of a reporter.
+            - Do not write from the perspective of the event organizer
+          - (if relevant) Provide a general agenda in a format that is commonly used for this type of event.
           - (if relevant) Provide information on how people can RSVP or purchase tickets. Include event cost, or note if it is free.
           - (if relevant) Provide information on how people can get more information, ask questions, or get event updates.
+          - JUST THE FACTS. Only include known information. Do not include speculation or opinion.
+          - BE SUCCINCT AND CLEAR.
+          - DO NOT USE NEW ADJECTIVES.
+          - BOTH SENTENCE FRAGMENTS AND FULL SENTENCES ARE OK.
         `,
       },
       {
