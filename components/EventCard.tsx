@@ -131,9 +131,12 @@ export default function EventCard(props: EventCardProps) {
         </LinkOrNot>
 
         <div
-          className={clsx("hidden flex-col justify-between items-center", {
-            "sm:flex": !singleEvent,
-          })}
+          className={clsx(
+            "hidden flex-col justify-between items-center w-12 flex-shrink-0",
+            {
+              "sm:flex": !singleEvent,
+            }
+          )}
         >
           <AddToCalendarButton
             {...(event as AddToCalendarButtonProps)}

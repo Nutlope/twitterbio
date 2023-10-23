@@ -44,20 +44,12 @@ function Form({
         onPaste={handlePaste}
         value={input}
         onChange={handleInputChange}
-        rows={4}
+        rows={6}
         className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
         placeholder={
           "Paste a description from a website, a text message from a friend, or anything else. Or you can describe your event."
         }
       />
-      <div className="flex items-center space-x-3">
-        <p className="text-left">
-          <span className="text-slate-500">
-            ⏳ Be patient, takes ~5 seconds/event.
-          </span>
-        </p>
-      </div>
-
       {!isLoading && (
         <button
           className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
@@ -67,16 +59,26 @@ function Form({
         </button>
       )}
       {isLoading && (
-        <button
-          className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-          disabled
-        >
-          <span className="loading">
-            <span style={{ backgroundColor: "white" }} />
-            <span style={{ backgroundColor: "white" }} />
-            <span style={{ backgroundColor: "white" }} />
-          </span>
-        </button>
+        <>
+          <button
+            className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+            disabled
+          >
+            <span className="loading">
+              <span style={{ backgroundColor: "white" }} />
+              <span style={{ backgroundColor: "white" }} />
+              <span style={{ backgroundColor: "white" }} />
+            </span>
+          </button>
+          <div className="p-1"></div>
+          <div className="flex items-center space-x-3">
+            <p className="text-center">
+              <span className="text-slate-500">
+                ⏳ Be patient, takes ~5 seconds/event.
+              </span>
+            </p>
+          </div>
+        </>
       )}
     </form>
   );
@@ -234,9 +236,6 @@ export default function Page() {
     isLoading,
     messages,
   } = useChat({
-    onResponse() {
-      scrollToEvents();
-    },
     onFinish(message) {
       setFinished(true);
     },
@@ -247,6 +246,7 @@ export default function Page() {
     if (finished) {
       const events = generatedIcsArrayToEvents(lastAssistantMessage);
       setEvents(events);
+      scrollToEvents();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finished]);
@@ -324,7 +324,8 @@ export default function Page() {
           Now: ⌨️✨📅
         </h1>
         <div className="p">
-          Paste event info, get a clean, calendarable event
+          Paste event info <span className="font-semibold">&rarr;</span> clean,
+          calendarable event
         </div>
         <div className="p-2"></div>
         <h2 className="sm:text-3xl text-xl max-w-[708px] font-bold text-slate-900 text-center opacity-70">
@@ -340,7 +341,7 @@ export default function Page() {
           isLoading={isLoading}
           onSubmit={onSubmit}
         />
-        <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
+        <div ref={eventRef}></div>
         <Output
           events={events}
           finished={finished}
