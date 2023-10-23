@@ -8,7 +8,7 @@ export function UserInfo(props: { user: User }) {
         <div>
           <Image
             className="inline-block h-9 w-9 rounded-full"
-            src={props.user.profileImageUrl}
+            src={props.user.imageUrl}
             alt=""
             width={375}
             height={375}
