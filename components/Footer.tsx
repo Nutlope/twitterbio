@@ -3,15 +3,32 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="text-center h-16 sm:h-20 w-full sm:pt-2 pt-4 border-t mt-5 flex sm:flex-row flex-col justify-between items-center px-3 space-y-3 sm:mb-0 mb-3">
-      <div>
-        Built by{" "}
+      <div className="font-medium">
+        <span className="text-red-500">C</span>
+        <span className="text-orange-500">o</span>
+        <span className="text-yellow-500">m</span>
+        <span className="text-green-500">m</span>
+        <span className="text-blue-500">u</span>
+        <span className="text-indigo-500">n</span>
+        <span className="text-purple-500">i</span>
+        <span className="text-red-500">t</span>
+        <span className="text-orange-500">y</span>
+        <span className="text-yellow-500">-</span>
+        <span className="text-green-500">P</span>
+        <span className="text-blue-500">o</span>
+        <span className="text-indigo-500">w</span>
+        <span className="text-purple-500">e</span>
+        <span className="text-red-500">r</span>
+        <span className="text-orange-500">e</span>
+        <span className="text-yellow-500">d</span> (🧑‍💻 by{" "}
         <a
           href="https://www.jaronheard.com"
           target="_blank"
           className="font-bold hover:underline transition underline-offset-2"
         >
-          Jaron Heard{" "}
+          Jaron{" "}
         </a>
+        )
       </div>
       <div className="flex space-x-4 pb-4 sm:pb-0">
         <Link

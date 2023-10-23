@@ -321,9 +321,18 @@ export default function Page() {
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center px-4 mt-12 sm:mt-20">
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900 text-center">
-          Paste anything, get calendar events
+          Now: ⌨️✨📅
         </h1>
-        <p className="text-slate-500 mt-5">1,312 events generated so far.</p>
+        <div className="p">
+          Paste event info, get a clean, calendarable event
+        </div>
+        <div className="p-2"></div>
+        <h2 className="sm:text-3xl text-xl max-w-[708px] font-bold text-slate-900 text-center opacity-70">
+          Soon: 📣🫂🎉
+        </h2>
+        <div className="p text-sm opacity-70">
+          Create, collect, curate & share events
+        </div>
         <Form
           handleInputChange={handleInputChange}
           handlePaste={handlePaste}
