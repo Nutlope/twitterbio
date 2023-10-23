@@ -42,9 +42,12 @@ export async function POST(req: Request) {
       {
         role: "system",
         content: `You parse calendar events from the provided text into iCal format and return the iCal file. Use the following rules:
+        # Time
         - For calculating relative dates/times, it is currently ${month} ${day}, ${year}
         - Include timezone (use America/Los Angeles if not specified)
         - Do not include timezone for full day events
+        - If event end time is not specified, guess based on event type
+        # File Format
         - ALWAYS INCLUDE THE FOLLOWING FIELDS:
           - BEGIN:VCALENDAR
           - END: VCALENDAR
@@ -52,13 +55,8 @@ export async function POST(req: Request) {
           - DTSTART
           - DTEND
           - SUMMARY
-            - If the event is a flight, format as: ✈️ [Flight Number] ([Departure Airport Code] to [Arrival Airport Code])
         - FOR EACH EVENT, INCLUDE THE FOLLOWING FIELDS IF AVAILABLE:
           - DESCRIPTION
-            - Summarize event details appropriately for a calendar invite
-              - Event details should be summarized in a way that is easy to read and understand
-              - Add a link to the original event if available
-            - If a contact for questions or logisitics is provided, include their name and contact information
           - LOCATION
         - FOR EACH EVENT, THE FOLLOWING FIELDS ARE NOT ALLOWED:
           - PRODID
@@ -66,6 +64,13 @@ export async function POST(req: Request) {
           - CALSCALE
           - METHOD
         - Do not include placeholders or extraneous text
+        # Special Instructions
+        - DESCRIPTION
+          - Please use the following structure as appropriate for the event type. Make sure to keep the details general and do not add any specific information that hasn't been provided.
+          - Provide a short description of the event, its significance, and what attendees can expect.
+          - (if relevant) Provide a general agenda format that is commonly used for this type of event.
+          - (if relevant) Provide information on how people can RSVP or purchase tickets. Include event cost, or note if it is free.
+          - (if relevant) Provide information on how people can get more information, ask questions, or get event updates.
         `,
       },
       {
