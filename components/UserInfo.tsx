@@ -19,7 +19,7 @@ export function UserInfo(props: { user: User }) {
             {props.user.firstName} {props.user.lastName}
           </p>
           <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
-            All events
+            @{props.user.username}
           </p>
         </div>
       </div>
