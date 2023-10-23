@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { SignedIn, useUser } from "@clerk/nextjs";
 
 export type DeleteButtonProps = {
+  userId: string;
   id: number;
 };
 
@@ -40,6 +41,10 @@ export function DeleteButton(props: DeleteButtonProps) {
     router.refresh();
 
     router.push(`/${user?.id}/events`);
+  }
+
+  if (!user || user.id !== props.userId) {
+    return null;
   }
 
   return (

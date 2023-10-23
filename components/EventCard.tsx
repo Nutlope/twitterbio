@@ -6,7 +6,6 @@ import { translateToHtml, getDateInfoUTC } from "../utils/utils";
 import { DeleteButton } from "./DeleteButton";
 import Link from "next/link";
 import clsx from "clsx";
-import { Suspense } from "react";
 
 type EventCardProps = {
   userId: string;
@@ -112,17 +111,21 @@ export default function EventCard(props: EventCardProps) {
           </div>
           <div className="p-0.5"></div>
           <div className="flex min-w-0 gap-x-4">
-            <div className="min-w-0 flex-auto">
-              <Suspense fallback={<div></div>}>
-                <p
-                  className={clsx("mt-1 text-sm leading-6 text-gray-600", {
-                    "line-clamp-2": !singleEvent,
-                  })}
-                  dangerouslySetInnerHTML={{
-                    __html: translateToHtml(event.description!),
-                  }}
-                ></p>
-              </Suspense>
+            <div className="min-w-0 flex-auto" suppressHydrationWarning>
+              <p
+                className={clsx("mt-1 text-sm leading-6 text-gray-600", {
+                  "line-clamp-2": !singleEvent,
+                })}
+              >
+                {!singleEvent && event.description}
+                {singleEvent && (
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: translateToHtml(event.description!),
+                    }}
+                  ></span>
+                )}
+              </p>
             </div>
           </div>
         </LinkOrNot>
@@ -138,7 +141,7 @@ export default function EventCard(props: EventCardProps) {
             hideTextLabelList
             size="8"
           />
-          <DeleteButton id={id} />
+          <DeleteButton userId={userId} id={id} />
         </div>
         <div
           className={clsx(
@@ -150,7 +153,7 @@ export default function EventCard(props: EventCardProps) {
             {...(event as AddToCalendarButtonProps)}
             size="4"
           />
-          <DeleteButton id={id} />
+          <DeleteButton userId={userId} id={id} />
         </div>
       </div>
     </Container>
