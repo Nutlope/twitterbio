@@ -37,6 +37,7 @@ export default async function Page() {
             {events.map((item) => (
               <EventCard
                 key={item.id}
+                userId={userId}
                 id={item.id}
                 event={item.event as AddToCalendarButtonProps}
                 createdAt={item.createdAt}
@@ -44,7 +45,6 @@ export default async function Page() {
             ))}
           </ul>
         )}
-        {userId}
       </main>
       <Footer />
     </div>

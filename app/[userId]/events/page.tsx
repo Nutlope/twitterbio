@@ -26,8 +26,11 @@ export default async function Page({ params }: { params: { userId: string } }) {
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
       <Header />
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-center px-4 mt-12 sm:mt-20">
-        <UserInfo user={user} />
+      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-center px-4 mt-12">
+        <div className="flex place-items-center gap-2">
+          <div className="font-medium">List by</div>
+          <UserInfo user={user} />
+        </div>{" "}
         <div className="p-2"></div>
         {events.length === 0 ? (
           <p className="text-gray-500 text-lg">No events found.</p>
@@ -36,6 +39,7 @@ export default async function Page({ params }: { params: { userId: string } }) {
             {events.map((item) => (
               <EventCard
                 key={item.id}
+                userId={params.userId}
                 id={item.id}
                 event={item.event as AddToCalendarButtonProps}
                 createdAt={item.createdAt}
