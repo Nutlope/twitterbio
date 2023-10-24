@@ -12,12 +12,14 @@ datasource db {
 }
 
 model Event {
-  id        Int      @id @default(autoincrement())
-  event     Json
-  userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  eventList List[]
+  id            Int      @id @default(autoincrement())
+  event         Json
+  userId        String
+  startDateTime DateTime @default(now())
+  endDateTime   DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  eventList     List[]
 }
 
 model List {
