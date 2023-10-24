@@ -65,6 +65,7 @@ export async function POST(req: Request) {
           - VERSION
           - CALSCALE
           - METHOD
+          - RRULE
         # Field Content
         - DESCRIPTION
           - Provide a short description of the event, its significance, and what attendees can expect, from the perspective of a reporter.
