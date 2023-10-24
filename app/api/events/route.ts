@@ -1,6 +1,8 @@
 import { auth } from "@clerk/nextjs";
 import * as z from "zod";
 import { db } from "../../../lib/db";
+import { AddToCalendarButtonProps } from "add-to-calendar-button-react/dist/AddToCalendarButton";
+import { Temporal } from "@js-temporal/polyfill";
 
 const eventCreateSchema = z.object({
   event: z.any(), //TODO: add validation
@@ -45,11 +47,23 @@ export async function POST(req: Request) {
 
     const json = await req.json();
     const body = eventCreateSchema.parse(json);
+    const event = body.event as AddToCalendarButtonProps;
+
+    const start = Temporal.ZonedDateTime.from(
+      `${event.startDate}T${event.startTime}[${event.timeZone}]`
+    );
+    const end = Temporal.ZonedDateTime.from(
+      `${event.endDate}T${event.endTime}[${event.timeZone}]`
+    );
+    const startUtc = start.toInstant().toString();
+    const endUtc = end.toInstant().toString();
 
     const post = await db.event.create({
       data: {
-        event: body.event,
+        event: event,
         userId: userId,
+        startDateTime: startUtc,
+        endDateTime: endUtc,
       },
       select: {
         id: true,
