@@ -155,6 +155,10 @@ export default function Page() {
 
   const finished = searchParams.has("message");
   const lastAssistantMessage = searchParams.get("message") || "";
+  const saveIntent = searchParams.get("saveIntent") || "";
+  const saveIntentEvent = localStorage.getItem("addToCalendarButtonProps");
+  const saveIntentEventJson = JSON.parse(saveIntentEvent || "{}");
+  const eventsToUse = saveIntent ? [saveIntentEventJson] : events;
 
   // set events when changing from not finished to finished
   useEffect(() => {
@@ -194,8 +198,8 @@ export default function Page() {
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center px-4 mt-12 sm:mt-20">
         <Output
-          events={events}
-          finished={finished}
+          events={eventsToUse}
+          finished={finished || !!saveIntent}
           isDev={isDev}
           issueStatus={issueStatus}
           lastAssistantMessage={lastAssistantMessage}

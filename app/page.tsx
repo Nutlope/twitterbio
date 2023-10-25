@@ -261,16 +261,6 @@ export default function Page() {
     },
   });
 
-  // set events when changing from not finished to finished
-  useEffect(() => {
-    if (finished) {
-      const events = generatedIcsArrayToEvents(lastAssistantMessage);
-      setEvents(events);
-      scrollToEvents();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [finished]);
-
   const handlePaste = async (e: any) => {
     // Check if the clipboard contains HTML
     if (e.clipboardData && e.clipboardData.types.indexOf("text/html") > -1) {
@@ -328,6 +318,16 @@ export default function Page() {
   //   assistantMessages?.[userMessages.length - 1]?.content || null;
   const lastAssistantMessage =
     assistantMessages?.[userMessages.length - 1]?.content || SAMPLE_ICS;
+
+  // set events when changing from not finished to finished
+  useEffect(() => {
+    if (finished) {
+      const events = generatedIcsArrayToEvents(lastAssistantMessage);
+      setEvents(events);
+      scrollToEvents();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [finished]);
 
   const isDev = process.env.NODE_ENV === "development";
 

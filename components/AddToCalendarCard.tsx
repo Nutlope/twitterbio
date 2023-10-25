@@ -25,18 +25,45 @@ export function AddToCalendarCard({
   const [endTime, setEndTime] = useState(initialProps.endTime);
   const [link, setLink] = useState("");
 
-  const updatedProps = {
-    ...initialProps,
-    name,
-    location,
-    description: link
-      ? description + "\n\n" + `[url]${link}|More Info[/url]`
-      : description,
-    startDate,
-    startTime,
-    endDate,
-    endTime,
-  };
+  const updatedProps = React.useMemo(
+    () => ({
+      ...initialProps,
+      name,
+      location,
+      description: link
+        ? description + "\n\n" + `[url]${link}|More Info[/url]`
+        : description,
+      startDate,
+      startTime,
+      endDate,
+      endTime,
+    }),
+    [
+      initialProps,
+      name,
+      location,
+      link,
+      description,
+      startDate,
+      startTime,
+      endDate,
+      endTime,
+    ]
+  );
+
+  // save updatedProps to localStorage
+  React.useEffect(() => {
+    localStorage.setItem("updatedProps", JSON.stringify(updatedProps));
+  }, [updatedProps]);
+
+  // load updatedProps from localStorage
+  React.useEffect(() => {
+    const data = localStorage.getItem("updatedProps");
+    if (data) {
+      setAddToCalendarButtonProps(JSON.parse(data));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="bg-white rounded-xl shadow-md p-4 border max-w-lg mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">

@@ -11,6 +11,7 @@ export default authMiddleware({
     "/api/bug",
     "/api/chat",
     "/api/og",
+    "/api/test",
     "/(.*)/events",
     "/(.*)/events/(.*)",
   ],

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { AddToCalendarButtonType } from "add-to-calendar-button-react";
-import { SignedIn, useUser } from "@clerk/nextjs";
+import { SignInButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import clsx from "clsx";
@@ -40,26 +40,43 @@ export function SaveButton(props: AddToCalendarButtonType) {
   }
 
   return (
-    <SignedIn>
-      <button
-        className={clsx(
-          "bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full",
-          {
-            "cursor-not-allowed opacity-60": isLoading,
-          }
-        )}
-        onClick={onClick}
-      >
-        {isLoading ? (
-          <span className="loading">
-            <span style={{ backgroundColor: "white" }} />
-            <span style={{ backgroundColor: "white" }} />
-            <span style={{ backgroundColor: "white" }} />
-          </span>
-        ) : (
-          "Save"
-        )}
-      </button>
-    </SignedIn>
+    <>
+      <SignedIn>
+        <button
+          className={clsx(
+            "bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full",
+            {
+              "cursor-not-allowed opacity-60": isLoading,
+            }
+          )}
+          onClick={onClick}
+        >
+          {isLoading ? (
+            <span className="loading">
+              <span style={{ backgroundColor: "white" }} />
+              <span style={{ backgroundColor: "white" }} />
+              <span style={{ backgroundColor: "white" }} />
+            </span>
+          ) : (
+            "Save"
+          )}
+        </button>
+      </SignedIn>
+      <SignedOut>
+        {/* TODO: instead convert from the AddToCalendarButtonProps */}
+        <SignInButton
+          afterSignInUrl={`http://localhost:3000/new?saveIntent=true`}
+          afterSignUpUrl={`http://localhost:3000/new?saveIntent=true`}
+        >
+          <button
+            className={clsx(
+              "bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+            )}
+          >
+            Sign in to save
+          </button>
+        </SignInButton>
+      </SignedOut>
+    </>
   );
 }
