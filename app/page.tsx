@@ -376,8 +376,8 @@ export default function Page() {
           setTrackedAddToCalendarGoal={setTrackedAddToCalendarGoal}
           trackedAddToCalendarGoal={trackedAddToCalendarGoal}
         />
+        <Leaderboard />
       </main>
-      <Leaderboard />
       <Footer />
     </div>
   );

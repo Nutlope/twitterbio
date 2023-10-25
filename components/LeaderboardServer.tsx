@@ -6,7 +6,7 @@ export default async function LeaderboardServer() {
   ).then((res) => res.json());
   const users = res.response;
 
-  const people = users.map((user) => ({
+  const people = users.map((user: any) => ({
     name: user.firstName + " " + user.lastName,
     userName: user.username,
     imageUrl: user.imageUrl,
