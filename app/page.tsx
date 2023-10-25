@@ -17,6 +17,8 @@ import {
   generatedIcsArrayToEvents,
 } from "../utils/utils";
 import Link from "next/link";
+import Leaderboard from "../components/Leaderboard";
+import LeaderboardServer from "../components/LeaderboardServer";
 
 type Status = "idle" | "submitting" | "submitted" | "error";
 
@@ -375,6 +377,7 @@ export default function Page() {
           trackedAddToCalendarGoal={trackedAddToCalendarGoal}
         />
       </main>
+      <Leaderboard />
       <Footer />
     </div>
   );
