@@ -68,9 +68,9 @@ export function Form({
             disabled
           >
             <span className="loading">
-              <span style={{ backgroundColor: "white" }} />
-              <span style={{ backgroundColor: "white" }} />
-              <span style={{ backgroundColor: "white" }} />
+              <span className="bg-white" />
+              <span className="bg-white" />
+              <span className="bg-white" />
             </span>
           </button>
           <div className="p-1"></div>
