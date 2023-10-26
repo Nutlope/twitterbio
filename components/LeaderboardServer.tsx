@@ -16,7 +16,7 @@ export default async function LeaderboardServer() {
 
   return (
     <div>
-      <h3 className="text-lg leading-6 font-medium text-gray-900 text-center">
+      <h3 className="text-center text-lg font-medium leading-6 text-gray-900">
         Top users
       </h3>
       <ul role="list" className="divide-y divide-gray-100">
@@ -24,7 +24,7 @@ export default async function LeaderboardServer() {
           <li key={person.userName}>
             <a
               href={person.href}
-              className="flex items-center justify-between gap-x-6 py-5 group"
+              className="group flex items-center justify-between gap-x-6 py-5"
             >
               <div className="flex min-w-0 gap-x-4">
                 <img

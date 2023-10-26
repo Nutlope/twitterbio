@@ -1,11 +1,10 @@
 "use client";
 
 import { AddToCalendarButton } from "add-to-calendar-button-react";
-import { AddToCalendarButtonProps } from "add-to-calendar-button-react/dist/AddToCalendarButton";
-import { translateToHtml, getDateInfoUTC } from "../utils/utils";
-import { DeleteButton } from "./DeleteButton";
 import Link from "next/link";
-import clsx from "clsx";
+import { DeleteButton } from "./DeleteButton";
+import { translateToHtml, getDateInfoUTC, cn } from "@/lib/utils";
+import { AddToCalendarButtonProps } from "@/types";
 
 type EventCardProps = {
   userId: string;
@@ -55,51 +54,51 @@ export default function EventCard(props: EventCardProps) {
   return (
     <Container>
       <div
-        className={clsx("flex items-stretch justify-between flex-col h-full", {
+        className={cn("flex h-full flex-col items-stretch justify-between", {
           "sm:flex-row": !singleEvent,
         })}
       >
         <LinkOrNot>
           <div className="flex items-center">
-            <div className="flex-shrink-0 flex flex-row gap-1">
-              <div className="h-14 w-14 grid place-items-center bg-gradient-to-b from-gray-900 to-gray-600 rounded-md">
-                <span className="text-white text-xs font-semibold uppercase">
+            <div className="flex shrink-0 flex-row gap-1">
+              <div className="grid h-14 w-14 place-items-center rounded-md bg-gradient-to-b from-gray-900 to-gray-600">
+                <span className="text-xs font-semibold uppercase text-white">
                   {startDateInfo?.monthName.substring(0, 3)}
                 </span>
-                <span className="text-white text-2xl font-extrabold -mt-2">
+                <span className="-mt-2 text-2xl font-extrabold text-white">
                   {startDateInfo?.day}
                 </span>
-                <span className="text-white text-xs font-light -mt-2 uppercase">
+                <span className="-mt-2 text-xs font-light uppercase text-white">
                   {startDateInfo?.dayOfWeek.substring(0, 3)}
                 </span>
               </div>
               {spansMultipleDays && (
-                <div className="h-14 w-14 grid place-items-center bg-gradient-to-b from-gray-900 to-gray-600 rounded-md">
-                  <span className="text-white text-xs font-semibold uppercase">
+                <div className="grid h-14 w-14 place-items-center rounded-md bg-gradient-to-b from-gray-900 to-gray-600">
+                  <span className="text-xs font-semibold uppercase text-white">
                     {endDateInfo?.monthName.substring(0, 3)}
                   </span>
-                  <span className="text-white text-2xl font-extrabold -mt-2">
+                  <span className="-mt-2 text-2xl font-extrabold text-white">
                     {endDateInfo?.day}
                   </span>
-                  <span className="text-white text-xs font-light -mt-2 uppercase">
+                  <span className="-mt-2 text-xs font-light uppercase text-white">
                     {endDateInfo?.dayOfWeek.substring(0, 3)}
                   </span>
                 </div>
               )}
             </div>
-            <div className="ml-4 -mt-1">
+            <div className="-mt-1 ml-4">
               <h3 className="text-base font-semibold leading-6 text-gray-900">
                 {event.name}
               </h3>
               <div className="p-0.5"></div>
               <div className="flex gap-2">
-                <div className="items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 flex-shrink-0">
+                <div className="shrink-0 items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
                   {event.startTime}-{event.endTime}
                 </div>
                 {event.location && (
                   <div
-                    className={clsx(
-                      "items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 flex-shrink",
+                    className={cn(
+                      "shrink items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10",
                       { "line-clamp-1": !singleEvent }
                     )}
                   >
@@ -113,7 +112,7 @@ export default function EventCard(props: EventCardProps) {
           <div className="flex min-w-0 gap-x-4">
             <div className="min-w-0 flex-auto" suppressHydrationWarning>
               <p
-                className={clsx("mt-1 text-sm leading-6 text-gray-600", {
+                className={cn("mt-1 text-sm leading-6 text-gray-600", {
                   "line-clamp-2": !singleEvent,
                 })}
               >
@@ -131,8 +130,8 @@ export default function EventCard(props: EventCardProps) {
         </LinkOrNot>
 
         <div
-          className={clsx(
-            "hidden flex-col justify-between items-center w-12 flex-shrink-0",
+          className={cn(
+            "hidden w-12 shrink-0 flex-col items-center justify-between",
             {
               "sm:flex": !singleEvent,
             }
@@ -147,8 +146,8 @@ export default function EventCard(props: EventCardProps) {
           <DeleteButton userId={userId} id={id} />
         </div>
         <div
-          className={clsx(
-            "flex-shrink-0 self-center flex justify-between w-full items-center py-2",
+          className={cn(
+            "flex w-full shrink-0 items-center justify-between self-center py-2",
             { "sm:hidden": !singleEvent }
           )}
         >

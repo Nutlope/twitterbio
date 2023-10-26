@@ -1,9 +1,9 @@
+import type { User } from "@clerk/backend";
 import Image from "next/image";
-import { User } from "@clerk/nextjs/dist/types/server";
 
 export function UserInfo(props: { user: User }) {
   return (
-    <div className="group block flex-shrink-0">
+    <div className="group block shrink-0">
       <div className="flex items-center">
         <div>
           <Image

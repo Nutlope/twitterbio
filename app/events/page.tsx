@@ -1,9 +1,9 @@
 import { auth } from "@clerk/nextjs";
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
-import { db } from "../../lib/db";
-import EventCard from "../../components/EventCard";
-import { AddToCalendarButtonProps } from "add-to-calendar-button-react/dist/AddToCalendarButton";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import { db } from "@/lib/db";
+import EventCard from "@/components/EventCard";
+import { AddToCalendarButtonProps } from "@/types";
 
 export default async function Page() {
   const { userId } = auth();
@@ -27,13 +27,13 @@ export default async function Page() {
   });
 
   return (
-    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
+    <div className="mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center py-2">
       <Header />
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-center px-4 mt-12 sm:mt-20">
+      <main className="mt-12 flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-4 sm:mt-20">
         {events.length === 0 ? (
-          <p className="text-gray-500 text-lg">No events found.</p>
+          <p className="text-lg text-gray-500">No events found.</p>
         ) : (
-          <ul role="list" className="divide-y divide-gray-100 max-w-full">
+          <ul role="list" className="max-w-full divide-y divide-gray-100">
             {events.map((item) => (
               <EventCard
                 key={item.id}

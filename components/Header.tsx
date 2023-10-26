@@ -13,7 +13,7 @@ export default function Header() {
   const { user } = useUser();
 
   return (
-    <header className="flex justify-between items-center w-full mt-5 border-b-2 pb-7 sm:px-4 px-2">
+    <header className="mt-5 flex w-full items-center justify-between border-b-2 px-2 pb-7 sm:px-4">
       <Link href="/" className="flex space-x-3">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +21,7 @@ export default function Header() {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-10 h-10"
+          className="h-10 w-10"
         >
           <path
             strokeLinecap="round"
@@ -30,16 +30,16 @@ export default function Header() {
           />
         </svg>
 
-        <h1 className="sm:text-4xl text-2xl font-bold ml-2 tracking-tight">
+        <h1 className="ml-2 text-2xl font-bold tracking-tight sm:text-4xl">
           timetime.cc
         </h1>
       </Link>
       {/* Link to events */}
-      <div className="flex gap-4 place-items-center">
+      <div className="flex place-items-center gap-4">
         <SignedIn>
           <Link
             href={`/${user?.id}/events`}
-            className=" text-black hover:text-black/80 font-bold"
+            className=" font-bold text-black hover:text-black/80"
           >
             Events
           </Link>

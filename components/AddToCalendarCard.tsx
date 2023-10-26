@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   AddToCalendarButton,
   AddToCalendarButtonType,
@@ -25,7 +25,7 @@ export function AddToCalendarCard({
   const [endTime, setEndTime] = useState(initialProps.endTime);
   const [link, setLink] = useState("");
 
-  const updatedProps = React.useMemo(
+  const updatedProps = useMemo(
     () => ({
       ...initialProps,
       name,
@@ -52,12 +52,12 @@ export function AddToCalendarCard({
   );
 
   // save updatedProps to localStorage
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem("updatedProps", JSON.stringify(updatedProps));
   }, [updatedProps]);
 
   // load updatedProps from localStorage
-  React.useEffect(() => {
+  useEffect(() => {
     const data = localStorage.getItem("updatedProps");
     if (data) {
       setAddToCalendarButtonProps(JSON.parse(data));
@@ -66,7 +66,7 @@ export function AddToCalendarCard({
   }, []);
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-4 border max-w-lg mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+    <div className="mt-10 grid max-w-lg grid-cols-1 gap-x-6 gap-y-8 rounded-xl border bg-white p-4 shadow-md sm:grid-cols-6">
       <div
         className="col-span-full flex justify-center"
         onClick={initialProps?.onClick}
@@ -86,7 +86,7 @@ export function AddToCalendarCard({
               type="text"
               name="name"
               id="name"
-              className="block text-lg font-bold flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+              className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-lg font-bold text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />

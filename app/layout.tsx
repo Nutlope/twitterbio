@@ -1,7 +1,7 @@
 import { Metadata } from "next";
-import "../styles/globals.css";
-import Fathom from "../components/Fathom";
+import "@/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import Fathom from "@/components/Fathom";
 
 const title = "timetime.cc";
 const description = "Paste anything, get calendar events.";

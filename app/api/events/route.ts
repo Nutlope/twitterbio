@@ -1,8 +1,8 @@
 import { auth } from "@clerk/nextjs";
 import * as z from "zod";
-import { db } from "../../../lib/db";
-import { AddToCalendarButtonProps } from "add-to-calendar-button-react/dist/AddToCalendarButton";
 import { Temporal } from "@js-temporal/polyfill";
+import { db } from "@/lib/db";
+import { AddToCalendarButtonProps } from "@/types";
 
 const eventCreateSchema = z.object({
   event: z.any(), //TODO: add validation

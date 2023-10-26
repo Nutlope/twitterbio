@@ -1,4 +1,7 @@
 "use client";
+import { Message } from "ai";
+import { clsx, ClassValue } from "clsx";
+import { trackGoal } from "fathom-client";
 import ICAL from "ical.js";
 import TurndownService from "turndown";
 
@@ -307,3 +310,70 @@ export const translateToHtml = (input: string): string => {
 
   return html;
 };
+
+export const formatDataOnPaste = async (
+  e: any,
+  setInput: (input: string) => void
+) => {
+  // Check if the clipboard contains HTML
+  if (e.clipboardData && e.clipboardData.types.indexOf("text/html") > -1) {
+    e.preventDefault();
+
+    // Get HTML content from clipboard
+    const htmlContent = e.clipboardData.getData("text/html");
+
+    // Convert to markdown
+    const markdownText = turndownService.turndown(htmlContent);
+
+    // set input to markdown
+    setInput(markdownText);
+  }
+};
+
+export const reportIssue = async (
+  title: string,
+  description: string,
+  setStatus: (status: Status) => void
+) => {
+  setStatus("submitting");
+  const response = await fetch("/api/bug", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ title, description }),
+  });
+
+  const data = await response.json();
+
+  if (data.issue.success) {
+    trackGoal("B2ZT84YS", 0);
+    console.log("Successfully created issue:", data.issue);
+    setStatus("submitted");
+  } else {
+    console.log("Error creating issue:", data);
+    setStatus("error");
+  }
+};
+
+export type Status = "idle" | "submitting" | "submitted" | "error";
+
+export const getLastMessages = (messages: Message[]) => {
+  const userMessages = messages.filter((message) => message.role === "user");
+  const assistantMessages = messages.filter(
+    (message) => message.role === "assistant"
+  );
+
+  const lastUserMessage =
+    userMessages?.[userMessages.length - 1]?.content || "";
+  // const lastAssistantMessage =
+  //   assistantMessages?.[userMessages.length - 1]?.content || null;
+  const lastAssistantMessage =
+    assistantMessages?.[userMessages.length - 1]?.content || SAMPLE_ICS;
+
+  return { lastUserMessage, lastAssistantMessage };
+};
+
+export function cn(...inputs: ClassValue[]) {
+  return clsx(inputs);
+}

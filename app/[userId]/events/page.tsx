@@ -1,16 +1,16 @@
-import { AddToCalendarButtonProps } from "add-to-calendar-button-react/dist/AddToCalendarButton";
-import EventCard from "../../../components/EventCard";
-import Header from "../../../components/Header";
-import { db } from "../../../lib/db";
-import Footer from "../../../components/Footer";
 import { clerkClient } from "@clerk/nextjs";
-import { UserInfo } from "../../../components/UserInfo";
+import EventCard from "@/components/EventCard";
+import Header from "@/components/Header";
+import { db } from "@/lib/db";
+import Footer from "@/components/Footer";
+import { UserInfo } from "@/components/UserInfo";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "../../../components/Accordian";
+} from "@/components/Accordian";
+import { AddToCalendarButtonProps } from "@/types";
 
 export default async function Page({ params }: { params: { userId: string } }) {
   const events = await db.event.findMany({
@@ -37,9 +37,9 @@ export default async function Page({ params }: { params: { userId: string } }) {
   );
 
   return (
-    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
+    <div className="mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center py-2">
       <Header />
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-center px-4 mt-12">
+      <main className="mt-12 flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-4">
         <div className="flex place-items-center gap-2">
           <div className="font-medium">List by</div>
           <UserInfo user={user} />
@@ -50,16 +50,16 @@ export default async function Page({ params }: { params: { userId: string } }) {
             <AccordionTrigger>
               <div className="flex gap-1.5">
                 Past events
-                <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-slate-100 bg-gray-600 rounded-full">
+                <span className="mr-2 inline-flex items-center justify-center rounded-full bg-gray-600 px-2 py-1 text-xs font-bold leading-none text-slate-100">
                   {pastEvents.length}
                 </span>
               </div>
             </AccordionTrigger>
             <AccordionContent className="-mx-6">
               {pastEvents.length === 0 ? (
-                <p className="mx-6 text-gray-500 text-lg">No past events.</p>
+                <p className="mx-6 text-lg text-gray-500">No past events.</p>
               ) : (
-                <ul role="list" className="divide-y divide-gray-100 max-w-full">
+                <ul role="list" className="max-w-full divide-y divide-gray-100">
                   {pastEvents.map((item) => (
                     <EventCard
                       key={item.id}
@@ -77,16 +77,16 @@ export default async function Page({ params }: { params: { userId: string } }) {
             <AccordionTrigger>
               <div className="flex gap-1.5">
                 Upcoming events
-                <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-slate-100 bg-gray-600 rounded-full">
+                <span className="mr-2 inline-flex items-center justify-center rounded-full bg-gray-600 px-2 py-1 text-xs font-bold leading-none text-slate-100">
                   {futureEvents.length}
                 </span>
               </div>
             </AccordionTrigger>
             <AccordionContent className="-mx-6">
               {futureEvents.length === 0 ? (
-                <p className="text-gray-500 text-lg mx-6">No future events.</p>
+                <p className="mx-6 text-lg text-gray-500">No future events.</p>
               ) : (
-                <ul role="list" className="divide-y divide-gray-100 max-w-full">
+                <ul role="list" className="max-w-full divide-y divide-gray-100">
                   {futureEvents.map((item) => (
                     <EventCard
                       key={item.id}

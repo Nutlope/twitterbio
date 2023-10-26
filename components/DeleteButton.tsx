@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import clsx from "clsx";
+import { toast } from "react-hot-toast";
 import { SignedIn, useUser } from "@clerk/nextjs";
+import { cn } from "@/lib/utils";
 
 export type DeleteButtonProps = {
   userId: string;
@@ -53,7 +53,7 @@ export function DeleteButton(props: DeleteButtonProps) {
         type="button"
         onClick={onClick}
         disabled={isLoading}
-        className={clsx("p-2", {
+        className={cn("p-2", {
           "cursor-not-allowed opacity-60": isLoading,
         })}
       >
@@ -63,7 +63,7 @@ export function DeleteButton(props: DeleteButtonProps) {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-6 h-6 text-red-600 hover:text-red-700"
+          className="h-6 w-6 text-red-600 hover:text-red-700"
         >
           <path
             strokeLinecap="round"
