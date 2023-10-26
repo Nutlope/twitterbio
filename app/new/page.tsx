@@ -13,6 +13,7 @@ import {
   generatedIcsArrayToEvents,
 } from "../../utils/utils";
 import { useSearchParams } from "next/navigation";
+import { useChat } from "ai/react";
 
 type Status = "idle" | "submitting" | "submitted" | "error";
 
@@ -147,27 +148,71 @@ function Output({
 }
 
 export default function Page() {
+  const [chatFinished, setChatFinished] = useState(false);
   const [issueStatus, setIssueStatus] = useState<Status>("idle");
   const [events, setEvents] = useState<AddToCalendarButtonType[] | null>(null);
+  const [chatEvents, setChatEvents] = useState<
+    AddToCalendarButtonType[] | null
+  >(null);
   const [trackedAddToCalendarGoal, setTrackedAddToCalendarGoal] =
     useState(false);
   const searchParams = useSearchParams();
 
   const finished = searchParams.has("message");
-  const lastAssistantMessage = searchParams.get("message") || "";
+  const message = searchParams.get("message") || "";
   const saveIntent = searchParams.get("saveIntent") || "";
   const saveIntentEvent = localStorage.getItem("addToCalendarButtonProps");
   const saveIntentEventJson = JSON.parse(saveIntentEvent || "{}");
-  const eventsToUse = saveIntent ? [saveIntentEventJson] : events;
+  const rawText = searchParams.get("rawText") || "";
+
+  const { append, messages } = useChat({
+    onFinish(message) {
+      setChatFinished(true);
+    },
+  });
+
+  useEffect(() => {
+    if (rawText) {
+      append({ role: "user", content: rawText });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const userMessages = messages.filter((message) => message.role === "user");
+  const assistantMessages = messages.filter(
+    (message) => message.role === "assistant"
+  );
+
+  const lastUserMessage =
+    userMessages?.[userMessages.length - 1]?.content || "";
+  // const lastAssistantMessage =
+  //   assistantMessages?.[userMessages.length - 1]?.content || null;
+  const lastAssistantMessage =
+    assistantMessages?.[userMessages.length - 1]?.content || "";
+
+  const eventsToUse = saveIntent
+    ? [saveIntentEventJson]
+    : chatFinished
+    ? chatEvents
+    : events;
 
   // set events when changing from not finished to finished
   useEffect(() => {
     if (finished) {
-      const events = generatedIcsArrayToEvents(lastAssistantMessage);
+      const events = generatedIcsArrayToEvents(message);
       setEvents(events);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finished]);
+
+  // set events when changing from not finished to finished
+  useEffect(() => {
+    if (chatFinished) {
+      const events = generatedIcsArrayToEvents(lastAssistantMessage);
+      setChatEvents(events);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatFinished]);
 
   const reportIssue = async (title: string, description: string) => {
     setIssueStatus("submitting");
@@ -199,11 +244,13 @@ export default function Page() {
       <main className="flex flex-1 w-full flex-col items-center justify-center px-4 mt-12 sm:mt-20">
         <Output
           events={eventsToUse}
-          finished={finished || !!saveIntent}
+          finished={finished || !!saveIntent || chatFinished}
           isDev={isDev}
           issueStatus={issueStatus}
-          lastAssistantMessage={lastAssistantMessage}
-          lastUserMessage={"Generated from text message"}
+          lastAssistantMessage={chatFinished ? lastAssistantMessage : message}
+          lastUserMessage={
+            chatFinished ? lastUserMessage : "Generated from message"
+          }
           reportIssue={reportIssue}
           setEvents={setEvents}
           setTrackedAddToCalendarGoal={setTrackedAddToCalendarGoal}
