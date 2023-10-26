@@ -10,7 +10,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.25.7",
+    "@clerk/nextjs": "^4.26.1",
     "@headlessui/react": "^1.7.17",
     "@headlessui/tailwindcss": "^0.2.0",
     "@heroicons/react": "^2.0.18",
@@ -24,7 +24,7 @@
     "ai": "^2.2.20",
     "clsx": "^2.0.0",
     "dotenv-expand": "^10.0.0",
-    "fathom-client": "^3.5.0",
+    "fathom-client": "^3.6.0",
     "ical.js": "^1.5.0",
     "ical2json": "^3.1.2",
     "lucide-react": "^0.289.0",
