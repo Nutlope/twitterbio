@@ -5,8 +5,6 @@ import { useChat } from "ai/react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Output } from "../Output";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 import {
   Status,
   generatedIcsArrayToEvents,
@@ -76,26 +74,20 @@ export default function Page() {
   const isDev = process.env.NODE_ENV === "development";
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center py-2">
-      <Header />
-      <main className="mt-12 flex w-full flex-1 flex-col items-center justify-center px-4 sm:mt-20">
-        <Output
-          events={eventsToUse}
-          finished={finished || !!saveIntent || chatFinished}
-          isDev={isDev}
-          issueStatus={issueStatus}
-          setIssueStatus={setIssueStatus}
-          lastAssistantMessage={chatFinished ? lastAssistantMessage : message}
-          lastUserMessage={
-            chatFinished ? lastUserMessage : "Generated from message"
-          }
-          reportIssue={reportIssue}
-          setEvents={setEvents}
-          setTrackedAddToCalendarGoal={setTrackedAddToCalendarGoal}
-          trackedAddToCalendarGoal={trackedAddToCalendarGoal}
-        />
-      </main>
-      <Footer />
-    </div>
+    <Output
+      events={eventsToUse}
+      finished={finished || !!saveIntent || chatFinished}
+      isDev={isDev}
+      issueStatus={issueStatus}
+      setIssueStatus={setIssueStatus}
+      lastAssistantMessage={chatFinished ? lastAssistantMessage : message}
+      lastUserMessage={
+        chatFinished ? lastUserMessage : "Generated from message"
+      }
+      reportIssue={reportIssue}
+      setEvents={setEvents}
+      setTrackedAddToCalendarGoal={setTrackedAddToCalendarGoal}
+      trackedAddToCalendarGoal={trackedAddToCalendarGoal}
+    />
   );
 }

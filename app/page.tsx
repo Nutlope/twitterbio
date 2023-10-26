@@ -3,13 +3,9 @@
 import { AddToCalendarButtonType } from "add-to-calendar-button-react";
 import { useChat } from "ai/react";
 import { trackGoal } from "fathom-client";
-import { useEffect, useRef, useState } from "react";
-import { Toaster } from "react-hot-toast";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { Form } from "./Form";
 import { Output } from "./Output";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import Leaderboard from "@/components/Leaderboard";
 import {
   Status,
   formatDataOnPaste,
@@ -17,6 +13,8 @@ import {
   getLastMessages,
   reportIssue,
 } from "@/lib/utils";
+import Leaderboard from "@/components/Leaderboard";
+import LeaderboardSkeleton from "@/components/LeaderboardSkeleton";
 
 export default function Page() {
   // State variables
@@ -76,54 +74,51 @@ export default function Page() {
   };
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center py-2">
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-        toastOptions={{ duration: 2000 }}
+    <>
+      <h1 className="max-w-[708px] text-center text-4xl font-bold text-slate-900 sm:text-6xl">
+        Now: ⌨️✨📅
+      </h1>
+      <div className="p">
+        Paste event info <span className="font-semibold">&rarr;</span> clean,
+        calendarable event
+      </div>
+      <div className="p-2"></div>
+      <h2 className="max-w-[708px] text-center text-xl font-bold text-slate-900 opacity-70 sm:text-3xl">
+        Soon: 📣🫂🎉
+      </h2>
+      <div className="text-sm opacity-70">
+        Create, collect, curate & share events
+      </div>
+      <Form
+        handleInputChange={handleInputChange}
+        handlePaste={handlePaste}
+        input={input}
+        isLoading={isLoading}
+        onSubmit={onSubmit}
       />
-      <Header />
-      <main className="mt-12 flex w-full flex-1 flex-col items-center justify-center px-4 sm:mt-20">
-        <h1 className="max-w-[708px] text-center text-4xl font-bold text-slate-900 sm:text-6xl">
-          Now: ⌨️✨📅
-        </h1>
-        <div className="p">
-          Paste event info <span className="font-semibold">&rarr;</span> clean,
-          calendarable event
-        </div>
-        <div className="p-2"></div>
-        <h2 className="max-w-[708px] text-center text-xl font-bold text-slate-900 opacity-70 sm:text-3xl">
-          Soon: 📣🫂🎉
-        </h2>
-        <div className="p text-sm opacity-70">
-          Create, collect, curate & share events
-        </div>
-        <Form
-          handleInputChange={handleInputChange}
-          handlePaste={handlePaste}
-          input={input}
-          isLoading={isLoading}
-          onSubmit={onSubmit}
-        />
-        <div ref={eventRef}></div>
-        <div className="p-6"></div>
-        <Output
-          events={events}
-          finished={finished}
-          isDev={isDev}
-          issueStatus={issueStatus}
-          setIssueStatus={setIssueStatus}
-          lastAssistantMessage={lastAssistantMessage}
-          lastUserMessage={lastUserMessage}
-          reportIssue={reportIssue}
-          setEvents={setEvents}
-          setTrackedAddToCalendarGoal={setTrackedAddToCalendarGoal}
-          trackedAddToCalendarGoal={trackedAddToCalendarGoal}
-        />
-        <Leaderboard />
-        <div className="p-2"></div>
-      </main>
-      <Footer />
-    </div>
+      <div ref={eventRef}></div>
+      <div className="p-6"></div>
+      <Output
+        events={events}
+        finished={finished}
+        isDev={isDev}
+        issueStatus={issueStatus}
+        setIssueStatus={setIssueStatus}
+        lastAssistantMessage={lastAssistantMessage}
+        lastUserMessage={lastUserMessage}
+        reportIssue={reportIssue}
+        setEvents={setEvents}
+        setTrackedAddToCalendarGoal={setTrackedAddToCalendarGoal}
+        trackedAddToCalendarGoal={trackedAddToCalendarGoal}
+      />
+      <h3 className="text-center text-lg font-bold leading-6 text-gray-900">
+        Top users
+      </h3>
+      {!isLoading && (
+        <Suspense fallback={<LeaderboardSkeleton />}>
+          <Leaderboard />
+        </Suspense>
+      )}
+    </>
   );
 }

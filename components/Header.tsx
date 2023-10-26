@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  ClerkLoaded,
+  ClerkLoading,
   SignInButton,
   SignedIn,
   SignedOut,
@@ -8,6 +10,7 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default function Header() {
   const { user } = useUser();
@@ -36,18 +39,28 @@ export default function Header() {
       </Link>
       {/* Link to events */}
       <div className="flex place-items-center gap-4">
-        <SignedIn>
-          <Link
-            href={`/${user?.id}/events`}
-            className=" font-bold text-black hover:text-black/80"
-          >
-            Events
-          </Link>
-        </SignedIn>
-        <UserButton afterSignOutUrl="/" />
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
+        <ClerkLoading>
+          <div className="flex place-items-center gap-2">
+            <div className="h-4 w-16 animate-pulse rounded bg-gray-200"></div>
+            <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200"></div>
+          </div>
+        </ClerkLoading>
+        <ClerkLoaded>
+          <SignedIn>
+            <Link
+              href={`/${user?.id}/events`}
+              className=" font-bold text-black hover:text-black/80"
+            >
+              Events
+            </Link>
+            <div className="h-8 w-8">
+              <UserButton afterSignOutUrl="/" />
+            </div>
+          </SignedIn>
+          <SignedOut>
+            <SignInButton />
+          </SignedOut>
+        </ClerkLoaded>
       </div>
     </header>
   );

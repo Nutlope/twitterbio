@@ -35,9 +35,9 @@ export async function GET(req: Request) {
     (a, b) => b.eventCount - a.eventCount
   );
 
-  const usersWithEventCountGreaterThanZero = usersWithEventCountSorted.filter(
-    (user) => user.eventCount > 0
-  );
+  const usersWithEventCountGreaterThanZero = usersWithEventCountSorted
+    .filter((user) => user.eventCount > 0)
+    .slice(0, 5);
 
   // Return the response message
   return Response.json({ response: usersWithEventCountGreaterThanZero });
