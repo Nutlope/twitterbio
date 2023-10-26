@@ -6,6 +6,7 @@ import Fathom from "@/components/Fathom";
 const title = "timetime.cc";
 const description = "Paste anything, get calendar events.";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.timetime.cc/"),
   title,

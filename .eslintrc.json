@@ -7,7 +7,7 @@
     "plugin:tailwindcss/recommended",
     "plugin:path/recommended"
   ],
-  "plugins": ["tailwindcss"],
+  "plugins": ["tailwindcss", "react-refresh"],
   "settings": {
     "import/resolver": {
       "typescript": {
@@ -26,7 +26,11 @@
   "rules": {
     "import/order": 2,
     "tailwindcss/no-custom-classname": "off",
-    "tailwindcss/classnames-order": "error"
+    "tailwindcss/classnames-order": "error",
+    "react-refresh/only-export-components": [
+      "warn",
+      { "allowConstantExport": true }
+    ]
   },
   "overrides": [
     {
