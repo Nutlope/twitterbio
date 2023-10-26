@@ -130,7 +130,7 @@ function Output({
   trackedAddToCalendarGoal: boolean;
 }) {
   return (
-    <output className="space-y-10 my-10">
+    <output className="">
       {finished && (
         <>
           <div className="flex justify-center gap-4 flex-wrap">
@@ -364,6 +364,7 @@ export default function Page() {
           onSubmit={onSubmit}
         />
         <div ref={eventRef}></div>
+        <div className="p-6"></div>
         <Output
           events={events}
           finished={finished}
@@ -377,6 +378,7 @@ export default function Page() {
           trackedAddToCalendarGoal={trackedAddToCalendarGoal}
         />
         <Leaderboard />
+        <div className="p-2"></div>
       </main>
       <Footer />
     </div>

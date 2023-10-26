@@ -40,7 +40,7 @@ function Output({
   trackedAddToCalendarGoal: boolean;
 }) {
   return (
-    <output className="space-y-10 my-10">
+    <output className="">
       {finished && (
         <>
           <div className="flex justify-center gap-4 flex-wrap">

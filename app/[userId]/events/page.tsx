@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: { userId: string } }) {
             </AccordionTrigger>
             <AccordionContent className="-mx-6">
               {pastEvents.length === 0 ? (
-                <p className="text-gray-500 text-lg">No past events.</p>
+                <p className="mx-6 text-gray-500 text-lg">No past events.</p>
               ) : (
                 <ul role="list" className="divide-y divide-gray-100 max-w-full">
                   {pastEvents.map((item) => (
@@ -84,7 +84,7 @@ export default async function Page({ params }: { params: { userId: string } }) {
             </AccordionTrigger>
             <AccordionContent className="-mx-6">
               {futureEvents.length === 0 ? (
-                <p className="text-gray-500 text-lg">No future events.</p>
+                <p className="text-gray-500 text-lg mx-6">No future events.</p>
               ) : (
                 <ul role="list" className="divide-y divide-gray-100 max-w-full">
                   {futureEvents.map((item) => (
