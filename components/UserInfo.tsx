@@ -1,5 +1,11 @@
-import type { User } from "@clerk/backend";
 import Image from "next/image";
+
+type User = {
+  firstName: string;
+  lastName: string;
+  username: string;
+  imageUrl: string;
+};
 
 export function UserInfo(props: { user: User }) {
   return (
