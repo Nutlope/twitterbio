@@ -1,10 +1,10 @@
 import Image from "next/image";
 
 type User = {
-  firstName: string;
-  lastName: string;
-  username: string;
-  imageUrl: string;
+  firstName: string | null;
+  lastName: string | null;
+  username: string | null;
+  imageUrl: string | null;
 };
 
 export function UserInfo(props: { user: User }) {
