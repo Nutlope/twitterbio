@@ -42,7 +42,7 @@ export default function RootLayout({
             <Toaster
               position="top-center"
               reverseOrder={false}
-              toastOptions={{ duration: 2000 }}
+              toastOptions={{ duration: 2500 }}
             />
             <Header />
             <main className="my-12 flex w-full flex-1 flex-col items-center justify-center px-4 sm:my-20">

@@ -38,12 +38,47 @@ export function Output({
   setTrackedAddToCalendarGoal: (trackedAddToCalendarGoal: boolean) => void;
   trackedAddToCalendarGoal: boolean;
 }) {
+  // validate events using Zod
+  const eventsAreValid = events?.length === 0;
+  const blankEvents = [
+    {
+      options: [
+        "Apple",
+        "Google",
+        "iCal",
+        "Microsoft365",
+        "MicrosoftTeams",
+        "Outlook.com",
+        "Yahoo",
+      ] as
+        | (
+            | "Apple"
+            | "Google"
+            | "iCal"
+            | "Microsoft365"
+            | "MicrosoftTeams"
+            | "Outlook.com"
+            | "Yahoo"
+          )[]
+        | undefined,
+      buttonStyle: "text" as const,
+      name: "New event" as const,
+      description: "" as const,
+      location: "" as const,
+      startDate: "today" as const,
+      endDate: "" as const,
+      startTime: "" as const,
+      endTime: "" as const,
+      timeZone: "" as const,
+    },
+  ];
+  const eventsToUse = eventsAreValid ? events : blankEvents;
   return (
     <output className="">
       {finished && (
         <>
           <div className="flex flex-wrap justify-center gap-4">
-            {events?.map((props, index) => (
+            {eventsToUse?.map((props, index) => (
               <AddToCalendarCard
                 {...props}
                 key={props.name}
@@ -52,7 +87,7 @@ export function Output({
                   setTrackedAddToCalendarGoal(true);
                 }}
                 setAddToCalendarButtonProps={(props) => {
-                  const newArray = [...events];
+                  const newArray = [...eventsToUse];
                   newArray[index] = props;
                   setEvents(newArray);
                 }}

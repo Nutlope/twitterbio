@@ -62,7 +62,7 @@ export function convertIcsToJson(icsData: any) {
       });
     });
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 
   // You can now work with this JSON object or stringify it

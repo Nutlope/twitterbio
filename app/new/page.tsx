@@ -4,6 +4,7 @@ import { AddToCalendarButtonType } from "add-to-calendar-button-react";
 import { useChat } from "ai/react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { Output } from "../Output";
 import {
   Status,
@@ -58,15 +59,14 @@ export default function Page() {
   const finished = searchParams.has("message");
   const message = searchParams.get("message") || "";
   const saveIntent = searchParams.get("saveIntent") || "";
-  const saveIntentEvent = localStorage.getItem("addToCalendarButtonProps");
+  let saveIntentEvent = null;
+  if (typeof window !== "undefined") {
+    // Perform localStorage action
+    saveIntentEvent = localStorage.getItem("addToCalendarButtonProps");
+  }
   const saveIntentEventJson = JSON.parse(saveIntentEvent || "{}");
   const rawText = searchParams.get("rawText") || "";
   const [randomLoadingText, setRandomLoadingText] = useState("");
-
-  useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * LOADING_TEXTS.length);
-    setRandomLoadingText(LOADING_TEXTS[randomIndex]);
-  }, []); // Empty dependency array means this useEffect runs once when the component mounts
 
   const eventsToUse = saveIntent
     ? [saveIntentEventJson]
@@ -74,7 +74,14 @@ export default function Page() {
     ? chatEvents
     : events;
 
+  const setEventsToUse = chatFinished ? setChatEvents : setEvents;
+
   // Effects
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * LOADING_TEXTS.length);
+    setRandomLoadingText(LOADING_TEXTS[randomIndex]);
+  }, []); // Empty dependency array means this useEffect runs once when the component mounts
+
   useEffect(() => {
     if (rawText) {
       append({ role: "user", content: rawText });
@@ -93,6 +100,11 @@ export default function Page() {
   useEffect(() => {
     if (chatFinished) {
       const events = generatedIcsArrayToEvents(lastAssistantMessage);
+      if (events.length === 0) {
+        toast.error(
+          "Sorry, we couldn't find any events in your message. Please try again."
+        );
+      }
       setChatEvents(events);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -146,7 +158,7 @@ export default function Page() {
             chatFinished ? lastUserMessage : "Generated from message"
           }
           reportIssue={reportIssue}
-          setEvents={setEvents}
+          setEvents={setEventsToUse}
           setTrackedAddToCalendarGoal={setTrackedAddToCalendarGoal}
           trackedAddToCalendarGoal={trackedAddToCalendarGoal}
         />
