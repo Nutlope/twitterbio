@@ -65,8 +65,8 @@ export function SaveButton(props: AddToCalendarButtonType) {
       <SignedOut>
         {/* TODO: instead convert from the AddToCalendarButtonProps */}
         <SignInButton
-          afterSignInUrl={`http://localhost:3000/new?saveIntent=true`}
-          afterSignUpUrl={`http://localhost:3000/new?saveIntent=true`}
+          afterSignInUrl={`${process.env.NEXT_PUBLIC_URL}/new?saveIntent=true`}
+          afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/onboarding?saveIntent=true`}
         >
           <button
             className={cn(

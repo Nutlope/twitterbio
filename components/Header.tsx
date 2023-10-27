@@ -10,7 +10,6 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import Link from "next/link";
-import { Suspense } from "react";
 
 export default function Header() {
   const { user } = useUser();
