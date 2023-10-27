@@ -4,7 +4,7 @@ type User = {
   firstName: string | null;
   lastName: string | null;
   username: string | null;
-  imageUrl: string | null;
+  imageUrl: string;
 };
 
 export function UserInfo(props: { user: User }) {
