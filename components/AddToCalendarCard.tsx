@@ -51,10 +51,10 @@ export function AddToCalendarCard({
     ]
   );
 
-  // // save updatedProps to localStorage
-  // useEffect(() => {
-  //   localStorage.setItem("updatedProps", JSON.stringify(updatedProps));
-  // }, [updatedProps]);
+  // save updatedProps to localStorage
+  useEffect(() => {
+    localStorage.setItem("updatedProps", JSON.stringify(updatedProps));
+  }, [updatedProps]);
 
   // // load updatedProps from localStorage
   // useEffect(() => {
