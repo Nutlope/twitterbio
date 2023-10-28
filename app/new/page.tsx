@@ -62,7 +62,7 @@ export default function Page() {
   let saveIntentEvent = null;
   if (typeof window !== "undefined") {
     // Perform localStorage action
-    saveIntentEvent = localStorage.getItem("addToCalendarButtonProps");
+    saveIntentEvent = localStorage.getItem("updatedProps");
   }
   const saveIntentEventJson = JSON.parse(saveIntentEvent || "{}");
   const rawText = searchParams.get("rawText") || "";
