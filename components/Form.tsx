@@ -55,6 +55,10 @@ export function Form({
                 className="font-bold text-slate-900"
               >
                 list
+              </Link>{" "}
+              or{" "}
+              <Link href="/onboarding" className="font-bold text-slate-900">
+                learn more
               </Link>
               .
             </span>

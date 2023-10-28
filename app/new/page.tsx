@@ -5,7 +5,7 @@ import { useChat } from "ai/react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { Output } from "../Output";
+import { Output } from "@/components/Output";
 import {
   Status,
   generatedIcsArrayToEvents,
@@ -93,6 +93,11 @@ export default function Page() {
     if (finished) {
       const events = generatedIcsArrayToEvents(message);
       setEvents(events);
+      if (events.length === 0) {
+        toast.error(
+          "Something went wrong. Add you event manually or try again."
+        );
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finished]);
@@ -102,7 +107,7 @@ export default function Page() {
       const events = generatedIcsArrayToEvents(lastAssistantMessage);
       if (events.length === 0) {
         toast.error(
-          "Sorry, we couldn't find any events in your message. Please try again."
+          "Something went wrong. Add you event manually or try again."
         );
       }
       setChatEvents(events);

@@ -1,78 +1,9 @@
-"use client";
-
-import { AddToCalendarButtonType } from "add-to-calendar-button-react";
-import { useChat } from "ai/react";
-import { trackGoal } from "fathom-client";
-import { Suspense, useEffect, useRef, useState } from "react";
-import { Form } from "./Form";
-import { Output } from "./Output";
-import {
-  Status,
-  formatDataOnPaste,
-  generatedIcsArrayToEvents,
-  getLastMessages,
-  reportIssue,
-} from "@/lib/utils";
+import { Suspense } from "react";
+import AddEvent from "./AddEvent";
 import Leaderboard from "@/components/Leaderboard";
 import LeaderboardSkeleton from "@/components/LeaderboardSkeleton";
 
 export default function Page() {
-  // State variables
-  const [issueStatus, setIssueStatus] = useState<Status>("idle");
-  const [finished, setFinished] = useState(false);
-  const [events, setEvents] = useState<AddToCalendarButtonType[] | null>(null);
-  const [trackedAddToCalendarGoal, setTrackedAddToCalendarGoal] =
-    useState(false);
-
-  // Refs
-  const eventRef = useRef<null | HTMLDivElement>(null);
-
-  // Custom hooks and utility functions
-  const {
-    input,
-    setInput,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    messages,
-  } = useChat({
-    onFinish(message) {
-      setFinished(true);
-    },
-  });
-
-  const { lastUserMessage, lastAssistantMessage } = getLastMessages(messages);
-
-  // Event handlers
-  const handlePaste = async (e: any) => formatDataOnPaste(e, setInput);
-
-  const onSubmit = (e: any) => {
-    trackGoal("WBJDUXPZ", 1);
-    setFinished(false);
-    setTrackedAddToCalendarGoal(false);
-    setIssueStatus("idle");
-    handleSubmit(e);
-  };
-
-  // Effects
-  useEffect(() => {
-    if (finished) {
-      const events = generatedIcsArrayToEvents(lastAssistantMessage);
-      setEvents(events);
-      scrollToEvents();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [finished]);
-
-  const isDev = process.env.NODE_ENV === "development";
-
-  // Helper functions
-  const scrollToEvents = () => {
-    if (eventRef.current !== null) {
-      eventRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
     <>
       <h1 className="max-w-[708px] text-center text-4xl font-bold text-slate-900 sm:text-6xl">
@@ -89,36 +20,14 @@ export default function Page() {
       <div className="text-sm opacity-70">
         Create, collect, curate & share events
       </div>
-      <Form
-        handleInputChange={handleInputChange}
-        handlePaste={handlePaste}
-        input={input}
-        isLoading={isLoading}
-        onSubmit={onSubmit}
-      />
-      <div ref={eventRef}></div>
+      <AddEvent />
       <div className="p-6"></div>
-      <Output
-        events={events}
-        finished={finished}
-        isDev={isDev}
-        issueStatus={issueStatus}
-        setIssueStatus={setIssueStatus}
-        lastAssistantMessage={lastAssistantMessage}
-        lastUserMessage={lastUserMessage}
-        reportIssue={reportIssue}
-        setEvents={setEvents}
-        setTrackedAddToCalendarGoal={setTrackedAddToCalendarGoal}
-        trackedAddToCalendarGoal={trackedAddToCalendarGoal}
-      />
       <h3 className="text-center text-lg font-bold leading-6 text-gray-900">
         Top users
       </h3>
-      {!isLoading && (
-        <Suspense fallback={<LeaderboardSkeleton />}>
-          <Leaderboard />
-        </Suspense>
-      )}
+      <Suspense fallback={<LeaderboardSkeleton />}>
+        <Leaderboard />
+      </Suspense>
     </>
   );
 }

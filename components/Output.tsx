@@ -38,8 +38,7 @@ export function Output({
   setTrackedAddToCalendarGoal: (trackedAddToCalendarGoal: boolean) => void;
   trackedAddToCalendarGoal: boolean;
 }) {
-  // validate events using Zod
-  const eventsAreValid = events?.length === 0;
+  const eventsAreValid = finished && events && events.length > 0;
   const blankEvents = [
     {
       options: [
@@ -62,7 +61,7 @@ export function Output({
           )[]
         | undefined,
       buttonStyle: "text" as const,
-      name: "New event" as const,
+      name: "Manual entry" as const,
       description: "" as const,
       location: "" as const,
       startDate: "today" as const,
@@ -70,30 +69,51 @@ export function Output({
       startTime: "" as const,
       endTime: "" as const,
       timeZone: "" as const,
-    },
+    } as AddToCalendarButtonType,
   ];
-  const eventsToUse = eventsAreValid ? events : blankEvents;
+
   return (
     <output className="">
       {finished && (
         <>
-          <div className="flex flex-wrap justify-center gap-4">
-            {eventsToUse?.map((props, index) => (
-              <AddToCalendarCard
-                {...props}
-                key={props.name}
-                onClick={() => {
-                  !trackedAddToCalendarGoal && trackGoal("BQ3VFDBF", 1);
-                  setTrackedAddToCalendarGoal(true);
-                }}
-                setAddToCalendarButtonProps={(props) => {
-                  const newArray = [...eventsToUse];
-                  newArray[index] = props;
-                  setEvents(newArray);
-                }}
-              />
-            ))}
-          </div>
+          {eventsAreValid && (
+            <div className="flex flex-wrap justify-center gap-4">
+              {events?.map((props, index) => (
+                <AddToCalendarCard
+                  {...props}
+                  key={props.name}
+                  onClick={() => {
+                    !trackedAddToCalendarGoal && trackGoal("BQ3VFDBF", 1);
+                    setTrackedAddToCalendarGoal(true);
+                  }}
+                  setAddToCalendarButtonProps={(props) => {
+                    const newArray = [...events];
+                    newArray[index] = props;
+                    setEvents(newArray);
+                  }}
+                />
+              ))}
+            </div>
+          )}
+          {!eventsAreValid && (
+            <div className="flex flex-wrap justify-center gap-4">
+              {blankEvents?.map((props, index) => (
+                <AddToCalendarCard
+                  {...props}
+                  key={props.name}
+                  onClick={() => {
+                    !trackedAddToCalendarGoal && trackGoal("BQ3VFDBF", 1);
+                    setTrackedAddToCalendarGoal(true);
+                  }}
+                  setAddToCalendarButtonProps={(props) => {
+                    const newArray = [...blankEvents];
+                    newArray[index] = props;
+                    setEvents(newArray);
+                  }}
+                />
+              ))}
+            </div>
+          )}
           {issueStatus === "submitting" && (
             <button
               className="fixed bottom-5 right-3 z-50 w-40 rounded-xl bg-red-700 px-4 py-2 font-medium text-white"

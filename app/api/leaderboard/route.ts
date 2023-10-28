@@ -40,5 +40,5 @@ export async function GET(req: Request) {
     .slice(0, 5);
 
   // Return the response message
-  return Response.json({ response: usersWithEventCountGreaterThanZero });
+  return Response.json(usersWithEventCountGreaterThanZero);
 }

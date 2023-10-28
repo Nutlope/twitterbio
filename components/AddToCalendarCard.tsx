@@ -51,19 +51,19 @@ export function AddToCalendarCard({
     ]
   );
 
-  // save updatedProps to localStorage
-  useEffect(() => {
-    localStorage.setItem("updatedProps", JSON.stringify(updatedProps));
-  }, [updatedProps]);
+  // // save updatedProps to localStorage
+  // useEffect(() => {
+  //   localStorage.setItem("updatedProps", JSON.stringify(updatedProps));
+  // }, [updatedProps]);
 
-  // load updatedProps from localStorage
-  useEffect(() => {
-    const data = localStorage.getItem("updatedProps");
-    if (data) {
-      setAddToCalendarButtonProps(JSON.parse(data));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // // load updatedProps from localStorage
+  // useEffect(() => {
+  //   const data = localStorage.getItem("updatedProps");
+  //   if (data) {
+  //     setAddToCalendarButtonProps(JSON.parse(data));
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <div className="mt-10 grid max-w-lg grid-cols-1 gap-x-6 gap-y-8 rounded-xl border bg-white p-4 shadow-md sm:grid-cols-6">

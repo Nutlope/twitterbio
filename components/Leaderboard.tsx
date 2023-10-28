@@ -1,10 +1,12 @@
-export default async function Leaderboard() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/leaderboard`
-  ).then((res) => res.json());
-  const users = res.response;
+async function getLeaderboardUsers() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/leaderboard`);
+  return res.json();
+}
 
-  const people = users.map((user: any) => ({
+export default async function Leaderboard() {
+  const leaderboardUsers = await getLeaderboardUsers();
+
+  const people = leaderboardUsers.map((user: any) => ({
     name: user.firstName + " " + user.lastName,
     userName: user.username,
     imageUrl: user.imageUrl,
