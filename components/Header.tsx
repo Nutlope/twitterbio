@@ -57,7 +57,7 @@ export default function Header() {
             </div>
           </SignedIn>
           <SignedOut>
-            <SignInButton />
+            <SignInButton afterSignUpUrl="/onboarding" />
           </SignedOut>
         </ClerkLoaded>
       </div>
