@@ -43,10 +43,7 @@ export function Form({
           <p className="mt-4 text-center">
             <span className="text-slate-500">
               Or look at a sample{" "}
-              <a
-                href="/user_2X3xAXHdaKKG8RLZqm72wb119Yj/events/4"
-                className="font-bold text-slate-900"
-              >
+              <a href="/event/4" className="font-bold text-slate-900">
                 event
               </a>{" "}
               or{" "}

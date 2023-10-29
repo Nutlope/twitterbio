@@ -44,7 +44,7 @@ export function UpdateButton(props: UpdateButtonProps) {
     // This forces a cache invalidation.
     router.refresh();
 
-    router.push(`/${user?.id}/events/${event.id}`);
+    router.push(`/event/${event.id}`);
   }
 
   return (

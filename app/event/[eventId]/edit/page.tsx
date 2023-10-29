@@ -8,21 +8,25 @@ import { AddToCalendarButtonProps } from "@/types";
 export default async function Page({
   params,
 }: {
-  params: { userId: string; eventId: string };
+  params: { eventId: string };
 }) {
   const event = await db.event.findUnique({
     where: {
-      userId: params.userId,
       id: params.eventId,
     },
     select: {
       id: true,
+      userId: true,
       event: true,
       createdAt: true,
     },
   });
 
-  const user = await clerkClient.users.getUser(params.userId);
+  if (!event) {
+    return <p className="text-lg text-gray-500">No event found.</p>;
+  }
+
+  const user = await clerkClient.users.getUser(event.userId);
 
   return (
     <>
@@ -38,7 +42,7 @@ export default async function Page({
       )}
       <div className="p-4"></div>
       <Link
-        href={`/${params.userId}/events`}
+        href={`/${event.userId}/events`}
         className="flex place-items-center gap-2"
       >
         <div className="font-medium">Collected by</div>

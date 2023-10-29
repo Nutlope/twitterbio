@@ -45,7 +45,7 @@ export default function EventCard(props: EventCardProps) {
 
   function EventLink(props: { children: React.ReactNode }) {
     return (
-      <Link href={`/${userId}/events/${id}`} className="my-auto">
+      <Link href={`/event/${id}`} className="my-auto">
         {props.children}
       </Link>
     );

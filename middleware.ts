@@ -16,6 +16,7 @@ export default authMiddleware({
     "/api/leaderboard",
     "/(.*)/events",
     "/(.*)/events/(.*)",
+    "/event/(.*)",
   ],
 });
 

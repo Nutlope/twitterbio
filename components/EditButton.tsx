@@ -18,7 +18,7 @@ export function EditButton(props: EditButtonProps) {
 
   return (
     <SignedIn>
-      <Link href={`/${props.userId}/events/${props.id}/edit`}>
+      <Link href={`/event/${props.id}/edit`}>
         <PencilIcon className="h-6 w-6 text-blue-600 hover:text-blue-700" />
       </Link>
     </SignedIn>
