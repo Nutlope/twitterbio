@@ -91,6 +91,7 @@ export function Output({
                     newArray[index] = props;
                     setEvents(newArray);
                   }}
+                  update={false}
                 />
               ))}
             </div>
@@ -110,6 +111,7 @@ export function Output({
                     newArray[index] = props;
                     setEvents(newArray);
                   }}
+                  update={false}
                 />
               ))}
             </div>

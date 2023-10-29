@@ -7,23 +7,31 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 
-export function SaveButton(props: AddToCalendarButtonType) {
+type UpdateButtonProps = AddToCalendarButtonType & {
+  id: string;
+  update: boolean;
+};
+
+export function UpdateButton(props: UpdateButtonProps) {
   const { user } = useUser();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  async function onClick() {
+  async function onClickUpdate(id: string) {
     setIsLoading(true);
 
     const response = await fetch("/api/events", {
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        id: Number(id),
         event: props,
       }),
     });
+
+    console.log(response);
 
     setIsLoading(false);
 
@@ -49,7 +57,7 @@ export function SaveButton(props: AddToCalendarButtonType) {
               "cursor-not-allowed opacity-60": isLoading,
             }
           )}
-          onClick={onClick}
+          onClick={() => onClickUpdate(props.id)}
         >
           {isLoading ? (
             <span className="loading">
@@ -58,22 +66,22 @@ export function SaveButton(props: AddToCalendarButtonType) {
               <span className="bg-white" />
             </span>
           ) : (
-            "Save"
+            "Update"
           )}
         </button>
       </SignedIn>
       <SignedOut>
-        {/* TODO: instead convert from the AddToCalendarButtonProps */}
+        {/* TODO: Does this show up anywhere? */}
         <SignInButton
-          afterSignInUrl={`${process.env.NEXT_PUBLIC_URL}/new?saveIntent=true`}
-          afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/onboarding?saveIntent=true`}
+          afterSignInUrl={`${process.env.NEXT_PUBLIC_URL}/`}
+          afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/`}
         >
           <button
             className={cn(
               "mt-8 w-full rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80 sm:mt-10"
             )}
           >
-            Sign in to save
+            Sign in to update (updates not saved)
           </button>
         </SignInButton>
       </SignedOut>

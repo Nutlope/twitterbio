@@ -3,6 +3,7 @@
 import { AddToCalendarButton } from "add-to-calendar-button-react";
 import Link from "next/link";
 import { DeleteButton } from "./DeleteButton";
+import { EditButton } from "./EditButton";
 import { translateToHtml, getDateInfoUTC, cn } from "@/lib/utils";
 import { AddToCalendarButtonProps } from "@/types";
 
@@ -143,6 +144,7 @@ export default function EventCard(props: EventCardProps) {
             hideTextLabelList
             size="8"
           />
+          <EditButton userId={userId} id={id} />
           <DeleteButton userId={userId} id={id} />
         </div>
         <div
@@ -155,7 +157,10 @@ export default function EventCard(props: EventCardProps) {
             {...(event as AddToCalendarButtonProps)}
             size="4"
           />
-          <DeleteButton userId={userId} id={id} />
+          <div className="flex items-center gap-8">
+            <EditButton userId={userId} id={id} />
+            <DeleteButton userId={userId} id={id} />
+          </div>
         </div>
       </div>
     </Container>
