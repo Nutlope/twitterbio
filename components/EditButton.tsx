@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export type EditButtonProps = {
   userId: string;
-  id: number;
+  id: string;
 };
 
 export function EditButton(props: EditButtonProps) {

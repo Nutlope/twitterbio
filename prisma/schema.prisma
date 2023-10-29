@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Event {
-  id            Int      @id @default(autoincrement())
+  id            String   @id @default(cuid()) @map("cuid")
   event         Json
   userId        String
   startDateTime DateTime @default(now())
@@ -23,7 +23,7 @@ model Event {
 }
 
 model List {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(cuid())
   name        String
   description String
   createdAt   DateTime @default(now())

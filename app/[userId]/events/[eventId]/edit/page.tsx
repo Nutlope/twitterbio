@@ -13,7 +13,7 @@ export default async function Page({
   const event = await db.event.findUnique({
     where: {
       userId: params.userId,
-      id: Number(params.eventId),
+      id: params.eventId,
     },
     select: {
       id: true,

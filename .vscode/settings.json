@@ -2,5 +2,6 @@
   "dotenv.enableAutocloaking": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
-  }
+  },
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true
 }

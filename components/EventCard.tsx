@@ -9,7 +9,7 @@ import { AddToCalendarButtonProps } from "@/types";
 
 type EventCardProps = {
   userId: string;
-  id: number;
+  id: string;
   createdAt: Date;
   event: AddToCalendarButtonProps;
   singleEvent?: boolean;

@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 
 export type DeleteButtonProps = {
   userId: string;
-  id: number;
+  id: string;
 };
 
 export function DeleteButton(props: DeleteButtonProps) {

@@ -26,7 +26,7 @@ export function UpdateButton(props: UpdateButtonProps) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: Number(id),
+        id: id,
         event: props,
       }),
     });

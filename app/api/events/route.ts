@@ -9,12 +9,12 @@ const eventCreateSchema = z.object({
 });
 
 const eventUpdateSchema = z.object({
-  id: z.number(),
+  id: z.string(),
   event: z.any(), //TODO: add validation
 });
 
 const eventDeleteSchema = z.object({
-  id: z.number(),
+  id: z.string(),
 });
 
 export async function GET() {
