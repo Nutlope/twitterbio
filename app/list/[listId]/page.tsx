@@ -10,23 +10,32 @@ import {
   AccordionContent,
 } from "@/components/Accordian";
 import { AddToCalendarButtonProps } from "@/types";
-import ListCardsForUser from "@/components/ListCardsForUser";
+import { ListEditButton } from "@/components/ListEditButton";
+import { ListDeleteButton } from "@/components/ListDeleteButton";
 
-export default async function Page({ params }: { params: { userId: string } }) {
-  const events = await db.event.findMany({
+export default async function Page({ params }: { params: { listId: string } }) {
+  const list = await db.list.findUnique({
     where: {
-      userId: params.userId,
+      id: params.listId,
     },
     select: {
-      id: true,
-      event: true,
+      userId: true,
+      name: true,
+      description: true,
+      events: {
+        orderBy: {
+          startDateTime: "asc",
+        },
+      },
       createdAt: true,
-      startDateTime: true,
-    },
-    orderBy: {
-      startDateTime: "asc",
+      updatedAt: true,
     },
   });
+
+  if (!list) {
+    return <> </>;
+  }
+  const events = list.events;
 
   const pastEvents = events.filter((item) => item.startDateTime < new Date());
 
@@ -37,13 +46,16 @@ export default async function Page({ params }: { params: { userId: string } }) {
   return (
     <>
       <div className="flex place-items-center gap-2">
-        <div className="font-medium">Events saved by</div>
-        <Suspense>
-          <UserInfo userId={params.userId} />
-        </Suspense>
+        <div className="flex flex-col">
+          <div className="font-medium">{list.name}</div>
+          <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+            {list.description}
+          </p>
+        </div>
+        <UserInfo userId={list.userId} />
+        <ListEditButton listId={params.listId} listUserId={list.userId} />
+        <ListDeleteButton listId={params.listId} listUserId={list.userId} />
       </div>
-      <div className="p-2"></div>
-      <ListCardsForUser userId={params.userId} limit={10} />
       <div className="p-2"></div>
       <Accordion type="multiple" className="w-full" defaultValue={["item-2"]}>
         <AccordionItem value="item-1" className="px-6 opacity-80">
@@ -63,7 +75,7 @@ export default async function Page({ params }: { params: { userId: string } }) {
                 {pastEvents.map((item) => (
                   <EventCard
                     key={item.id}
-                    userId={params.userId}
+                    userId={item.userId}
                     id={item.id}
                     event={item.event as AddToCalendarButtonProps}
                     createdAt={item.createdAt}
@@ -90,7 +102,7 @@ export default async function Page({ params }: { params: { userId: string } }) {
                 {futureEvents.map((item) => (
                   <EventCard
                     key={item.id}
-                    userId={params.userId}
+                    userId={item.userId}
                     id={item.id}
                     event={item.event as AddToCalendarButtonProps}
                     createdAt={item.createdAt}

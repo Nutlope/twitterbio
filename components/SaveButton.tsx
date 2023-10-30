@@ -8,7 +8,6 @@ import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 
 export function SaveButton(props: AddToCalendarButtonType) {
-  const { user } = useUser();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 

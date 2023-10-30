@@ -26,6 +26,7 @@ model List {
   id          String   @id @default(cuid())
   name        String
   description String
+  userId      String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   events      Event[]

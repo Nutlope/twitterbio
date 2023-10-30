@@ -12,6 +12,7 @@ type AddToCalendarCardProps = AddToCalendarButtonType & {
   update: boolean;
   updateId?: string;
   onClick?: any;
+  children?: React.ReactNode;
   setAddToCalendarButtonProps?: (props: AddToCalendarButtonType) => void;
 };
 
@@ -74,7 +75,7 @@ export function AddToCalendarCard({
         className="col-span-full flex justify-center"
         onClick={initialProps?.onClick}
       >
-        <AddToCalendarButton {...updatedProps} />
+        {initialProps.children || <AddToCalendarButton {...updatedProps} />}
       </div>
       <div className="col-span-full">
         <label

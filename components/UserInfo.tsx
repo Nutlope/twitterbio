@@ -1,21 +1,26 @@
+import { clerkClient } from "@clerk/nextjs";
 import Image from "next/image";
+import Link from "next/link";
 
-type User = {
-  firstName: string | null;
-  lastName: string | null;
-  username: string | null;
-  imageUrl: string;
+type UserInfoProps = {
+  userId: string;
 };
 
-export function UserInfo(props: { user: User }) {
+export async function UserInfo(props: UserInfoProps) {
+  const user = await clerkClient.users.getUser(props.userId);
+
+  if (!user) {
+    return null;
+  }
+
   return (
-    <div className="group block shrink-0">
+    <Link href={`/${user.id}/events`} className="group block shrink-0">
       <div className="flex items-center">
-        {props.user.imageUrl && (
+        {user.imageUrl && (
           <div>
             <Image
               className="inline-block h-9 w-9 rounded-full"
-              src={props.user.imageUrl}
+              src={user.imageUrl}
               alt=""
               width={375}
               height={375}
@@ -24,13 +29,13 @@ export function UserInfo(props: { user: User }) {
         )}
         <div className="ml-3">
           <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-            {props.user.firstName} {props.user.lastName}
+            {user.firstName} {user.lastName}
           </p>
           <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
-            @{props.user.username}
+            @{user.username}
           </p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -17,6 +17,7 @@ export default authMiddleware({
     "/(.*)/events",
     "/(.*)/events/(.*)",
     "/event/(.*)",
+    "/list/(.*)",
   ],
 });
 

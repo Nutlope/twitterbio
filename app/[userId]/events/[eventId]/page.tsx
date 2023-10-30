@@ -1,4 +1,3 @@
-import { clerkClient } from "@clerk/nextjs";
 import Link from "next/link";
 import EventCard from "@/components/EventCard";
 import { UserInfo } from "@/components/UserInfo";
@@ -24,8 +23,6 @@ export default async function Page({
     },
   });
 
-  const user = await clerkClient.users.getUser(params.userId);
-
   return (
     <>
       {!event ? (
@@ -46,7 +43,7 @@ export default async function Page({
         className="flex place-items-center gap-2"
       >
         <div className="font-medium">Collected by</div>
-        <UserInfo user={user} />
+        <UserInfo userId={params.userId} />
       </Link>
     </>
   );

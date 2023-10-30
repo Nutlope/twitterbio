@@ -1,49 +1,50 @@
 "use client";
 
 import { SignInButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
-import { AddToCalendarButtonType } from "add-to-calendar-button-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 
-type UpdateButtonProps = AddToCalendarButtonType & {
+type ListUpdateButtonProps = {
   id: string;
-  update: boolean;
+  name: string;
+  description: string;
+  afterSuccess?: string;
 };
 
-export function UpdateButton(props: UpdateButtonProps) {
+export default function ListUpdateButton(props: ListUpdateButtonProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  async function onClickUpdate(id: string) {
+  async function onClick() {
     setIsLoading(true);
 
-    const response = await fetch("/api/events", {
+    const response = await fetch("/api/lists", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: id,
-        event: props,
+        id: props.id,
+        name: props.name,
+        description: props.description,
       }),
     });
-
-    console.log(response);
 
     setIsLoading(false);
 
     if (!response?.ok) {
-      return toast.error("Your event was not saved. Please try again.");
+      console.log(response);
+      return toast.error("Your list was not saved. Please try again.");
     }
 
-    const event = await response.json();
+    const list = await response.json();
 
     // This forces a cache invalidation.
     router.refresh();
 
-    router.push(`/event/${event.id}`);
+    router.push(props.afterSuccess ? props.afterSuccess : `/list/${list.id}`);
   }
 
   return (
@@ -56,7 +57,7 @@ export function UpdateButton(props: UpdateButtonProps) {
               "cursor-not-allowed opacity-60": isLoading,
             }
           )}
-          onClick={() => onClickUpdate(props.id)}
+          onClick={onClick}
         >
           {isLoading ? (
             <span className="loading">
@@ -70,7 +71,7 @@ export function UpdateButton(props: UpdateButtonProps) {
         </button>
       </SignedIn>
       <SignedOut>
-        {/* TODO: Does this show up anywhere? */}
+        {/* TODO: Redirect somewhere meaningful */}
         <SignInButton
           afterSignInUrl={`${process.env.NEXT_PUBLIC_URL}/`}
           afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/`}
@@ -80,7 +81,7 @@ export function UpdateButton(props: UpdateButtonProps) {
               "mt-8 w-full rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80 sm:mt-10"
             )}
           >
-            Sign in to update (updates not saved)
+            Sign in to update
           </button>
         </SignInButton>
       </SignedOut>

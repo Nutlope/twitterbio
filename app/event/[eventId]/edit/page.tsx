@@ -4,6 +4,7 @@ import { UserInfo } from "@/components/UserInfo";
 import { db } from "@/lib/db";
 import { AddToCalendarCard } from "@/components/AddToCalendarCard";
 import { AddToCalendarButtonProps } from "@/types";
+import EventListsButton from "@/components/EventListsButton";
 
 export default async function Page({
   params,
@@ -19,6 +20,7 @@ export default async function Page({
       userId: true,
       event: true,
       createdAt: true,
+      eventList: true,
     },
   });
 
@@ -26,17 +28,29 @@ export default async function Page({
     return <p className="text-lg text-gray-500">No event found.</p>;
   }
 
-  const user = await clerkClient.users.getUser(event.userId);
+  const lists = await db.list.findMany({
+    where: {
+      userId: event.userId,
+    },
+  });
 
   return (
     <>
       {event && event.event ? (
-        <AddToCalendarCard
-          {...(event.event as AddToCalendarButtonProps)}
-          key={event.id}
-          update
-          updateId={params.eventId}
-        />
+        <>
+          <AddToCalendarCard
+            {...(event.event as AddToCalendarButtonProps)}
+            key={event.id}
+            update
+            updateId={params.eventId}
+          >
+            <EventListsButton
+              userLists={lists}
+              eventId={params.eventId}
+              eventLists={event.eventList}
+            />
+          </AddToCalendarCard>
+        </>
       ) : (
         <p className="text-lg text-gray-500">No event found.</p>
       )}
@@ -46,7 +60,7 @@ export default async function Page({
         className="flex place-items-center gap-2"
       >
         <div className="font-medium">Collected by</div>
-        <UserInfo user={user} />
+        <UserInfo userId={event.userId} />
       </Link>
     </>
   );
