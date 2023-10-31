@@ -56,7 +56,7 @@ export default function Page() {
                   </strong>
                   Capture events from Instagram stories or anywhere else.{" "}
                   <a
-                    href="https://www.icloud.com/shortcuts/1aecbd2ee98c42edb613642a1382e718"
+                    href="https://www.icloud.com/shortcuts/30f7001c689b4460b787a944165de6c2"
                     className="text-blue-500 underline"
                     target="_blank"
                     rel="noopener noreferrer"
