@@ -137,7 +137,13 @@ export default function EventCard(props: EventCardProps) {
                   "line-clamp-2": !singleEvent,
                 })}
               >
-                {!singleEvent && event.description}
+                {!singleEvent && (
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: translateToHtml(event.description!),
+                    }}
+                  ></span>
+                )}
                 {singleEvent && (
                   <span
                     dangerouslySetInnerHTML={{
