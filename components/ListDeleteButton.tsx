@@ -4,7 +4,8 @@ import { SignedIn, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { cn } from "@/lib/utils";
+import { Loader2, Trash } from "lucide-react";
+import { Button } from "./ui/button";
 
 type ListDeleteButtonProps = {
   listUserId: string;
@@ -49,19 +50,17 @@ export function ListDeleteButton(props: ListDeleteButtonProps) {
 
   return (
     <SignedIn>
-      <button
-        type="button"
-        onClick={onClick}
-        disabled={isLoading}
-        className={cn(
-          "w-20 rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80",
-          {
-            "cursor-not-allowed opacity-60": isLoading,
-          }
-        )}
-      >
-        Delete
-      </button>
+      {isLoading && (
+        <Button variant={"destructive"} disabled>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Please wait
+        </Button>
+      )}
+      {!isLoading && (
+        <Button variant={"destructive"} onClick={onClick}>
+          <Trash className="mr-2 h-4 w-4" /> Delete
+        </Button>
+      )}
     </SignedIn>
   );
 }

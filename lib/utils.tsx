@@ -1,9 +1,10 @@
 "use client";
 import { Message } from "ai";
-import { clsx, ClassValue } from "clsx";
 import { trackGoal } from "fathom-client";
 import ICAL from "ical.js";
 import TurndownService from "turndown";
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export const turndownService = new TurndownService();
 export const SAMPLE_ICS = `BEGIN:VCALENDAR
@@ -375,5 +376,5 @@ export const getLastMessages = (messages: Message[]) => {
 };
 
 export function cn(...inputs: ClassValue[]) {
-  return clsx(inputs);
+  return twMerge(clsx(inputs));
 }

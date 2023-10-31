@@ -1,6 +1,8 @@
 "use client";
 import { AddToCalendarButtonType } from "add-to-calendar-button-react";
 import { trackGoal } from "fathom-client";
+import { Bug, Check, Loader2 } from "lucide-react";
+import { Button } from "./ui/button";
 import { AddToCalendarCard } from "@/components/AddToCalendarCard";
 import {
   Status,
@@ -117,20 +119,19 @@ export function Output({
             </div>
           )}
           {issueStatus === "submitting" && (
-            <button
-              className="fixed bottom-5 right-3 z-50 w-40 rounded-xl bg-red-700 px-4 py-2 font-medium text-white"
+            <Button
+              className="fixed bottom-5 right-3 z-50"
+              variant="destructive"
               disabled
             >
-              <span className="loading">
-                <span className="bg-white" />
-                <span className="bg-white" />
-                <span className="bg-white" />
-              </span>
-            </button>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Please wait
+            </Button>
           )}
           {issueStatus === "idle" && (
-            <button
-              className="fixed bottom-5 right-3 z-50 w-40 rounded-xl bg-red-700 px-4 py-2 font-medium text-white hover:bg-red-800"
+            <Button
+              variant="destructive"
+              className="fixed bottom-5 right-3 z-50 "
               onClick={() =>
                 reportIssue(
                   generateIssueTitle(lastUserMessage),
@@ -144,19 +145,20 @@ export function Output({
                 )
               }
             >
-              Report issue &rarr;
-            </button>
+              <Bug className="mr-2 h-4 w-4" /> Report issue
+            </Button>
           )}
           {issueStatus === "submitted" && (
-            <button
-              className="fixed bottom-5 right-3 z-50 w-40 rounded-xl bg-red-700 px-4 py-2 font-medium text-white"
+            <Button
+              variant="destructive"
+              className="fixed bottom-5 right-3 z-50 "
               disabled
             >
-              ✔︎ Reported
-            </button>
+              <Check className="mr-2 h-4 w-4" /> Reported
+            </Button>
           )}
           {isDev && (
-            <>
+            <div className="mt-20 grid gap-4">
               <div className="mx-auto flex max-w-xl flex-col items-center justify-center space-y-8">
                 <div className="cursor-pointer rounded-xl border bg-white p-4 shadow-md transition hover:bg-gray-100">
                   <p>Prompt</p>
@@ -195,7 +197,7 @@ export function Output({
                   </div>
                 </div>
               ))}
-            </>
+            </div>
           )}
         </>
       )}

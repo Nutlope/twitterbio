@@ -41,22 +41,25 @@ export default async function ListCardsForUser({
   }
 
   return (
-    <div className="w-full px-6">
-      <h2 className="text-sm font-medium text-gray-500">Featured Lists</h2>
-      <ul
-        role="list"
-        className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
-      >
-        {showAdd && <ListCardAdd />}
-        {lists.map((list) => (
-          <ListCard
-            key={list.name}
-            name={list.name}
-            count={list._count.events}
-            id={list.id}
-          />
-        ))}
-      </ul>
-    </div>
+    <>
+      <div className="w-full px-6">
+        <h2 className="text-sm font-medium text-gray-500">Featured Lists</h2>
+        <ul
+          role="list"
+          className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
+        >
+          {showAdd && <ListCardAdd />}
+          {lists.map((list) => (
+            <ListCard
+              key={list.name}
+              name={list.name}
+              count={list._count.events}
+              id={list.id}
+            />
+          ))}
+        </ul>
+      </div>
+      <div className="p-8"></div>
+    </>
   );
 }

@@ -4,6 +4,8 @@ import { SignInButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import { Loader2, Save } from "lucide-react";
+import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 
 type ListSaveButtonProps = {
@@ -48,25 +50,17 @@ export default function ListSaveButton(props: ListSaveButtonProps) {
   return (
     <>
       <SignedIn>
-        <button
-          className={cn(
-            "mt-8 w-full rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80 sm:mt-10",
-            {
-              "cursor-not-allowed opacity-60": isLoading,
-            }
-          )}
-          onClick={onClick}
-        >
-          {isLoading ? (
-            <span className="loading">
-              <span className="bg-white" />
-              <span className="bg-white" />
-              <span className="bg-white" />
-            </span>
-          ) : (
-            "Save"
-          )}
-        </button>
+        {isLoading && (
+          <Button disabled>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </Button>
+        )}
+        {!isLoading && (
+          <Button onClick={onClick}>
+            <Save className="mr-2 h-4 w-4" /> Save
+          </Button>
+        )}
       </SignedIn>
       <SignedOut>
         {/* TODO: Redirect somewhere meaningful */}
@@ -74,13 +68,7 @@ export default function ListSaveButton(props: ListSaveButtonProps) {
           afterSignInUrl={`${process.env.NEXT_PUBLIC_URL}/`}
           afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/`}
         >
-          <button
-            className={cn(
-              "mt-8 w-full rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80 sm:mt-10"
-            )}
-          >
-            Sign in to save
-          </button>
+          <Button>Sign in to save</Button>
         </SignInButton>
       </SignedOut>
     </>

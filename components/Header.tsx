@@ -10,6 +10,13 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import Link from "next/link";
+import { buttonVariants } from "./ui/button";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  navigationMenuTriggerStyle,
+} from "./ui/navigation-menu";
 
 export default function Header() {
   const { user } = useUser();
@@ -46,12 +53,15 @@ export default function Header() {
         </ClerkLoading>
         <ClerkLoaded>
           <SignedIn>
-            <Link
-              href={`/${user?.id}/events`}
-              className=" font-bold text-black hover:text-black/80"
-            >
-              Events
-            </Link>
+            <NavigationMenu>
+              <NavigationMenuItem className="list-none">
+                <Link href={`/${user?.id}/events`} legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Events
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </NavigationMenu>
             <div className="h-8 w-8">
               <UserButton afterSignOutUrl="/" />
             </div>

@@ -45,7 +45,7 @@ export default async function Page({ params }: { params: { listId: string } }) {
 
   return (
     <>
-      <div className="flex place-items-center gap-2">
+      <div className="flex flex-col place-items-center gap-4 sm:flex-row">
         <div className="flex flex-col">
           <div className="font-medium">{list.name}</div>
           <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">

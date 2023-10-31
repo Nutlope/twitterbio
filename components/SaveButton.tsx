@@ -5,7 +5,8 @@ import { AddToCalendarButtonType } from "add-to-calendar-button-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { cn } from "@/lib/utils";
+import { Loader2, Save } from "lucide-react";
+import { Button } from "./ui/button";
 
 export function SaveButton(props: AddToCalendarButtonType) {
   const router = useRouter();
@@ -41,25 +42,17 @@ export function SaveButton(props: AddToCalendarButtonType) {
   return (
     <>
       <SignedIn>
-        <button
-          className={cn(
-            "mt-8 w-full rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80 sm:mt-10",
-            {
-              "cursor-not-allowed opacity-60": isLoading,
-            }
-          )}
-          onClick={onClick}
-        >
-          {isLoading ? (
-            <span className="loading">
-              <span className="bg-white" />
-              <span className="bg-white" />
-              <span className="bg-white" />
-            </span>
-          ) : (
-            "Save"
-          )}
-        </button>
+        {isLoading && (
+          <Button className="w-full" disabled>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </Button>
+        )}
+        {!isLoading && (
+          <Button className="w-full" onClick={onClick}>
+            <Save className="mr-2 h-4 w-4" /> Save
+          </Button>
+        )}
       </SignedIn>
       <SignedOut>
         {/* TODO: instead convert from the AddToCalendarButtonProps */}
@@ -67,13 +60,7 @@ export function SaveButton(props: AddToCalendarButtonType) {
           afterSignInUrl={`${process.env.NEXT_PUBLIC_URL}/new?saveIntent=true`}
           afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/onboarding?saveIntent=true`}
         >
-          <button
-            className={cn(
-              "mt-8 w-full rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80 sm:mt-10"
-            )}
-          >
-            Sign in to save
-          </button>
+          <Button className="w-full">Sign in to save</Button>
         </SignInButton>
       </SignedOut>
     </>

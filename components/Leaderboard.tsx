@@ -1,3 +1,5 @@
+import { Badge } from "./ui/badge";
+
 async function getLeaderboardUsers() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/leaderboard`);
   return res.json();
@@ -37,9 +39,7 @@ export default async function Leaderboard() {
                 </p>
               </div>
             </div>
-            <div className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 group-hover:bg-gray-50">
-              {person.eventCount} events
-            </div>
+            <Badge>{person.eventCount} events</Badge>
           </a>
         </li>
       ))}

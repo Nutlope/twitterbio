@@ -36,6 +36,7 @@ export default function EventCard(props: EventCardProps) {
   const startDateInfo = getDateInfoUTC(event.startDate!);
   const endDateInfo = getDateInfoUTC(event.endDate!);
   const spansMultipleDays = startDateInfo?.day !== endDateInfo?.day;
+  const imageUrl = event?.images?.[0];
 
   const Container = singleEvent ? DivContainer : LiContainer;
 
@@ -109,8 +110,16 @@ export default function EventCard(props: EventCardProps) {
               </div>
             </div>
           </div>
-          <div className="p-0.5"></div>
+          <div className="p-1"></div>
           <div className="flex min-w-0 gap-x-4">
+            {imageUrl && !singleEvent && (
+              <div className="grow">
+                <img
+                  src={imageUrl}
+                  className="aspect-[16/16] w-28 object-cover sm:hidden"
+                />
+              </div>
+            )}
             <div className="min-w-0 flex-auto" suppressHydrationWarning>
               <p
                 className={cn("mt-1 text-sm leading-6 text-gray-600", {
@@ -129,7 +138,14 @@ export default function EventCard(props: EventCardProps) {
             </div>
           </div>
         </LinkOrNot>
-
+        {imageUrl && !singleEvent && (
+          <div className="grow">
+            <img
+              src={imageUrl}
+              className="mx-auto hidden h-28 w-[3.9375rem] object-cover sm:ml-auto sm:mr-2 sm:block"
+            />
+          </div>
+        )}
         <div
           className={cn(
             "hidden w-12 shrink-0 flex-col items-center justify-between",
@@ -163,6 +179,14 @@ export default function EventCard(props: EventCardProps) {
           </div>
         </div>
       </div>
+      <div className="p-2"></div>
+      {imageUrl && singleEvent && (
+        <img
+          src={imageUrl}
+          className="mx-auto h-96 w-[13.5rem] object-cover"
+          alt=""
+        />
+      )}
     </Container>
   );
 }

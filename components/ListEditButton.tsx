@@ -2,6 +2,8 @@
 
 import { SignedIn, useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import { Edit } from "lucide-react";
+import { buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
 
 type ListEditButtonProps = {
@@ -18,13 +20,8 @@ export function ListEditButton(props: ListEditButtonProps) {
 
   return (
     <SignedIn>
-      <Link
-        href={`/list/${props.listId}/edit`}
-        className={cn(
-          "w-16 rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80"
-        )}
-      >
-        Edit
+      <Link href={`/list/${props.listId}/edit`} className={buttonVariants()}>
+        <Edit className="mr-2 h-4 w-4" /> Edit
       </Link>
     </SignedIn>
   );

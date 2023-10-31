@@ -42,9 +42,9 @@ export default async function Page({ params }: { params: { userId: string } }) {
           <UserInfo userId={params.userId} />
         </Suspense>
       </div>
-      <div className="p-2"></div>
+      <div className="p-4"></div>
       <ListCardsForUser userId={params.userId} limit={10} />
-      <div className="p-2"></div>
+      <h2 className="text-sm font-medium text-gray-500">All Events</h2>
       <Accordion type="multiple" className="w-full" defaultValue={["item-2"]}>
         <AccordionItem value="item-1" className="px-6 opacity-80">
           <AccordionTrigger>
