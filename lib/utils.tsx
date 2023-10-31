@@ -161,6 +161,8 @@ type DateInfo = {
   year: number;
   dayOfWeek: string;
   monthName: string;
+  hour: number;
+  minute: number;
 };
 
 export function getDateInfo(dateString: string): DateInfo | null {
@@ -184,6 +186,8 @@ export function getDateInfo(dateString: string): DateInfo | null {
   const month = date.getMonth() + 1; // Months are zero-based
   const day = date.getDate();
   const year = date.getFullYear();
+  const hour = date.getHours();
+  const minute = date.getMinutes();
 
   // Get day of the week
   const daysOfWeek = [
@@ -214,7 +218,7 @@ export function getDateInfo(dateString: string): DateInfo | null {
 
   const monthName = monthNames[date.getMonth()];
 
-  return { month, monthName, day, year, dayOfWeek };
+  return { month, monthName, day, year, dayOfWeek, hour, minute };
 }
 export function getDateInfoUTC(dateString: string): DateInfo | null {
   // Validate input
@@ -237,6 +241,8 @@ export function getDateInfoUTC(dateString: string): DateInfo | null {
   const month = date.getUTCMonth() + 1; // Months are zero-based
   const day = date.getUTCDate();
   const year = date.getUTCFullYear();
+  const hour = date.getUTCHours();
+  const minute = date.getUTCMinutes();
 
   // Get day of the week
   const daysOfWeek = [
@@ -267,7 +273,46 @@ export function getDateInfoUTC(dateString: string): DateInfo | null {
 
   const monthName = monthNames[date.getUTCMonth()];
 
-  return { month, monthName, day, year, dayOfWeek };
+  return { month, monthName, day, year, dayOfWeek, hour, minute };
+}
+
+export function endsNextDayBeforeMorning(
+  startDateInfo: DateInfo | null,
+  endDateInfo: DateInfo | null
+) {
+  if (!startDateInfo || !endDateInfo) {
+    return false;
+  }
+  const isNextDay =
+    (startDateInfo.month === endDateInfo.month &&
+      startDateInfo.day === endDateInfo.day - 1) ||
+    (startDateInfo.month !== endDateInfo.month && endDateInfo.day === 1); //TODO: this is a hack
+  const isBeforeMorning = endDateInfo.hour < 6;
+  return isNextDay && isBeforeMorning;
+}
+
+export function spansMultipleDays(
+  startDateInfo: DateInfo | null,
+  endDateInfo: DateInfo | null
+) {
+  if (!startDateInfo || !endDateInfo) {
+    return false;
+  }
+  const notSameDay = startDateInfo.day !== endDateInfo.day;
+  return notSameDay;
+}
+
+export function showMultipleDays(
+  startDateInfo: DateInfo | null,
+  endDateInfo: DateInfo | null
+) {
+  if (!startDateInfo || !endDateInfo) {
+    return false;
+  }
+  return (
+    spansMultipleDays(startDateInfo, endDateInfo) &&
+    !endsNextDayBeforeMorning(startDateInfo, endDateInfo)
+  );
 }
 
 export const translateToHtml = (input: string): string => {

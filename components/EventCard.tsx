@@ -4,7 +4,13 @@ import { AddToCalendarButton } from "add-to-calendar-button-react";
 import Link from "next/link";
 import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
-import { translateToHtml, getDateInfoUTC, cn } from "@/lib/utils";
+import {
+  translateToHtml,
+  getDateInfoUTC,
+  cn,
+  showMultipleDays,
+  endsNextDayBeforeMorning,
+} from "@/lib/utils";
 import { AddToCalendarButtonProps } from "@/types";
 
 type EventCardProps = {
@@ -35,7 +41,9 @@ export default function EventCard(props: EventCardProps) {
   const { userId, id, event, singleEvent } = props;
   const startDateInfo = getDateInfoUTC(event.startDate!);
   const endDateInfo = getDateInfoUTC(event.endDate!);
-  const spansMultipleDays = startDateInfo?.day !== endDateInfo?.day;
+  const showMultiDay = showMultipleDays(startDateInfo, endDateInfo);
+  const showNightIcon =
+    endsNextDayBeforeMorning(startDateInfo, endDateInfo) && !showMultiDay;
   const imageUrl = event?.images?.[0];
 
   const Container = singleEvent ? DivContainer : LiContainer;
@@ -63,7 +71,7 @@ export default function EventCard(props: EventCardProps) {
         <LinkOrNot>
           <div className="flex items-center">
             <div className="flex shrink-0 flex-row gap-1">
-              <div className="grid h-14 w-14 place-items-center rounded-md bg-gradient-to-b from-gray-900 to-gray-600">
+              <div className="relative grid h-14 w-14 place-items-center rounded-md bg-gradient-to-b from-gray-900 to-gray-600">
                 <span className="text-xs font-semibold uppercase text-white">
                   {startDateInfo?.monthName.substring(0, 3)}
                 </span>
@@ -73,8 +81,11 @@ export default function EventCard(props: EventCardProps) {
                 <span className="-mt-2 text-xs font-light uppercase text-white">
                   {startDateInfo?.dayOfWeek.substring(0, 3)}
                 </span>
+                {showNightIcon && (
+                  <div className="absolute -right-2 -top-2 text-2xl">🌛</div>
+                )}
               </div>
-              {spansMultipleDays && (
+              {showMultiDay && (
                 <div className="grid h-14 w-14 place-items-center rounded-md bg-gradient-to-b from-gray-900 to-gray-600">
                   <span className="text-xs font-semibold uppercase text-white">
                     {endDateInfo?.monthName.substring(0, 3)}
