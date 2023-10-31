@@ -57,7 +57,7 @@ export default function Header() {
               <NavigationMenuItem className="list-none">
                 <Link href={`/${user?.id}/events`} legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Events
+                    My Events
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
@@ -67,6 +67,15 @@ export default function Header() {
             </div>
           </SignedIn>
           <SignedOut>
+            <NavigationMenu>
+              <NavigationMenuItem className="list-none">
+                <Link href={`/events`} legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    All Events
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </NavigationMenu>
             <SignInButton afterSignUpUrl="/onboarding" />
           </SignedOut>
         </ClerkLoaded>

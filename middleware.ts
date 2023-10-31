@@ -8,6 +8,7 @@ export default authMiddleware({
     "/",
     "/new",
     "/onboarding",
+    "/events",
     "/api",
     "/api/bug",
     "/api/chat",
