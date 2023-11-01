@@ -41,7 +41,9 @@ export default async function Leaderboard() {
                 </p>
               </div>
             </div>
-            <Badge>{person.eventCount} events</Badge>
+            <Badge className="whitespace-nowrap">
+              {person.eventCount} events
+            </Badge>
           </a>
         </li>
       ))}
