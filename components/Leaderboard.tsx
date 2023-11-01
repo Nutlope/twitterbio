@@ -1,7 +1,9 @@
 import { Badge } from "./ui/badge";
 
 async function getLeaderboardUsers() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/leaderboard`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/leaderboard`, {
+    next: { revalidate: 600 },
+  });
   return res.json();
 }
 
