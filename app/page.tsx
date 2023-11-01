@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import NextEvents from "@/components/NextEvents";
 
 export default function Page() {
   return (
@@ -31,17 +32,12 @@ export default function Page() {
       </div>
       <div className="p-6"></div>
       <AddEvent />
-      {/* <Card>
-        <CardHeader>
-          <CardTitle>Paste event info</CardTitle>
-          <CardDescription>
-            Get a clean, calendarable, shareable event
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <AddEvent />
-        </CardContent>
-      </Card> */}
+      <div className="p-6"></div>
+      <div className="max-w-xl">
+        <Suspense fallback={<LeaderboardSkeleton />}>
+          <NextEvents />
+        </Suspense>
+      </div>
       <div className="p-6"></div>
       <Card>
         <CardHeader>
