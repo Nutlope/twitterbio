@@ -57,7 +57,9 @@ export default function EventList({
       >
         <AccordionTrigger>
           <div className="flex gap-1.5">
-            Upcoming events
+            {variant === "future-minimal"
+              ? "Portland area events happening soon"
+              : "Upcoming events"}
             <span className="mr-2 inline-flex items-center justify-center rounded-full bg-gray-600 px-2 py-1 text-xs font-bold leading-none text-slate-100">
               {futureEvents.length}
             </span>
