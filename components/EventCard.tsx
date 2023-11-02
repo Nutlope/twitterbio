@@ -2,6 +2,7 @@
 
 import { AddToCalendarButton } from "add-to-calendar-button-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
 import {
@@ -37,7 +38,24 @@ function DivContainer(props: { children: React.ReactNode }) {
   );
 }
 
+function NoLink(props: { children: React.ReactNode; id: string }) {
+  return <div className="my-auto">{props.children}</div>;
+}
+
+function EventLink(props: { children: React.ReactNode; id: string }) {
+  return (
+    <Link href={`/event/${props.id}`} className="my-auto">
+      {props.children}
+    </Link>
+  );
+}
+
 export default function EventCard(props: EventCardProps) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   const { userId, id, event, singleEvent } = props;
   const startDateInfo = getDateInfoUTC(event.startDate!);
   const endDateInfo = getDateInfoUTC(event.endDate!);
@@ -48,17 +66,6 @@ export default function EventCard(props: EventCardProps) {
 
   const Container = singleEvent ? DivContainer : LiContainer;
 
-  function NoLink(props: { children: React.ReactNode }) {
-    return <div className="my-auto">{props.children}</div>;
-  }
-
-  function EventLink(props: { children: React.ReactNode }) {
-    return (
-      <Link href={`/event/${id}`} className="my-auto">
-        {props.children}
-      </Link>
-    );
-  }
   const LinkOrNot = singleEvent ? NoLink : EventLink;
 
   return (
@@ -68,7 +75,7 @@ export default function EventCard(props: EventCardProps) {
           "sm:flex-row": !singleEvent,
         })}
       >
-        <LinkOrNot>
+        <LinkOrNot id={id}>
           <div className="flex items-center">
             <div className="flex shrink-0 flex-row gap-1">
               <div className="relative grid h-14 w-14 place-items-center rounded-md bg-gradient-to-b from-gray-900 to-gray-600">
@@ -137,14 +144,15 @@ export default function EventCard(props: EventCardProps) {
                   "line-clamp-2": !singleEvent,
                 })}
               >
-                {!singleEvent && (
+                {/* only render on client to prevent hydration errors */}
+                {isClient && !singleEvent && (
                   <span
                     dangerouslySetInnerHTML={{
                       __html: translateToHtml(event.description!),
                     }}
                   ></span>
                 )}
-                {singleEvent && (
+                {isClient && singleEvent && (
                   <span
                     dangerouslySetInnerHTML={{
                       __html: translateToHtml(event.description!),
