@@ -15,16 +15,16 @@ export default function Page() {
   return (
     <>
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-        Now: ⌨️✨📅
+        Now:<span className="tracking-wider"> 📱✨📅</span>
       </h1>
       <p className="leading-7 [&:not(:first-child)]:mt-6">
-        Paste event info <span className="font-semibold">&rarr;</span> clean,
+        Event info <span className="font-semibold">&rarr;</span> clean,
         calendarable event
       </p>
       <div className="p-2"></div>
       <div className="scale-90 opacity-70">
         <h2 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-          Soon: 📣🫂🎉
+          Soon:<span className="tracking-wider"> 📣🫂🎉</span>
         </h2>
         <p className="leading-7 [&:not(:first-child)]:mt-6">
           Create, collect, curate & share events

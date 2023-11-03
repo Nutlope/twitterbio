@@ -9,6 +9,13 @@ import {
   AccordionTrigger,
 } from "@/components/Accordian";
 
+export const metadata = {
+  title: "Get Started | timetime.cc",
+  openGraph: {
+    title: "Get Started | timetime.cc",
+  },
+};
+
 export default function Page() {
   return (
     <div className="bg-white px-6 py-32 lg:px-8">

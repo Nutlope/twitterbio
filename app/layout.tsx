@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 
 const title = "timetime.cc";
-const description = "Paste anything, get calendar events.";
+const description = "Create, collect, curate & share events";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const metadata: Metadata = {
@@ -19,12 +19,13 @@ export const metadata: Metadata = {
     description,
     locale: "en_US",
     type: "website",
-    images: ["https://www.timetime.cc/api/og"],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
+    images: [
+      {
+        url: "/api/og",
+        width: 800,
+        height: 400,
+      },
+    ],
   },
 };
 
