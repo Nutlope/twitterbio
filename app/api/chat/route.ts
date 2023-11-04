@@ -66,49 +66,27 @@ export async function POST(req: Request) {
   // Convert the response into a friendly text-stream
   const stream = OpenAIStream(response, {
     async onCompletion(completion) {
+      console.log("starting onCompletion");
+      console.log(completion);
       let errors = [];
       // Cache the response. Note that this will also cache function calls.
       kv.set(key, completion).catch((error) => errors.push(error));
       kv.expire(key, 60 * 60).catch((error) => errors.push(error));
-
+      console.log("finished caching");
       // calculate time from initial request to completion
       const time = new Date().getTime() - requestStart.getTime();
-
-      let icsJson = null;
-      let addToCalendarButtonProps = null;
-
-      // try to parse the response
-      try {
-        icsJson = convertIcsToJson(completion);
-      } catch (error: any) {
-        errors.push(error);
-      }
-
-      // try to parse the response
-      try {
-        addToCalendarButtonProps = convertIcsToJson(completion).map((item) =>
-          icsJsonToAddToCalendarButtonProps(item)
-        );
-      } catch (error) {
-        errors.push(error);
-      }
 
       db.requestResponse
         .update({
           where: { id: requestResponse.id },
           data: {
             modelOutput: { text: completion },
-            parsedOutput: {
-              icsJson: icsJson || undefined,
-              addToCalendarButtonProps: addToCalendarButtonProps || undefined,
-              errors: errors,
-              errorsCount: errors.length,
-            },
             modelCompletionTime: time,
             modelStatus: "success",
           },
         })
         .catch((error) => console.log(error));
+      console.log("finished updating db");
     },
   });
 
