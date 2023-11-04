@@ -148,7 +148,7 @@ export function Output({
               <Bug className="mr-2 h-4 w-4" /> Report issue
             </Button>
           )}
-          {issueStatus === "submitted" && (
+          {issueStatus === "success" && (
             <Button
               variant="destructive"
               className="fixed bottom-5 right-3 z-50 "

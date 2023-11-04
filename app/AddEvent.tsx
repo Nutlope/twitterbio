@@ -35,6 +35,9 @@ export default function AddEvent() {
     isLoading,
     messages,
   } = useChat({
+    body: {
+      source: "text",
+    },
     onFinish(message) {
       setFinished(true);
     },

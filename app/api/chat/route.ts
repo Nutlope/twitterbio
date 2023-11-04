@@ -1,6 +1,12 @@
 import { Configuration, OpenAIApi } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { kv } from "@vercel/kv";
+import { db } from "@/lib/db";
+import { getPrompt } from "@/lib/prompts";
+import {
+  convertIcsToJson,
+  icsJsonToAddToCalendarButtonProps,
+} from "@/lib/utils";
 
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({
@@ -8,29 +14,37 @@ const config = new Configuration({
 });
 const openai = new OpenAIApi(config);
 
-// Set the runtime to edge for best performance
-export const runtime = "edge";
-
 export async function POST(req: Request) {
-  const { messages } = await req.json();
+  const { messages, source } = await req.json();
   const key = JSON.stringify(messages); // come up with a key based on the request
-
-  // Get current date in Month, Day, Year format
-  const today = new Date();
-  const month = today.toLocaleString("default", { month: "long" });
-  const day = today.getDate();
-  const year = today.getFullYear();
-
+  const requestStart = new Date();
   const cached = await kv.get(key);
   if (cached) {
     return new Response(cached as any);
   }
+
+  const prompt = getPrompt();
 
   const userMessages = messages.filter(
     (message: { role: string }) => message.role === "user"
   );
   const lastUserMessage =
     userMessages?.[userMessages.length - 1]?.content || null;
+
+  // Create a new requestResponse in the database, but don't await it
+  const requestResponse = await db.requestResponse.create({
+    data: {
+      modelInput: {
+        promptVersion: prompt.version,
+        message: lastUserMessage,
+      },
+      modelStatus: "pending",
+      source: source,
+    },
+    select: {
+      id: true,
+    },
+  });
 
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
@@ -40,44 +54,7 @@ export async function POST(req: Request) {
     messages: [
       {
         role: "system",
-        content: `You parse calendar events from the provided text into iCal format and return the iCal file. Use the following rules:
-        # General
-        - ONLY RETURN A VALID ICAL FILE
-        - DO NOT RETURN ADDITIONAL INFORMATION
-        # Time
-        - For calculating relative dates/times, it is currently ${month} ${day}, ${year}
-        - Include timezone (use America/Los Angeles if not specified)
-        - Do not include timezone for full day events
-        - If event end time is not specified, guess based on event type
-        # File Format
-        - ALWAYS INCLUDE THE FOLLOWING FIELDS:
-          - BEGIN:VCALENDAR
-          - END: VCALENDAR
-        - FOR EACH EVENT, THE FOLLOWING FIELDS ARE REQUIRED:
-          - DTSTART
-          - DTEND
-          - SUMMARY
-        - FOR EACH EVENT, INCLUDE THE FOLLOWING FIELDS IF AVAILABLE:
-          - DESCRIPTION
-          - LOCATION
-        - FOR EACH EVENT, THE FOLLOWING FIELDS ARE NOT ALLOWED:
-          - PRODID
-          - VERSION
-          - CALSCALE
-          - METHOD
-          - RRULE
-        # Field Content
-        - DESCRIPTION
-          - Provide a short description of the event, its significance, and what attendees can expect, from the perspective of a reporter.
-            - Do not write from the perspective of the event organizer
-          - (if relevant) Provide a general agenda in a format that is commonly used for this type of event.
-          - (if relevant) Provide information on how people can RSVP or purchase tickets. Include event cost, or note if it is free.
-          - (if relevant) Provide information on how people can get more information, ask questions, or get event updates.
-          - JUST THE FACTS. Only include known information. Do not include speculation or opinion.
-          - BE SUCCINCT AND CLEAR.
-          - DO NOT USE NEW ADJECTIVES.
-          - BOTH SENTENCE FRAGMENTS AND FULL SENTENCES ARE OK.
-        `,
+        content: prompt.text,
       },
       {
         role: "user",
@@ -89,9 +66,49 @@ export async function POST(req: Request) {
   // Convert the response into a friendly text-stream
   const stream = OpenAIStream(response, {
     async onCompletion(completion) {
+      let errors = [];
       // Cache the response. Note that this will also cache function calls.
-      await kv.set(key, completion);
-      await kv.expire(key, 60 * 60);
+      kv.set(key, completion).catch((error) => errors.push(error));
+      kv.expire(key, 60 * 60).catch((error) => errors.push(error));
+
+      // calculate time from initial request to completion
+      const time = new Date().getTime() - requestStart.getTime();
+
+      let icsJson = null;
+      let addToCalendarButtonProps = null;
+
+      // try to parse the response
+      try {
+        icsJson = convertIcsToJson(completion);
+      } catch (error: any) {
+        errors.push(error);
+      }
+
+      // try to parse the response
+      try {
+        addToCalendarButtonProps = convertIcsToJson(completion).map((item) =>
+          icsJsonToAddToCalendarButtonProps(item)
+        );
+      } catch (error) {
+        errors.push(error);
+      }
+
+      db.requestResponse
+        .update({
+          where: { id: requestResponse.id },
+          data: {
+            modelOutput: { text: completion },
+            parsedOutput: {
+              icsJson: icsJson || undefined,
+              addToCalendarButtonProps: addToCalendarButtonProps || undefined,
+              errors: errors,
+              errorsCount: errors.length,
+            },
+            modelCompletionTime: time,
+            modelStatus: "success",
+          },
+        })
+        .catch((error) => console.log(error));
     },
   });
 

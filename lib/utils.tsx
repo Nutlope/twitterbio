@@ -395,14 +395,14 @@ export const reportIssue = async (
   if (data.issue.success) {
     trackGoal("B2ZT84YS", 0);
     console.log("Successfully created issue:", data.issue);
-    setStatus("submitted");
+    setStatus("success");
   } else {
     console.log("Error creating issue:", data);
     setStatus("error");
   }
 };
 
-export type Status = "idle" | "submitting" | "submitted" | "error";
+export type Status = "idle" | "submitting" | "success" | "error";
 
 export const getLastMessages = (messages: Message[]) => {
   const userMessages = messages.filter((message) => message.role === "user");

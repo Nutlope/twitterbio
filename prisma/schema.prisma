@@ -31,3 +31,22 @@ model List {
   updatedAt   DateTime @updatedAt
   events      Event[]
 }
+
+model RequestResponse {
+  id                  String   @id @default(cuid())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  modelInput          Json // Store the request payload
+  modelOutput         Json? // Store the model output
+  parsedOutput        Json? // Store the parsed output
+  modelCompletionTime Int? // Store the time taken to complete the model
+  modelStatus         String   @default("idle")
+  source              String   @default("unknown")
+}
+
+enum Status {
+  idle
+  submitting
+  success
+  error
+}

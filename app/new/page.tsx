@@ -61,6 +61,9 @@ export default function Page() {
   // Hooks and utility functions
   const searchParams = useSearchParams();
   const { append, isLoading, messages } = useChat({
+    body: {
+      source: "shortcut",
+    },
     onFinish(message) {
       setChatFinished(true);
     },
