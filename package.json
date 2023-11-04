@@ -45,6 +45,7 @@
     "react-hook-form": "^7.47.0",
     "react-hot-toast": "^2.4.1",
     "react-use-measure": "^2.1.1",
+    "svix": "^1.13.0",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "turndown": "^7.1.2",

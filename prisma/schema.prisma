@@ -20,6 +20,9 @@ model Event {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   eventList     List[]
+  User          User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([userId])
 }
 
 model List {
@@ -30,6 +33,9 @@ model List {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   events      Event[]
+  User        User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([userId])
 }
 
 model RequestResponse {
@@ -42,6 +48,18 @@ model RequestResponse {
   modelCompletionTime Int? // Store the time taken to complete the model
   modelStatus         String   @default("idle")
   source              String   @default("unknown")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  username    String   @unique
+  email       String   @unique
+  displayName String
+  userImage   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  lists       List[]
+  events      Event[]
 }
 
 enum Status {
