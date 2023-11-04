@@ -4,17 +4,19 @@ import ListCardAdd from "./ListCardAdd";
 import { db } from "@/lib/db";
 
 type ListCardsForUserProps = {
-  userId: string;
+  userName: string;
   limit: number;
 };
 
 export default async function ListCardsForUser({
-  userId,
+  userName,
   limit,
 }: ListCardsForUserProps) {
   const lists = await db.list.findMany({
     where: {
-      userId: userId,
+      User: {
+        username: userName,
+      },
     },
     select: {
       id: true,
@@ -33,7 +35,7 @@ export default async function ListCardsForUser({
   });
 
   const user = await currentUser();
-  const showAdd = user && user.id === userId;
+  const showAdd = user && user.username === userName;
   const hideAll = !showAdd && lists.length === 0;
 
   if (!lists || hideAll) {

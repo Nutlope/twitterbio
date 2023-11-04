@@ -20,7 +20,7 @@ model Event {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   eventList     List[]
-  User          User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  User          User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([userId])
 }
@@ -33,7 +33,7 @@ model List {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   events      Event[]
-  User        User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([userId])
 }
@@ -55,7 +55,7 @@ model User {
   username    String   @unique
   email       String   @unique
   displayName String
-  userImage   String
+  imageUrl    String   @map("userImage")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   lists       List[]

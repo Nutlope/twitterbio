@@ -11,7 +11,7 @@ export default function OnboardingContinueButton() {
   const saveIntent = searchParams.get("saveIntent") || "";
   const signedInPath = saveIntent
     ? `/new?saveIntent=true`
-    : `/${user?.id}/events`;
+    : `/@${user?.username}/events`;
   const signedOutUrl = saveIntent
     ? `${process.env.NEXT_PUBLIC_URL}/new?saveIntent=true`
     : process.env.NEXT_PUBLIC_URL;

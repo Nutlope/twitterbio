@@ -1,5 +1,4 @@
 import { Metadata, ResolvingMetadata } from "next/types";
-import { clerkClient } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 import { UserInfo } from "@/components/UserInfo";
 import { ListEditButton } from "@/components/ListEditButton";
@@ -29,18 +28,32 @@ const getList = async (listId: string) => {
   return list;
 };
 
+const getUsername = async (userId: string) => {
+  const user = await db.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      username: true,
+    },
+  });
+  return user;
+};
+
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const list = await getList(params.listId);
+
   if (!list) {
     return {
       title: "No list found | timetime.cc",
     };
   }
 
-  const user = await clerkClient.users.getUser(list.userId);
+  const user = await getUsername(list.userId);
+
   if (!user) {
     return {
       title: "No user found | timetime.cc",

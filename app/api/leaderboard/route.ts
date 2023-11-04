@@ -1,44 +1,50 @@
-import { clerkClient } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 
-export async function GET(req: Request) {
-  const users = await clerkClient.users.getUserList();
+export type LeaderboardUsers = Awaited<ReturnType<typeof getLeaderboardUsers>>;
 
-  const usersWithExclude = users.filter(
-    (user) => user.username !== "jaronhearddev"
-  );
-
-  const eventCountForUsers = await db.event.groupBy({
-    by: ["userId"],
+async function getLeaderboardUsers(excludeUsers: string[], currentDate: Date) {
+  return db.user.findMany({
     where: {
-      endDateTime: {
-        gt: new Date().toISOString(),
+      id: {
+        notIn: excludeUsers,
       },
     },
-    _count: {
-      _all: true,
+    select: {
+      id: true,
+      username: true,
+      displayName: true,
+      imageUrl: true,
+      _count: {
+        select: {
+          events: {
+            where: {
+              startDateTime: {
+                gt: currentDate,
+              },
+            },
+          },
+        },
+      },
+    },
+    orderBy: {
+      events: {
+        _count: "desc",
+      },
     },
   });
+}
 
-  const usersWithEventCount = usersWithExclude.map((user) => {
-    const eventCount = eventCountForUsers.find(
-      (eventCount) => eventCount.userId === user.id
-    );
+export async function GET(req: Request) {
+  const excludeUsers = ["user_2X3xAXHdaKKG8RLZqm72wb119Yj"];
+  const currentDate = new Date();
 
-    return {
-      ...user,
-      eventCount: eventCount?._count?._all || 0,
-    };
-  });
+  const leaderboardUsers = await getLeaderboardUsers(excludeUsers, currentDate);
 
-  const usersWithEventCountSorted = usersWithEventCount.sort(
-    (a, b) => b.eventCount - a.eventCount
-  );
-
-  const usersWithEventCountGreaterThanZero = usersWithEventCountSorted
-    .filter((user) => user.eventCount > 0)
-    .slice(0, 5);
+  const sortedLeaderboardUsers = leaderboardUsers
+    .sort((a, b) => b._count.events - a._count.events)
+    .slice(0, 5)
+    .filter((user) => user._count.events > 0);
 
   // Return the response message
-  return Response.json(usersWithEventCountGreaterThanZero);
+  return Response.json(sortedLeaderboardUsers);
 }

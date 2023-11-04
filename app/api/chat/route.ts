@@ -3,10 +3,6 @@ import { OpenAIStream, StreamingTextResponse } from "ai";
 import { kv } from "@vercel/kv";
 import { db } from "@/lib/db";
 import { getPrompt } from "@/lib/prompts";
-import {
-  convertIcsToJson,
-  icsJsonToAddToCalendarButtonProps,
-} from "@/lib/utils";
 
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({

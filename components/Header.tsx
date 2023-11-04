@@ -10,7 +10,6 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import Link from "next/link";
-import { buttonVariants } from "./ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -55,7 +54,11 @@ export default function Header() {
           <SignedIn>
             <NavigationMenu>
               <NavigationMenuItem className="list-none">
-                <Link href={`/${user?.id}/events`} legacyBehavior passHref>
+                <Link
+                  href={`/@${user?.username}/events`}
+                  legacyBehavior
+                  passHref
+                >
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     My Events
                   </NavigationMenuLink>

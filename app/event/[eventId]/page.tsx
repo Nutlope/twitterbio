@@ -4,7 +4,6 @@ import EventCard from "@/components/EventCard";
 import { UserInfo } from "@/components/UserInfo";
 import { db } from "@/lib/db";
 import { AddToCalendarButtonProps } from "@/types";
-import { getDateInfoUTC } from "@/lib/utils";
 
 const getEvent = async (eventId: string) => {
   const event = await db.event.findUnique({
@@ -13,9 +12,14 @@ const getEvent = async (eventId: string) => {
     },
     select: {
       id: true,
-      userId: true,
       event: true,
       createdAt: true,
+      userId: true,
+      User: {
+        select: {
+          username: true,
+        },
+      },
     },
   });
   return event;
@@ -51,7 +55,7 @@ export async function generateMetadata(
       title: `${eventData.name} | timetime.cc`,
       description: `(${eventData.startDate} ${eventData.startTime}-${eventData.endTime}) ${eventData.description}`,
       locale: "en_US",
-      url: `${process.env.NEXT_PUBLIC_URL}/${event.userId}/events/${event.id}`,
+      url: `${process.env.NEXT_PUBLIC_URL}/events/${event.id}`,
       type: "article",
       images: [...previousImages],
     },
@@ -76,7 +80,7 @@ export default async function Page({ params }: Props) {
       />
       <div className="p-4"></div>
       <Link
-        href={`/${event.userId}/events`}
+        href={`/${event.User?.username}/events`}
         className="flex place-items-center gap-2"
       >
         <div className="font-medium">Collected by</div>

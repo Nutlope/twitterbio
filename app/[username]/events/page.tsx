@@ -1,35 +1,42 @@
 import { Suspense } from "react";
 import { Metadata, ResolvingMetadata } from "next/types";
-import { clerkClient } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 import { UserInfo } from "@/components/UserInfo";
 import ListCardsForUser from "@/components/ListCardsForUser";
 import EventList from "@/components/EventList";
 
-const getEventsForUser = async (userId: string) => {
+type Props = { params: { userName: string } };
+
+const getEventsForUser = async (userName: string) => {
   const events = await db.event.findMany({
     where: {
-      userId: userId,
+      User: {
+        username: userName,
+      },
     },
     orderBy: {
       startDateTime: "asc",
+    },
+    include: {
+      User: {
+        select: {
+          username: true,
+        },
+      },
     },
   });
   return events;
 };
 
-type Props = { params: { userId: string } };
-
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const events = await getEventsForUser(params.userId);
-  const user = await clerkClient.users.getUser(params.userId);
+  const events = await getEventsForUser(params.userName);
 
-  if (!events || !user) {
+  if (!events) {
     return {
-      title: "No user found | timetime.cc",
+      title: "No events found | timetime.cc",
       openGraph: {
         images: [],
       },
@@ -45,12 +52,12 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
-    title: `@${user.username} (${futureEventsCount} upcoming events) | timetime.cc`,
+    title: `@${params.userName} (${futureEventsCount} upcoming events) | timetime.cc`,
     openGraph: {
-      title: `@${user.username} (${futureEventsCount} upcoming events) | timetime.cc`,
-      description: `See the events that @${user.username} has saved on timetime.cc`,
+      title: `@${params.userName} (${futureEventsCount} upcoming events) | timetime.cc`,
+      description: `See the events that @${params.userName} has saved on timetime.cc`,
       locale: "en_US",
-      url: `${process.env.NEXT_PUBLIC_URL}/${params.userId}/events`,
+      url: `${process.env.NEXT_PUBLIC_URL}/${params.userName}/events`,
       type: "article",
       images: [...previousImages],
     },
@@ -58,7 +65,7 @@ export async function generateMetadata(
 }
 
 export default async function Page({ params }: Props) {
-  const events = await getEventsForUser(params.userId);
+  const events = await getEventsForUser(params.userName);
 
   const pastEvents = events.filter((item) => item.startDateTime < new Date());
 
@@ -71,11 +78,11 @@ export default async function Page({ params }: Props) {
       <div className="flex place-items-center gap-2">
         <div className="font-medium">Events saved by</div>
         <Suspense>
-          <UserInfo userId={params.userId} />
+          <UserInfo userName={params.userName} />
         </Suspense>
       </div>
       <div className="p-4"></div>
-      <ListCardsForUser userId={params.userId} limit={10} />
+      <ListCardsForUser userName={params.userName} limit={10} />
       <h2 className="text-sm font-medium text-gray-500">All Events</h2>
       <EventList pastEvents={pastEvents} futureEvents={futureEvents} />
       <div className="p-5"></div>

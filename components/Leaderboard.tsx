@@ -1,4 +1,5 @@
 import { Badge } from "./ui/badge";
+import { LeaderboardUsers } from "@/app/api/leaderboard/route";
 
 async function getLeaderboardUsers() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/leaderboard`, {
@@ -8,14 +9,14 @@ async function getLeaderboardUsers() {
 }
 
 export default async function Leaderboard() {
-  const leaderboardUsers = await getLeaderboardUsers();
+  const leaderboardUsers = (await getLeaderboardUsers()) as LeaderboardUsers;
 
-  const people = leaderboardUsers.map((user: any) => ({
-    name: user.firstName + " " + user.lastName,
+  const people = leaderboardUsers.map((user) => ({
+    name: user.displayName,
     userName: user.username,
     imageUrl: user.imageUrl,
-    href: `/${user.id}/events`,
-    eventCount: user.eventCount,
+    href: `/@${user.username}/events`,
+    eventCount: user._count.events,
   }));
 
   return (

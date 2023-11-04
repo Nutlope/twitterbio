@@ -16,4 +16,12 @@ module.exports = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/@:username/events",
+        destination: "/:username/events",
+      },
+    ];
+  },
 };

@@ -41,7 +41,7 @@ export function DeleteButton(props: DeleteButtonProps) {
     // This forces a cache invalidation.
     router.refresh();
 
-    router.push(`/${user?.id}/events`);
+    router.push(`/@${user?.username}/events`);
   }
 
   if (!user || user.id !== props.userId) {

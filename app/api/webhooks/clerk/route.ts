@@ -61,7 +61,7 @@ export async function POST(req: Request) {
           data: {
             username: evt.data.username || "",
             displayName: `${evt.data.first_name} ${evt.data.last_name}`,
-            userImage: evt.data.image_url,
+            imageUrl: evt.data.image_url,
             email: evt.data.email_addresses[0].email_address,
           },
         });
@@ -74,7 +74,7 @@ export async function POST(req: Request) {
             id: evt.data.id,
             username: evt.data.username || "",
             displayName: `${evt.data.first_name} ${evt.data.last_name}`,
-            userImage: evt.data.image_url,
+            imageUrl: evt.data.image_url,
             email: evt.data.email_addresses[0].email_address,
           },
         });

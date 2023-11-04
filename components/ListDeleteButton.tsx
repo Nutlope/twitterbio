@@ -41,7 +41,7 @@ export function ListDeleteButton(props: ListDeleteButtonProps) {
     // This forces a cache invalidation.
     router.refresh();
 
-    router.push(`/${user?.id}/events`);
+    router.push(`/@${user?.username}/events`);
   }
 
   const show = user && user.id === props.listUserId;
