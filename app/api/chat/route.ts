@@ -66,13 +66,12 @@ export async function POST(req: Request) {
   // Convert the response into a friendly text-stream
   const stream = OpenAIStream(response, {
     async onCompletion(completion) {
-      console.log("starting onCompletion");
-      console.log(completion);
       let errors = [];
+
       // Cache the response. Note that this will also cache function calls.
       kv.set(key, completion).catch((error) => errors.push(error));
       kv.expire(key, 60 * 60).catch((error) => errors.push(error));
-      console.log("finished caching");
+
       // calculate time from initial request to completion
       const time = new Date().getTime() - requestStart.getTime();
 
@@ -86,7 +85,6 @@ export async function POST(req: Request) {
           },
         })
         .catch((error) => console.log(error));
-      console.log("finished updating db");
     },
   });
 
