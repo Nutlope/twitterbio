@@ -4,6 +4,8 @@ import { Temporal } from "@js-temporal/polyfill";
 import { db } from "@/lib/db";
 import { AddToCalendarButtonProps } from "@/types";
 
+export const dynamic = "force-dynamic";
+
 const eventCreateSchema = z.object({
   event: z.any(), //TODO: add validation
 });

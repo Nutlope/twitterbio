@@ -4,6 +4,8 @@ import { kv } from "@vercel/kv";
 import { db } from "@/lib/db";
 import { getPrompt } from "@/lib/prompts";
 
+export const dynamic = "force-dynamic";
+
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -46,7 +48,6 @@ export async function POST(req: Request) {
   const response = await openai.createChatCompletion({
     model: "gpt-4",
 
-    stream: true,
     messages: [
       {
         role: "system",

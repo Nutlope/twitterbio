@@ -2,6 +2,8 @@ import { auth } from "@clerk/nextjs";
 import * as z from "zod";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 const eventListAddSchema = z.object({
   eventId: z.string(),
   listId: z.string(),

@@ -1,5 +1,7 @@
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export type LeaderboardUsers = Awaited<ReturnType<typeof getLeaderboardUsers>>;
 
 async function getLeaderboardUsers(excludeUsers: string[], currentDate: Date) {
