@@ -55,7 +55,7 @@ export default function Header() {
             <NavigationMenu>
               <NavigationMenuItem className="list-none">
                 <Link
-                  href={`/@${user?.username}/events`}
+                  href={`/${user?.username}/events`}
                   legacyBehavior
                   passHref
                 >

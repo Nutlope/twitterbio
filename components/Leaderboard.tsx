@@ -15,7 +15,7 @@ export default async function Leaderboard() {
     name: user.displayName,
     userName: user.username,
     imageUrl: user.imageUrl,
-    href: `/@${user.username}/events`,
+    href: `/${user.username}/events`,
     eventCount: user._count.events,
   }));
 
