@@ -44,11 +44,7 @@ export async function UserInfo(props: UserInfoProps) {
   }
 
   return (
-    <Link
-      href={`/${user.username}/events`}
-      as={`/@${user.username}/events`}
-      className="group block shrink-0"
-    >
+    <Link href={`/@${user.username}/events`} className="group block shrink-0">
       <div className="flex items-center">
         <div>
           <Image
