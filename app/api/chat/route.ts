@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { getPrompt } from "@/lib/prompts";
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({
