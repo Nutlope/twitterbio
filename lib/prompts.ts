@@ -28,7 +28,8 @@ export const getText = (
   - RRULE
 # Field Content
 - DESCRIPTION
-  - Use HTML pseudo tags for formatting: [url], [br], [hr], [p], [strong], [u], [i], [em], [li], [ul], [ol], [h*] (like h1, h2, h3, ...).
+  - Use HTML pseudo tags for formatting: [url], [br], [li], [ul], [ol].
+    - Use [br] for line breaks.
     - Define a link text with the following schema: [url]https://....|URL Text[/url].
   - Provide a short description of the event, its significance, and what attendees can expect, from the perspective of a reporter.
     - Do not write from the perspective of the event organizer
