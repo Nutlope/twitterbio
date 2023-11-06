@@ -1,9 +1,6 @@
 import { OpenAI } from "openai";
 import { getPrompt } from "@/lib/prompts";
 
-// TODO: update or remove. was used for testing zapier/text message integration
-export const dynamic = "force-dynamic";
-
 // Create an OpenAI API client (that's edge friendly!)
 const config = {
   apiKey: process.env.OPENAI_API_KEY,
@@ -21,6 +18,7 @@ export async function POST(req: Request) {
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.chat.completions.create({
     model: "gpt-4",
+    stream: true,
 
     messages: [
       {
