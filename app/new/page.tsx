@@ -2,6 +2,8 @@ import { Suspense } from "react";
 import EventsFromRawText from "./EventsFromRawText";
 import Loading from "./Loading";
 
+export const maxDuration = 60;
+
 type Props = {
   params: {};
   searchParams: { rawText?: string };
