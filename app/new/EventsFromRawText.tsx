@@ -59,19 +59,25 @@ export default async function EventsFromRawText({
     console.log(e);
   }
 
-  return (
-    <>
-      {events.length > 0 &&
-        events?.map((props, index) => (
-          <AddToCalendarCard {...props} key={props.name} />
-        ))}
-      {events.length === 0 && (
-        <>
-          <EventsError rawText={rawText} response={response || undefined} />
-          <div className="p-4"></div>
-          <AddToCalendarCard {...blankEvent} />
-        </>
-      )}
-    </>
-  );
+  if (events.length === 0) {
+    return (
+      <>
+        <EventsError rawText={rawText} response={response || undefined} />
+        <div className="p-4"></div>
+        <AddToCalendarCard {...blankEvent} />
+      </>
+    );
+  }
+
+  if (events.length >= 0) {
+    return (
+      <>
+        {events.length > 0 &&
+          events?.map((props, index) => (
+            <AddToCalendarCard {...props} key={props.name} />
+          ))}
+        {events.length === 0 && <></>}
+      </>
+    );
+  }
 }
