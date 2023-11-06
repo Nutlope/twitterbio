@@ -21,6 +21,7 @@ export default authMiddleware({
     "/(.*)/events/(.*)",
     "/event/(.*)",
     "/list/(.*)",
+    "/.well-known/acme-challenge/(.*)",
   ],
 });
 
