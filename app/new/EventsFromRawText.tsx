@@ -1,3 +1,4 @@
+import { unknown } from "zod";
 import EventsError from "./EventsError";
 import { AddToCalendarCard } from "@/components/AddToCalendarCard";
 import { generatedIcsArrayToEvents } from "@/lib/utils";
@@ -34,18 +35,41 @@ const blankEvent = {
   timeZone: "" as const,
 } as AddToCalendarButtonProps;
 
+async function fetchWithTimeout(
+  resource: RequestInfo,
+  options = {} as RequestInit & { timeout?: number }
+) {
+  // timeout after 22 seconds to work around vercel timeout
+  const { timeout = 22000 } = options;
+
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+
+  const response = await fetch(resource, {
+    ...options,
+    signal: controller.signal,
+  });
+  clearTimeout(id);
+
+  return response;
+}
+
 export default async function EventsFromRawText({
   rawText,
 }: {
   rawText: string;
 }) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/event/new`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ inputText: rawText }),
-  });
+  const res = await fetchWithTimeout(
+    `${process.env.NEXT_PUBLIC_URL}/api/event/new`,
+    {
+      timeout: 22000,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ inputText: rawText }),
+    }
+  );
   const json = await res.json();
   if (!json?.response?.choices?.[0]?.message?.content) {
     return <EventsError rawText={rawText} response={json} />;
