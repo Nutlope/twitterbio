@@ -30,6 +30,7 @@ export const getText = (
 - DESCRIPTION
   - Formatting has special rules
     - Use [br] for line breaks.
+      - Use the minimal amount of line breaks necessary.
     - Define a link text with the following schema: [url]https://....|URL Text[/url].
   - Provide a short description of the event, its significance, and what attendees can expect, from the perspective of a reporter.
     - Do not write from the perspective of the event organizer
