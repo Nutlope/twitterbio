@@ -383,7 +383,6 @@ export const reportIssue = async (
 export type Status = "idle" | "submitting" | "success" | "error";
 
 export const getLastMessages = (messages: Message[]) => {
-  console.log("messages", messages);
   const userMessages = messages.filter((message) => message.role === "user");
   const assistantMessages = messages.filter(
     (message) => message.role === "assistant"
