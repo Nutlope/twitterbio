@@ -6,9 +6,6 @@ import Fathom from "@/components/Fathom";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 
-// temporarily force dynamic until caching is set up properly
-export const dynamic = "force-dynamic";
-
 const title = "timetime.cc";
 const description = "Create, collect, curate & share events";
 
