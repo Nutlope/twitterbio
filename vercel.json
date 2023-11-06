@@ -1,8 +1,5 @@
 {
   "functions": {
-    "**/*.ts": {
-      "maxDuration": 60
-    },
     "**/*.tsx": {
       "maxDuration": 60
     }
