@@ -9,12 +9,12 @@ type Props = {
 
 export default function Page({ params, searchParams }: Props) {
   return (
-    <>
+    <div>
       {searchParams.rawText && (
         <Suspense fallback={<Loading rawText={searchParams.rawText} />}>
           <EventsFromRawText rawText={searchParams.rawText} />
         </Suspense>
       )}
-    </>
+    </div>
   );
 }
