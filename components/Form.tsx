@@ -69,7 +69,7 @@ export function Form({
           <div className="p-1"></div>
           <p className="text-center">
             <span className="text-slate-500">
-              ⏳ Be patient, takes ~5 seconds/event.
+              ⏳ Be patient, takes ~10 seconds/event.
             </span>
           </p>
         </>
