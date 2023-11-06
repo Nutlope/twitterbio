@@ -5,6 +5,8 @@ import { generatedIcsArrayToEvents } from "@/lib/utils";
 import { AddToCalendarButtonProps } from "@/types";
 import { getPrompt } from "@/lib/prompts";
 
+export const maxDuration = 60;
+
 const blankEvent = {
   options: [
     "Apple",
