@@ -72,9 +72,9 @@ export function icsJsonToAddToCalendarButtonProps(icsJson: ICSJson) {
   const { summary, location } = icsJson;
   const description = icsJson.details;
   const startDate = input.startDate.split("T")[0];
-  const startTime = input.startDate.split("T")[1].substring(0, 5);
+  const startTime = input.startDate.split("T")[1]?.substring(0, 5);
   const endDate = input.endDate.split("T")[0];
-  const endTime = input.endDate.split("T")[1].substring(0, 5);
+  const endTime = input.endDate.split("T")[1]?.substring(0, 5);
   const timeZone = input.timezone;
   const rrule = input.rrule;
 
@@ -104,8 +104,8 @@ export function icsJsonToAddToCalendarButtonProps(icsJson: ICSJson) {
     location: location,
     startDate: startDate,
     endDate: endDate,
-    startTime: startTime,
-    endTime: endTime,
+    startTime: startTime || undefined,
+    endTime: endTime || undefined,
     timeZone: timeZone,
     recurrence: rrule?.freq || undefined,
     recurrence_count: rrule?.count || undefined,
