@@ -1,8 +1,9 @@
-import { unknown } from "zod";
+import { OpenAI } from "openai";
 import EventsError from "./EventsError";
 import { AddToCalendarCard } from "@/components/AddToCalendarCard";
 import { generatedIcsArrayToEvents } from "@/lib/utils";
 import { AddToCalendarButtonProps } from "@/types";
+import { getPrompt } from "@/lib/prompts";
 
 const blankEvent = {
   options: [
@@ -35,46 +36,40 @@ const blankEvent = {
   timeZone: "" as const,
 } as AddToCalendarButtonProps;
 
-async function fetchWithTimeout(
-  resource: RequestInfo,
-  options = {} as RequestInit & { timeout?: number }
-) {
-  // timeout after 22 seconds to work around vercel timeout
-  const { timeout = 22000 } = options;
-
-  const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), timeout);
-
-  const response = await fetch(resource, {
-    ...options,
-    signal: controller.signal,
-  });
-  clearTimeout(id);
-
-  return response;
-}
+// Create an OpenAI API client (that's edge friendly!)
+const config = {
+  apiKey: process.env.OPENAI_API_KEY,
+};
+const openai = new OpenAI(config);
 
 export default async function EventsFromRawText({
   rawText,
 }: {
   rawText: string;
 }) {
-  const res = await fetchWithTimeout(
-    `${process.env.NEXT_PUBLIC_URL}/api/event/new`,
-    {
-      timeout: 22000,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+  const prompt = getPrompt();
+
+  // Ask OpenAI for a streaming completion given the prompt
+  const res = await openai.chat.completions.create({
+    model: "gpt-4",
+
+    messages: [
+      {
+        role: "system",
+        content: prompt.text,
       },
-      body: JSON.stringify({ inputText: rawText }),
-    }
-  );
-  const json = await res.json();
-  if (!json?.response?.choices?.[0]?.message?.content) {
-    return <EventsError rawText={rawText} response={json} />;
+      {
+        role: "user",
+        content: rawText,
+      },
+    ],
+  });
+
+  const response = res.choices[0].message.content;
+
+  if (response === null) {
+    return <EventsError rawText={rawText} />;
   }
-  const response = json?.response?.choices?.[0]?.message?.content;
   let events = [] as AddToCalendarButtonProps[];
 
   try {
