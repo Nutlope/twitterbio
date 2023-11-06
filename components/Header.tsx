@@ -21,8 +21,8 @@ export default function Header() {
   const { user } = useUser();
 
   return (
-    <header className="mt-5 flex w-full items-center justify-between border-b-2 px-2 pb-7 sm:px-4">
-      <Link href="/" className="flex space-x-3">
+    <header className="mt-3 flex w-full items-center justify-between border-b-2 px-2 pb-4 sm:mt-5 sm:px-4 sm:pb-7">
+      <Link href="/" className="flex items-center space-x-3">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
