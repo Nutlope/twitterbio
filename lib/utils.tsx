@@ -1,12 +1,9 @@
-"use client";
 import { Message } from "ai";
 import { trackGoal } from "fathom-client";
 import ICAL from "ical.js";
-import TurndownService from "turndown";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-export const turndownService = new TurndownService();
 export const SAMPLE_ICS = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//hacksw/handcal//NONSGML v1.0//EN
@@ -357,25 +354,6 @@ export const translateToHtml = (input: string): string => {
   return html;
 };
 
-export const formatDataOnPaste = async (
-  e: any,
-  setInput: (input: string) => void
-) => {
-  // Check if the clipboard contains HTML
-  if (e.clipboardData && e.clipboardData.types.indexOf("text/html") > -1) {
-    e.preventDefault();
-
-    // Get HTML content from clipboard
-    const htmlContent = e.clipboardData.getData("text/html");
-
-    // Convert to markdown
-    const markdownText = turndownService.turndown(htmlContent);
-
-    // set input to markdown
-    setInput(markdownText);
-  }
-};
-
 export const reportIssue = async (
   title: string,
   description: string,
@@ -405,6 +383,7 @@ export const reportIssue = async (
 export type Status = "idle" | "submitting" | "success" | "error";
 
 export const getLastMessages = (messages: Message[]) => {
+  console.log("messages", messages);
   const userMessages = messages.filter((message) => message.role === "user");
   const assistantMessages = messages.filter(
     (message) => message.role === "assistant"
@@ -415,7 +394,7 @@ export const getLastMessages = (messages: Message[]) => {
   // const lastAssistantMessage =
   //   assistantMessages?.[userMessages.length - 1]?.content || null;
   const lastAssistantMessage =
-    assistantMessages?.[userMessages.length - 1]?.content || SAMPLE_ICS;
+    assistantMessages?.[userMessages.length - 1]?.content || "";
 
   return { lastUserMessage, lastAssistantMessage };
 };

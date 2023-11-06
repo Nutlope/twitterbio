@@ -10,7 +10,7 @@ import { Button } from "./ui/button";
 
 type UpdateButtonProps = AddToCalendarButtonType & {
   id: string;
-  update: boolean;
+  update?: boolean;
 };
 
 export function UpdateButton(props: UpdateButtonProps) {

@@ -16,6 +16,7 @@ export default authMiddleware({
     "/api/test",
     "/api/leaderboard",
     "/api/webhooks/clerk",
+    "/api/event/new",
     "/(.*)/events",
     "/(.*)/events/(.*)",
     "/event/(.*)",

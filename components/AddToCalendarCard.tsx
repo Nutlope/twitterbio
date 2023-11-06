@@ -13,7 +13,7 @@ import { Textarea } from "./ui/textarea";
 import { Card, CardContent } from "./ui/card";
 
 type AddToCalendarCardProps = AddToCalendarButtonType & {
-  update: boolean;
+  update?: boolean;
   updateId?: string;
   onClick?: any;
   children?: React.ReactNode;

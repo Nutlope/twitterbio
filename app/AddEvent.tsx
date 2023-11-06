@@ -9,11 +9,11 @@ import { Form } from "../components/Form";
 import { Output } from "../components/Output";
 import {
   Status,
-  formatDataOnPaste,
   generatedIcsArrayToEvents,
   getLastMessages,
   reportIssue,
 } from "@/lib/utils";
+import { formatDataOnPaste } from "@/lib/turndown";
 
 export default function AddEvent() {
   // State variables
