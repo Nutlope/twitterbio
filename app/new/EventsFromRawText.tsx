@@ -51,7 +51,7 @@ export default async function EventsFromRawText({
 
   // Ask OpenAI for a streaming completion given the prompt
   const res = await openai.chat.completions.create({
-    model: "gpt-4",
+    model: "gpt-4-1106-preview",
 
     messages: [
       {

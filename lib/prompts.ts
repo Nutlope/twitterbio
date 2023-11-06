@@ -28,7 +28,7 @@ export const getText = (
   - RRULE
 # Field Content
 - DESCRIPTION
-  - Use HTML pseudo tags for formatting: [url], [br], [li], [ul], [ol].
+  - Formatting has special rules
     - Use [br] for line breaks.
     - Define a link text with the following schema: [url]https://....|URL Text[/url].
   - Provide a short description of the event, its significance, and what attendees can expect, from the perspective of a reporter.
@@ -52,6 +52,6 @@ export const getPrompt = () => {
 
   return {
     text: getText(date),
-    version: "v2023.11.05",
+    version: "v2023.11.06",
   };
 };
