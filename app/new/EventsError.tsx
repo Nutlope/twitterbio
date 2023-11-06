@@ -12,7 +12,7 @@ export default function EventsError({
   response,
 }: {
   rawText: string;
-  response?: string;
+  response?: any;
 }) {
   return (
     <Accordion type="single" collapsible>
@@ -31,7 +31,7 @@ export default function EventsError({
                 <div className="p-1"></div>
                 <p className="text-sm text-gray-700">
                   <span className="font-semibold">Magic response:</span>{" "}
-                  {response}
+                  {`${response}`}
                 </p>
               </>
             )}
