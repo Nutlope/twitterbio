@@ -204,13 +204,15 @@ export default function EventCard(props: EventCardProps) {
           </div>
         </div>
       </div>
-      <div className="p-2"></div>
       {imageUrl && singleEvent && (
-        <img
-          src={imageUrl}
-          className="mx-auto h-96 w-[13.5rem] object-cover"
-          alt=""
-        />
+        <>
+          <div className="p-2"></div>
+          <img
+            src={imageUrl}
+            className="mx-auto h-96 w-[13.5rem] object-cover"
+            alt=""
+          />
+        </>
       )}
     </Container>
   );
