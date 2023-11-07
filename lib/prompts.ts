@@ -30,12 +30,6 @@ export const getText = (
   - RRULE
 # Field Content
 - DESCRIPTION
-  - Formatting has special rules
-    - Use [br] for line breaks.
-      - DO NOT put a line break at the beginning or end of the description.
-      - Use the minimal amount of line breaks necessary.
-    - Define a link text with the following schema: [url]https://....|URL Text[/url].
-      - MUST use | as a separator between the URL and the URL Text.
   - Provide a short description of the event, its significance, and what attendees can expect, from the perspective of a reporter.
     - Do not write from the perspective of the event organizer
   - (if relevant) Provide a general agenda in a format that is commonly used for this type of event.
@@ -45,6 +39,13 @@ export const getText = (
   - BE SUCCINCT AND CLEAR.
   - DO NOT USE NEW ADJECTIVES.
   - BOTH SENTENCE FRAGMENTS AND FULL SENTENCES ARE OK.
+  - FORMATTING HAS SPECIAL RULES:
+    - Use [br] for line breaks.
+      - ONLY USE LINE BREAKS WHERE ABSOLUTELY NECESSARY.
+      - DO NOT INCLUDE ANY LINE BREAKS AT THE BEGINNING OF A DESCRIPTION.
+      - DO NOT INCLUDE ANY LINE BREAKS AT THE END OF A DESCRIPTION.
+    - Define a link text with the following schema: [url]https://....|URL Text[/url].
+      - MUST use | as a separator between the URL and the URL Text.
 `;
 
 export const getPrompt = () => {
@@ -57,6 +58,6 @@ export const getPrompt = () => {
 
   return {
     text: getText(date),
-    version: "v2023.11.06.1",
+    version: "v2023.11.07",
   };
 };
