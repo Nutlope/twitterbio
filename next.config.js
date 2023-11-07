@@ -15,6 +15,10 @@ module.exports = {
         protocol: "https",
         hostname: "img.clerk.com",
       },
+      {
+        protocol: "https",
+        hostname: "upcdn.io",
+      },
     ],
   },
 };

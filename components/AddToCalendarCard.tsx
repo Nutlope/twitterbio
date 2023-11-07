@@ -5,12 +5,14 @@ import {
   AddToCalendarButton,
   AddToCalendarButtonType,
 } from "add-to-calendar-button-react";
+import { useSearchParams } from "next/navigation";
 import { SaveButton } from "./SaveButton";
 import { UpdateButton } from "./UpdateButton";
 import { Label } from "./ui/label";
 import { Input, InputDescription } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Card, CardContent } from "./ui/card";
+import { useCroppedImageContext } from "@/context/CroppedImageContext";
 
 type AddToCalendarCardProps = AddToCalendarButtonType & {
   update?: boolean;
@@ -24,6 +26,39 @@ export function AddToCalendarCard({
   setAddToCalendarButtonProps: setAddToCalendarButtonProps,
   ...initialProps
 }: AddToCalendarCardProps) {
+  // get croppedImagesUrls from context
+  const { croppedImagesUrls, setCroppedImagesUrls } = useCroppedImageContext();
+  const searchParams = useSearchParams();
+  const filePath = searchParams.get("filePath");
+
+  // TODO: only use croppedImagesUrls if query param is set and same image
+  const hasFilePath = croppedImagesUrls.filePath;
+  const matchesFilePath = croppedImagesUrls.filePath === filePath;
+  const hasAllAspectRatios =
+    croppedImagesUrls.original &&
+    croppedImagesUrls.square &&
+    croppedImagesUrls.fourThree &&
+    croppedImagesUrls.sixteenNine;
+  const validImages = hasFilePath && matchesFilePath && hasAllAspectRatios;
+
+  const images = useMemo(() => {
+    return validImages
+      ? [
+          croppedImagesUrls.square!,
+          croppedImagesUrls.fourThree!,
+          croppedImagesUrls.sixteenNine!,
+          croppedImagesUrls.original!,
+        ]
+      : undefined;
+  }, [
+    validImages,
+    croppedImagesUrls.square,
+    croppedImagesUrls.fourThree,
+    croppedImagesUrls.sixteenNine,
+    croppedImagesUrls.original!,
+  ]);
+
+  // state
   const [name, setName] = useState(initialProps.name);
   const [location, setLocation] = useState(initialProps.location);
   const [description, setDescription] = useState(initialProps.description);
@@ -45,6 +80,7 @@ export function AddToCalendarCard({
       startTime,
       endDate,
       endTime,
+      images,
     }),
     [
       initialProps,
@@ -56,6 +92,7 @@ export function AddToCalendarCard({
       startTime,
       endDate,
       endTime,
+      images,
     ]
   );
 
@@ -155,6 +192,7 @@ export function AddToCalendarCard({
             defaultValue={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+          <div className="p-0.5"></div>
           <InputDescription>
             Uses html psuedocode for formatting. [br] = line break,
             [url]link|link.com[/url] = link.{" "}

@@ -90,13 +90,13 @@ export default async function EventsFromRawText({
 
   if (events.length >= 0) {
     return (
-      <>
+      <div className="flex flex-wrap justify-center gap-8">
         {events.length > 0 &&
           events?.map((props, index) => (
             <AddToCalendarCard {...props} key={props.name} />
           ))}
         {events.length === 0 && <></>}
-      </>
+      </div>
     );
   }
 }

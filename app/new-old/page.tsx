@@ -7,6 +7,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import Cropper, { Area } from "react-easy-crop";
+import { ReactCrop, type Crop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 import { Trash, Upload } from "lucide-react";
 import { UploadButton } from "@bytescale/upload-widget-react";
 import { Output } from "@/components/Output";
@@ -17,6 +19,7 @@ import {
   reportIssue,
 } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import ImageCropper from "@/components/ImageCropper";
 
 const LOADING_TEXTS = [
   "Conjuring your event onto the calendar",
@@ -49,18 +52,11 @@ export default function Page() {
   >(null);
   const [trackedAddToCalendarGoal, setTrackedAddToCalendarGoal] =
     useState(false);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [cropArea, setCropArea] = useState<Area>({
-    x: 0,
-    y: 0,
-    width: 640,
-    height: 1138,
-  });
+  const [crop, setCrop] = useState<Crop>();
 
   // Hooks and utility functions
   const searchParams = useSearchParams();
-  const { append, isLoading, messages, stop } = useChat({
+  const { append, isLoading, messages } = useChat({
     body: {
       source: "shortcut",
     },
@@ -111,10 +107,6 @@ export default function Page() {
 
   const setEventsToUse = chatFinished ? setChatEvents : setEvents;
 
-  const onCropComplete = (croppedArea: any, croppedAreaPixels: Area) => {
-    setCropArea(croppedAreaPixels);
-  };
-
   // Effects
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * LOADING_TEXTS.length);
@@ -125,7 +117,6 @@ export default function Page() {
     if (rawText) {
       append({ role: "user", content: rawText });
     }
-    return () => stop();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -181,19 +172,7 @@ export default function Page() {
         <p className="block text-sm font-medium leading-6 text-gray-900">
           Image <span className="text-gray-500">(optional)</span>
         </p>
-        <div className="relative h-64 w-36">
-          {imageUrl && (
-            <Cropper
-              image={imageUrl}
-              crop={crop}
-              zoom={zoom}
-              aspect={9 / 16}
-              onCropChange={setCrop}
-              onZoomChange={setZoom}
-              onCropComplete={onCropComplete}
-            />
-          )}
-        </div>
+        {imageUrl && <ImageCropper imageUrl={imageUrl} filePath={filePath} />}
         <div className="p-2"></div>
         <div className="flex gap-4">
           <UploadButton
@@ -202,7 +181,6 @@ export default function Page() {
               editor: {
                 images: {
                   crop: true,
-                  cropRatio: 9 / 16,
                   preview: true,
                 },
               },

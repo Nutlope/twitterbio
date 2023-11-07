@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import Fathom from "@/components/Fathom";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import { CroppedImageProvider } from "@/context/CroppedImageContext";
 
 const title = "timetime.cc";
 const description = "Create, collect, curate & share events";
@@ -35,24 +36,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body>
-          <Fathom />
-          <div className="mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center py-2">
-            <Toaster
-              position="top-center"
-              reverseOrder={false}
-              toastOptions={{ duration: 2500 }}
-            />
-            <Header />
-            <main className="my-12 flex w-full flex-1 flex-col items-center justify-center px-4 sm:my-20">
-              {children}
-            </main>
-            <Footer />
-          </div>
-        </body>
-      </html>
-    </ClerkProvider>
+    <CroppedImageProvider>
+      <ClerkProvider>
+        <html lang="en">
+          <body>
+            <Fathom />
+            <div className="mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center py-2">
+              <Toaster
+                position="top-center"
+                reverseOrder={false}
+                toastOptions={{ duration: 2500 }}
+              />
+              <Header />
+              <main className="my-12 flex w-full flex-1 flex-col items-center justify-center px-4 sm:my-20">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </body>
+        </html>
+      </ClerkProvider>
+    </CroppedImageProvider>
   );
 }

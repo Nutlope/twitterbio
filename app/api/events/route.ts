@@ -19,6 +19,12 @@ const eventDeleteSchema = z.object({
   id: z.string(),
 });
 
+const devLog = (message: any, ...optionalParams: any[]) => {
+  if (process.env.NODE_ENV === "development") {
+    console.log(message, ...optionalParams);
+  }
+};
+
 export async function GET() {
   try {
     const { userId } = auth();
@@ -55,6 +61,7 @@ export async function POST(req: Request) {
     const json = await req.json();
     const body = eventCreateSchema.parse(json);
     const event = body.event as AddToCalendarButtonProps;
+    devLog("processed event: ", event);
 
     const start = Temporal.ZonedDateTime.from(
       `${event.startDate}T${event.startTime}[${event.timeZone}]`
@@ -62,8 +69,10 @@ export async function POST(req: Request) {
     const end = Temporal.ZonedDateTime.from(
       `${event.endDate}T${event.endTime}[${event.timeZone}]`
     );
+    devLog("calculated start and end: ", start, end);
     const startUtc = start.toInstant().toString();
     const endUtc = end.toInstant().toString();
+    devLog("calculated start and end UTC: ", startUtc, endUtc);
 
     const post = await db.event.create({
       data: {
@@ -79,6 +88,7 @@ export async function POST(req: Request) {
 
     return new Response(JSON.stringify(post));
   } catch (error) {
+    devLog(error);
     if (error instanceof z.ZodError) {
       return new Response(JSON.stringify(error.issues), { status: 422 });
     }
@@ -123,7 +133,7 @@ export async function PATCH(req: Request) {
 
     return new Response(JSON.stringify(post));
   } catch (error) {
-    console.log(error);
+    devLog(error);
     if (error instanceof z.ZodError) {
       return new Response(JSON.stringify(error.issues), { status: 422 });
     }

@@ -3,6 +3,7 @@
 import { AddToCalendarButton } from "add-to-calendar-button-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
 import {
@@ -63,6 +64,7 @@ export default function EventCard(props: EventCardProps) {
   const showNightIcon =
     endsNextDayBeforeMorning(startDateInfo, endDateInfo) && !showMultiDay;
   const imageUrl = event?.images?.[0];
+  const fullImageUrl = event?.images?.[3];
 
   const Container = singleEvent ? DivContainer : LiContainer;
 
@@ -71,7 +73,7 @@ export default function EventCard(props: EventCardProps) {
   return (
     <Container>
       <div
-        className={cn("flex h-full flex-col items-stretch justify-between", {
+        className={cn("flex h-full flex-col items-center justify-between", {
           "sm:flex-row": !singleEvent,
         })}
       >
@@ -131,10 +133,13 @@ export default function EventCard(props: EventCardProps) {
           <div className="p-1"></div>
           <div className="flex min-w-0 gap-x-4">
             {imageUrl && !singleEvent && (
-              <div className="grow">
-                <img
+              <div className="h-14 w-14 sm:hidden">
+                <Image
+                  alt=""
+                  width={56}
+                  height={56}
                   src={imageUrl}
-                  className="aspect-[16/16] w-28 object-cover sm:hidden"
+                  className="object-cover"
                 />
               </div>
             )}
@@ -164,10 +169,13 @@ export default function EventCard(props: EventCardProps) {
           </div>
         </LinkOrNot>
         {imageUrl && !singleEvent && (
-          <div className="grow">
-            <img
+          <div className="mx-auto hidden h-full w-28 sm:ml-auto sm:mr-2 sm:block">
+            <Image
+              alt=""
+              width={112}
+              height={112}
               src={imageUrl}
-              className="mx-auto hidden h-28 w-[3.9375rem] object-cover sm:ml-auto sm:mr-2 sm:block"
+              className="object-cover"
             />
           </div>
         )}
@@ -204,13 +212,15 @@ export default function EventCard(props: EventCardProps) {
           </div>
         </div>
       </div>
-      {imageUrl && singleEvent && (
+      {fullImageUrl && singleEvent && (
         <>
           <div className="p-2"></div>
-          <img
-            src={imageUrl}
-            className="mx-auto h-96 w-[13.5rem] object-cover"
+          <Image
+            src={fullImageUrl}
+            className="mx-auto w-3/4 object-cover sm:w-2/3"
             alt=""
+            width={640}
+            height={480}
           />
         </>
       )}
