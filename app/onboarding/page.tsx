@@ -32,9 +32,9 @@ export default function Page() {
         <p className="mt-6 max-w-xl text-xl leading-8">
           To allow individuals and organizations to easily curate, collect and
           share events in a way that allows for more cross-pollination,
-          community, and coalition building towards our collective liberation,
-          through a non-extractive and community-owned platform … and seamlessly
-          integrate with our digital calendars.
+          community, and coalition building, through a transparent,
+          community-owned platform … and seamlessly integrate with our digital
+          calendars.
         </p>
         <div className="bg-white pt-16">
           <RainbowText className="text-base font-semibold leading-7">
@@ -63,7 +63,7 @@ export default function Page() {
                   </strong>
                   Capture events from Instagram stories or anywhere else.{" "}
                   <a
-                    href="https://www.icloud.com/shortcuts/30f7001c689b4460b787a944165de6c2"
+                    href="https://www.icloud.com/shortcuts/4ef9b04bc9c848f3b1f1fdf117f49c27"
                     className="text-blue-500 underline"
                     target="_blank"
                     rel="noopener noreferrer"
