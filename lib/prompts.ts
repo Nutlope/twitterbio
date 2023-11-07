@@ -15,7 +15,9 @@ export const getText = (
   - END: VCALENDAR
 - FOR EACH EVENT, THE FOLLOWING FIELDS ARE REQUIRED:
   - DTSTART
+    - Include TZID if not a full day event
   - DTEND
+    - Include TZID if not a full day event
   - SUMMARY
 - FOR EACH EVENT, INCLUDE THE FOLLOWING FIELDS IF AVAILABLE:
   - DESCRIPTION
@@ -55,6 +57,6 @@ export const getPrompt = () => {
 
   return {
     text: getText(date),
-    version: "v2023.11.06",
+    version: "v2023.11.06.1",
   };
 };
