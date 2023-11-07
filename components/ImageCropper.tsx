@@ -3,10 +3,10 @@ import * as Bytescale from "@bytescale/sdk";
 import { Dialog } from "@headlessui/react";
 import React, { useState, useRef } from "react";
 import { ReactCrop, Crop, centerCrop, makeAspectCrop } from "react-image-crop";
+import { Scissors } from "lucide-react";
+import { Button } from "./ui/button";
 import { useCroppedImageContext } from "@/context/CroppedImageContext";
 import "react-image-crop/dist/ReactCrop.css";
-import { Button } from "./ui/button";
-import { Scissors } from "lucide-react";
 
 type ImageCropperProps = {
   imageUrl: string;
