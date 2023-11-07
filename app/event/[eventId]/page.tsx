@@ -47,7 +47,8 @@ export async function generateMetadata(
 
   const eventData = event.event as AddToCalendarButtonProps;
   // optionally access and extend (rather than replace) parent metadata
-  const previousImages = (await parent).openGraph?.images || [];
+  const hasAllImages = eventData.images && eventData.images.length === 4;
+  const allImages = hasAllImages ? eventData.images?.slice(0, 3) : undefined;
 
   return {
     title: `${eventData.name} | timetime.cc`,
@@ -57,7 +58,7 @@ export async function generateMetadata(
       locale: "en_US",
       url: `${process.env.NEXT_PUBLIC_URL}/events/${event.id}`,
       type: "article",
-      images: [...previousImages],
+      images: allImages || (await parent).openGraph?.images || [],
     },
   };
 }
