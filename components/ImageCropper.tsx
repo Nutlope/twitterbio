@@ -236,12 +236,12 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageUrl, filePath }) => {
       <Dialog
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        className="fixed inset-0 z-10 overflow-y-auto"
+        className="fixed inset-0 z-10 mx-auto max-w-[90vw] overflow-y-auto"
       >
         <div className="flex min-h-screen items-center justify-center">
           <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
-          <div className="relative mx-auto max-w-sm rounded bg-white p-4">
+          <div className="relative mx-auto max-w-[90vw] rounded bg-white p-4 sm:max-w-sm">
             <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
               Crop Image
             </Dialog.Title>
