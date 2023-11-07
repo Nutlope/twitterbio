@@ -17,6 +17,7 @@ export default authMiddleware({
     "/api/leaderboard",
     "/api/webhooks/clerk",
     "/api/event/new",
+    "/api/image-proxy",
     "/(.*)/events",
     "/(.*)/events/(.*)",
     "/event/(.*)",
