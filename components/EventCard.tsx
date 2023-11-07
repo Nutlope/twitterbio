@@ -217,7 +217,7 @@ export default function EventCard(props: EventCardProps) {
           <div className="p-2"></div>
           <Image
             src={fullImageUrl}
-            className="mx-auto w-3/4 object-cover sm:w-2/3"
+            className="mx-auto w-2/3 object-cover sm:w-1/3"
             alt=""
             width={640}
             height={480}
