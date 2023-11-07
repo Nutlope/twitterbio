@@ -1,9 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import * as Bytescale from "@bytescale/sdk";
+import { Dialog } from "@headlessui/react";
 import React, { useState, useRef } from "react";
 import { ReactCrop, Crop, centerCrop, makeAspectCrop } from "react-image-crop";
 import { useCroppedImageContext } from "@/context/CroppedImageContext";
 import "react-image-crop/dist/ReactCrop.css";
+import { Button } from "./ui/button";
+import { Scissors } from "lucide-react";
 
 type ImageCropperProps = {
   imageUrl: string;
@@ -12,7 +15,7 @@ type ImageCropperProps = {
 
 const ImageCropper: React.FC<ImageCropperProps> = ({ imageUrl, filePath }) => {
   const { setCroppedImagesUrls } = useCroppedImageContext();
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [crop, setCrop] = useState<Crop>();
   const [croppedImages, setCroppedImages] = useState<{ [key: string]: string }>(
     {}
@@ -213,25 +216,64 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageUrl, filePath }) => {
   };
 
   return (
-    <div>
-      <div className="mx-auto w-full lg:h-auto lg:w-1/2">
-        <ReactCrop
-          crop={crop}
-          onComplete={onCropComplete}
-          onChange={onCropChange}
+    <>
+      <div className="relative">
+        <img
+          src={imageUrl}
+          alt="Preview"
+          className="block max-w-xs" // Adjust width as necessary
+        />
+
+        <Button
+          onClick={() => setIsModalOpen(true)}
+          className="absolute right-2 top-2"
         >
-          <img
-            src={`/api/image-proxy?url=${encodeURIComponent(imageUrl)}`}
-            ref={imageRef}
-            alt="Crop preview"
-            onLoad={onImageLoad}
-          />
-        </ReactCrop>
+          <Scissors className="mr-2 h-4 w-4" />
+          Crop Image
+        </Button>
       </div>
+
+      <Dialog
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        className="fixed inset-0 z-10 overflow-y-auto"
+      >
+        <div className="flex min-h-screen items-center justify-center">
+          <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+
+          <div className="relative mx-auto max-w-sm rounded bg-white p-4">
+            <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
+              Crop Image
+            </Dialog.Title>
+            <div className="p-2"></div>
+            <ReactCrop
+              crop={crop}
+              onComplete={onCropComplete}
+              onChange={onCropChange}
+            >
+              <img
+                src={`/api/image-proxy?url=${encodeURIComponent(imageUrl)}`}
+                ref={imageRef}
+                alt="Crop preview"
+                onLoad={onImageLoad}
+              />
+            </ReactCrop>
+            <Button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute right-2 top-2"
+              variant="destructive"
+            >
+              Close
+            </Button>
+          </div>
+        </div>
+      </Dialog>
+
+      <div className="p-2"></div>
       <p className="mx-auto text-center text-sm font-medium leading-6 text-gray-500">
-        Crop previews for site, will be expandable to full size
+        Crop previews for site, will be expandable
       </p>
-      <div className="mx-auto flex h-24 max-w-sm flex-wrap justify-around">
+      <div className="mx-auto flex h-24 max-w-sm flex-wrap justify-around gap-2 ">
         {Object.entries(croppedImages).map(([aspect, src]) => (
           <div key={aspect} className="mt-2 h-auto w-24">
             <img
@@ -242,7 +284,8 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageUrl, filePath }) => {
           </div>
         ))}
       </div>
-    </div>
+      <div className="p-2"></div>
+    </>
   );
 };
 
