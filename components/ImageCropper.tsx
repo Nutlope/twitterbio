@@ -214,7 +214,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageUrl, filePath }) => {
 
   return (
     <div>
-      <div className="mx-auto h-64 w-full md:h-96 lg:h-auto lg:w-1/2">
+      <div className="mx-auto w-full lg:h-auto lg:w-1/2">
         <ReactCrop
           crop={crop}
           onComplete={onCropComplete}
@@ -231,9 +231,9 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageUrl, filePath }) => {
       <p className="mx-auto text-center text-sm font-medium leading-6 text-gray-500">
         Crop previews for site, will be expandable to full size
       </p>
-      <div className="mx-auto flex max-w-sm flex-wrap justify-around">
+      <div className="mx-auto flex h-24 max-w-sm flex-wrap justify-around">
         {Object.entries(croppedImages).map(([aspect, src]) => (
-          <div key={aspect} className="mt-2 h-24 w-24">
+          <div key={aspect} className="mt-2 h-auto w-24">
             <img
               alt={`Crop preview ${aspect}`}
               src={src}
