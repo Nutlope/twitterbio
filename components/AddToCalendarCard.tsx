@@ -8,7 +8,7 @@ import {
 import { SaveButton } from "./SaveButton";
 import { UpdateButton } from "./UpdateButton";
 import { Label } from "./ui/label";
-import { Input } from "./ui/input";
+import { Input, InputDescription } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Card, CardContent } from "./ui/card";
 
@@ -155,6 +155,18 @@ export function AddToCalendarCard({
             defaultValue={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+          <InputDescription>
+            Uses html psuedocode for formatting. [br] = line break,
+            [url]link|link.com[/url] = link.{" "}
+            <a
+              href="https://add-to-calendar-button.com/configuration#:~:text=for%20Microsoft%20services.-,description,-String"
+              target="_blank"
+              rel="noreferrer"
+              className="text-gray-900 underline"
+            >
+              More info
+            </a>
+          </InputDescription>
         </div>
         <div className="col-span-full">
           <Label htmlFor="location">Source Link (optional)</Label>

@@ -30,9 +30,10 @@ export const getText = (
 - DESCRIPTION
   - Formatting has special rules
     - Use [br] for line breaks.
-      - Do not put a line break at the beginning or end of the description.
+      - DO NOT put a line break at the beginning or end of the description.
       - Use the minimal amount of line breaks necessary.
     - Define a link text with the following schema: [url]https://....|URL Text[/url].
+      - MUST use | as a separator between the URL and the URL Text.
   - Provide a short description of the event, its significance, and what attendees can expect, from the perspective of a reporter.
     - Do not write from the perspective of the event organizer
   - (if relevant) Provide a general agenda in a format that is commonly used for this type of event.
