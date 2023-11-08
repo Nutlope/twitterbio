@@ -342,14 +342,30 @@ export const translateToHtml = (input: string): string => {
   html = html.replace(/\[hr\]/g, "<hr />");
 
   // Replace URLs with rel="noopener noreferrer" for security and style="text-decoration: underline;" for underline
-  html = html.replace(
-    /\[url\](.*?)\|(.*?)\[\/url\]/g,
-    '<a href="$1" rel="noopener noreferrer" style="text-decoration: underline;">$2</a>'
-  );
-  html = html.replace(
-    /\[url\](.*?)\[\/url\]/g,
-    '<a href="$1" rel="noopener noreferrer" style="text-decoration: underline;">$1</a>'
-  );
+  html = html.replace(/\[url\](.*?)\|(.*?)\[\/url\]/g, (match, url, text) => {
+    if (!/^https?:\/\//i.test(url)) {
+      url = "http://" + url;
+    }
+    return (
+      '<a href="' +
+      url +
+      '" rel="noopener noreferrer" target="_blank" style="text-decoration: underline;">' +
+      text +
+      "</a>"
+    );
+  });
+  html = html.replace(/\[url\](.*?)\[\/url\]/g, (match, url) => {
+    if (!/^https?:\/\//i.test(url)) {
+      url = "http://" + url;
+    }
+    return (
+      '<a href="' +
+      url +
+      '" target="_blank" rel="noopener noreferrer" style="text-decoration: underline;">' +
+      url +
+      "</a>"
+    );
+  });
 
   return html;
 };
