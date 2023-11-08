@@ -15,7 +15,7 @@ export default function EventsError({
   response?: any;
 }) {
   return (
-    <Accordion type="single" collapsible>
+    <Accordion type="single" collapsible className="max-w-full">
       <AccordionItem value="item-1" className="border-b-0">
         <AccordionTrigger className="flex gap-2 rounded-md bg-red-50 p-4">
           <div>Magic event didn&apos;t work 🥲</div>

@@ -19,7 +19,6 @@ import {
   reportIssue,
 } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import ImageCropper from "@/components/ImageCropper";
 
 const LOADING_TEXTS = [
   "Conjuring your event onto the calendar",
@@ -172,7 +171,7 @@ export default function Page() {
         <p className="block text-sm font-medium leading-6 text-gray-900">
           Image <span className="text-gray-500">(optional)</span>
         </p>
-        {imageUrl && <ImageCropper imageUrl={imageUrl} filePath={filePath} />}
+        {/* {imageUrl && <ImageCropper imageUrl={imageUrl} filePath={filePath} />} */}
         <div className="p-2"></div>
         <div className="flex gap-4">
           <UploadButton

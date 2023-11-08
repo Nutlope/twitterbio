@@ -11,7 +11,7 @@ import { UpdateButton } from "./UpdateButton";
 import { Label } from "./ui/label";
 import { Input, InputDescription } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent, CardTitle } from "./ui/card";
 import { useCroppedImageContext } from "@/context/CroppedImageContext";
 
 type AddToCalendarCardProps = AddToCalendarButtonType & {
@@ -113,6 +113,9 @@ export function AddToCalendarCard({
   return (
     <Card className="">
       <CardContent className="grid max-w-lg grid-cols-1 gap-6 py-4 shadow-md sm:grid-cols-6">
+        <CardTitle className="col-span-full flex justify-center">
+          Event Details
+        </CardTitle>
         <div
           className="col-span-full flex justify-center"
           onClick={initialProps?.onClick}

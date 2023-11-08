@@ -7,6 +7,7 @@ type CroppedImagesUrls = {
   square?: string;
   fourThree?: string;
   sixteenNine?: string;
+  cropped?: string;
   filePath?: string;
 };
 type CroppedImageContextType = {
