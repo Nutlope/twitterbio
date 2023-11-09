@@ -265,7 +265,7 @@ export default function Page() {
           </Button>
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
             <Button variant="link" asChild>
-              <Link href="/old-landing">
+              <Link href="/explore">
                 Explore <span aria-hidden="true">→</span>
               </Link>
             </Button>

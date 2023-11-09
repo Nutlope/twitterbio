@@ -7,7 +7,7 @@ export default authMiddleware({
   publicRoutes: [
     "/",
     "/new",
-    "/old-landing",
+    "/explore",
     "/old-new",
     "/onboarding",
     "/events",
