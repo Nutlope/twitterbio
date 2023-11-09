@@ -2,6 +2,7 @@
 import { AddToCalendarButtonType } from "add-to-calendar-button-react";
 import { trackGoal } from "fathom-client";
 import { Bug, Check, Loader2 } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { Button } from "./ui/button";
 import { AddToCalendarCard } from "@/components/AddToCalendarCard";
 import {
@@ -40,6 +41,15 @@ export function Output({
   setTrackedAddToCalendarGoal: (trackedAddToCalendarGoal: boolean) => void;
   trackedAddToCalendarGoal: boolean;
 }) {
+  const firstInputRef = useRef<null | HTMLInputElement>(null);
+
+  useEffect(() => {
+    // If finished is true, focus on the input
+    if (finished && firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, [finished]);
+
   const eventsAreValid = finished && events && events.length > 0;
   const blankEvents = [
     {
@@ -84,6 +94,7 @@ export function Output({
                 <AddToCalendarCard
                   {...props}
                   key={props.name}
+                  firstInputRef={index === 0 ? firstInputRef : undefined}
                   onClick={() => {
                     !trackedAddToCalendarGoal && trackGoal("BQ3VFDBF", 1);
                     setTrackedAddToCalendarGoal(true);
@@ -104,6 +115,7 @@ export function Output({
                 <AddToCalendarCard
                   {...props}
                   key={props.name}
+                  firstInputRef={index === 0 ? firstInputRef : undefined}
                   onClick={() => {
                     !trackedAddToCalendarGoal && trackGoal("BQ3VFDBF", 1);
                     setTrackedAddToCalendarGoal(true);

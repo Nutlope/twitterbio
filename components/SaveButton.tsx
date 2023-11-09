@@ -5,7 +5,7 @@ import { AddToCalendarButtonType } from "add-to-calendar-button-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { Loader2, Save } from "lucide-react";
+import { Loader2, UploadCloud } from "lucide-react";
 import { Button } from "./ui/button";
 
 export function SaveButton(props: AddToCalendarButtonType) {
@@ -43,14 +43,14 @@ export function SaveButton(props: AddToCalendarButtonType) {
     <>
       <SignedIn>
         {isLoading && (
-          <Button className="w-full" disabled>
+          <Button disabled>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Please wait
           </Button>
         )}
         {!isLoading && (
-          <Button className="w-full" onClick={onClick}>
-            <Save className="mr-2 h-4 w-4" /> Save
+          <Button onClick={onClick}>
+            <UploadCloud className="mr-2 h-4 w-4" /> Publish
           </Button>
         )}
       </SignedIn>
@@ -60,7 +60,7 @@ export function SaveButton(props: AddToCalendarButtonType) {
           afterSignInUrl={`${process.env.NEXT_PUBLIC_URL}/new?saveIntent=true`}
           afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/onboarding?saveIntent=true`}
         >
-          <Button className="w-full">Sign in to save</Button>
+          <Button className="w-full">Sign in to publish</Button>
         </SignInButton>
       </SignedOut>
     </>

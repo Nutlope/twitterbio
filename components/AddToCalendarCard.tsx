@@ -1,17 +1,17 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  AddToCalendarButton,
-  AddToCalendarButtonType,
-} from "add-to-calendar-button-react";
+import { atcb_action } from "add-to-calendar-button";
+import { AddToCalendarButtonType } from "add-to-calendar-button-react";
 import { useSearchParams } from "next/navigation";
+import { CalendarPlus } from "lucide-react";
 import { SaveButton } from "./SaveButton";
 import { UpdateButton } from "./UpdateButton";
 import { Label } from "./ui/label";
 import { Input, InputDescription } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Card, CardContent, CardTitle } from "./ui/card";
+import { Button } from "./ui/button";
 import { useCroppedImageContext } from "@/context/CroppedImageContext";
 
 type AddToCalendarCardProps = AddToCalendarButtonType & {
@@ -19,11 +19,13 @@ type AddToCalendarCardProps = AddToCalendarButtonType & {
   updateId?: string;
   onClick?: any;
   children?: React.ReactNode;
+  firstInputRef?: React.RefObject<HTMLInputElement>;
   setAddToCalendarButtonProps?: (props: AddToCalendarButtonType) => void;
 };
 
 export function AddToCalendarCard({
   setAddToCalendarButtonProps: setAddToCalendarButtonProps,
+  firstInputRef,
   ...initialProps
 }: AddToCalendarCardProps) {
   // get croppedImagesUrls from context
@@ -116,9 +118,11 @@ export function AddToCalendarCard({
         <CardTitle className="col-span-full flex items-center justify-between">
           <div>Event Details</div>
         </CardTitle>
-        <div className="col-span-full" onClick={initialProps?.onClick}>
-          {initialProps.children || <AddToCalendarButton {...updatedProps} />}
-        </div>
+        {initialProps.children && (
+          <div className="col-span-full" onClick={initialProps?.onClick}>
+            {initialProps.children}
+          </div>
+        )}
         <div className="col-span-full">
           <Label htmlFor="name">Event</Label>
           <Input
@@ -128,6 +132,7 @@ export function AddToCalendarCard({
             className="font-bold"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            ref={firstInputRef}
           />
         </div>
         <div className="col-span-full">
@@ -216,11 +221,15 @@ export function AddToCalendarCard({
             onChange={(e) => setLink(e.target.value)}
           />
         </div>
-        <div className="col-span-full">
+        <div className="flex gap-3">
           {!initialProps.update && <SaveButton {...updatedProps} />}
           {initialProps.update && (
             <UpdateButton id={initialProps.updateId!} {...updatedProps} />
           )}
+          <Button variant="secondary" onClick={() => atcb_action(updatedProps)}>
+            <CalendarPlus className="mr-2 h-4 w-4" />
+            Add to Calendar
+          </Button>
         </div>
       </CardContent>
     </Card>

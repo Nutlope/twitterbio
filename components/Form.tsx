@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import { FormLabel } from "./ui/form";
 import { Label } from "./ui/label";
@@ -19,6 +19,12 @@ export function Form({
   isLoading: boolean;
   onSubmit: (e: any) => void;
 }) {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+      onSubmit(event);
+    }
+  };
+
   return (
     <form className="grid w-full max-w-xl gap-1.5" onSubmit={onSubmit}>
       <Label htmlFor="input">
@@ -28,6 +34,7 @@ export function Form({
       <Textarea
         id="input"
         onPaste={handlePaste}
+        onKeyDown={handleKeyDown}
         value={input}
         onChange={handleInputChange}
         rows={6}
@@ -37,7 +44,10 @@ export function Form({
       />
       {!isLoading && (
         <>
-          <Button type="submit">Generate your event &rarr;</Button>
+          <Button type="submit">
+            <Sparkles className="mr-2 h-4 w-4" />
+            Generate your event
+          </Button>
           <p className="mt-4 text-center">
             <span className="text-slate-500">
               Or look at a sample{" "}
@@ -72,7 +82,7 @@ export function Form({
           <div className="p-1"></div>
           <p className="text-center">
             <span className="text-slate-500">
-              ⏳ Be patient, takes ~10 seconds/event.
+              ⏳ Be patient, takes ~4 seconds/event.
             </span>
           </p>
         </>
