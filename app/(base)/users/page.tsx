@@ -2,6 +2,15 @@ import { Suspense } from "react";
 import { Metadata, ResolvingMetadata } from "next/types";
 import { db } from "@/lib/db";
 import { UserInfo } from "@/components/UserInfo";
+import Leaderboard from "@/components/Leaderboard";
+import LeaderboardSkeleton from "@/components/LeaderboardSkeleton";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 
 const getAllUsers = async () => {
   const users = await db.user.findMany({
@@ -37,6 +46,18 @@ export default async function Page() {
 
   return (
     <>
+      <Card>
+        <CardHeader>
+          <CardTitle>Top Users</CardTitle>
+          <CardDescription>Most Upcoming Events</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Suspense fallback={<LeaderboardSkeleton />}>
+            <Leaderboard />
+          </Suspense>
+        </CardContent>
+      </Card>
+      <div className="p-4"></div>
       <div className="flex place-items-center">
         <div className="font-medium">All users</div>
       </div>

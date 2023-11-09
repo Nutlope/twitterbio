@@ -1,10 +1,8 @@
 "use client";
 
-import { AddToCalendarButton } from "add-to-calendar-button-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { CircleEllipsis } from "lucide-react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import { useUser } from "@clerk/nextjs";
 import { DeleteButton } from "./DeleteButton";
@@ -224,7 +222,7 @@ export default function EventCard(props: EventCardProps) {
           <div className="p-2"></div>
           <Image
             src={fullImageUrl}
-            className="mx-auto w-2/3 object-cover sm:w-1/3"
+            className="mx-auto h-auto w-2/3 object-cover sm:w-1/3"
             alt=""
             width={640}
             height={480}

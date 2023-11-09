@@ -47,13 +47,13 @@ export function FollowEventButton({
     <>
       <SignedIn>
         {isLoading && (
-          <Button disabled>
+          <Button disabled size="sm">
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Please wait
           </Button>
         )}
         {!isLoading && (
-          <Button onClick={followUnfollowEvent}>
+          <Button onClick={followUnfollowEvent} size="sm">
             {following && (
               <>
                 <Check className="mr-2 h-4 w-4" />
@@ -122,13 +122,13 @@ export function FollowUserButton({
     <>
       <SignedIn>
         {isLoading && (
-          <Button disabled>
+          <Button disabled size="sm">
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Please wait
           </Button>
         )}
         {!isLoading && (
-          <Button onClick={followUnfollowUser}>
+          <Button onClick={followUnfollowUser} size="sm">
             {following && (
               <>
                 <Check className="mr-2 h-4 w-4" />
@@ -187,13 +187,13 @@ export function FollowListButton({
     <>
       <SignedIn>
         {isLoading && (
-          <Button disabled>
+          <Button disabled size="sm">
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Please wait
           </Button>
         )}
         {!isLoading && (
-          <Button onClick={followUnfollowList}>
+          <Button onClick={followUnfollowList} size="sm">
             {following && (
               <>
                 <Check className="mr-2 h-4 w-4" />

@@ -65,29 +65,32 @@ export async function UserInfo(props: UserInfoProps) {
     activeUser?.id && (await getFollowing(activeUser?.id, user.id));
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
-      <Link href={`/${user.username}/events`}>
-        <Image
-          className="inline-block h-9 w-9 rounded-full"
-          src={user.imageUrl}
-          alt=""
-          width={375}
-          height={375}
-        />
-      </Link>
-      <Link href={`/${user.username}/events`} className="group">
-        <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-          {user.displayName}
-        </p>
-        <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
-          @{user.username}
-        </p>
-      </Link>
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex items-center gap-3">
+        <Link href={`/${user.username}/events`}>
+          <Image
+            className="inline-block h-9 w-9 rounded-full"
+            src={user.imageUrl}
+            alt=""
+            width={375}
+            height={375}
+          />
+        </Link>
+        <Link href={`/${user.username}/events`} className="group">
+          <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+            {user.displayName}
+          </p>
+          <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+            @{user.username}
+          </p>
+        </Link>
+      </div>
       {!self && (
         <div>
           <FollowUserButton userId={user.id} following={!!following} />
         </div>
       )}
+      {self && <div></div>}
     </div>
   );
 }
