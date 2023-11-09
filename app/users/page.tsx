@@ -13,6 +13,7 @@ const getAllUsers = async () => {
 };
 
 export async function generateMetadata(
+  {},
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const users = await getAllUsers();

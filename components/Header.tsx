@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  ClerkLoaded,
-  ClerkLoading,
   SignInButton,
   SignedIn,
   SignedOut,
@@ -10,97 +8,207 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import Link from "next/link";
+import * as React from "react";
+import { Calendar } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   navigationMenuTriggerStyle,
+  NavigationMenuContent,
+  NavigationMenuList,
+  NavigationMenuTrigger,
 } from "./ui/navigation-menu";
+import { cn } from "@/lib/utils";
+
+const userEvents: { title: string; href: string; description: string }[] = [
+  {
+    title: "My Events",
+    href: "/",
+    description: "All events you have created",
+  },
+  {
+    title: "Saved",
+    href: "/saved",
+    description: "All events you have saved.",
+  },
+  {
+    title: "Following",
+    href: "/following",
+    description: "All events from users or lists you are following.",
+  },
+];
+
+const allEvents: { title: string; href: string; description: string }[] = [
+  {
+    title: "All Events",
+    href: "/events",
+    description: "All events from all users.",
+  },
+];
+const allLists: { title: string; href: string; description: string }[] = [
+  {
+    title: "All Lists",
+    href: "/lists",
+    description: "All lists you have created.",
+  },
+];
+const userLists: { title: string; href: string; description: string }[] = [
+  {
+    title: "My Lists",
+    href: "/lists",
+    description: "All lists you have created.",
+  },
+];
+const userFollowing: { title: string; href: string; description: string }[] = [
+  {
+    title: "Users",
+    href: "/following/users",
+    description: "Users you are following.",
+  },
+];
+const allUsers: { title: string; href: string; description: string }[] = [
+  {
+    title: "All Users",
+    href: "/users",
+    description: "All users.",
+  },
+];
 
 export default function Header() {
-  const { user } = useUser();
-
   return (
     <header className="mt-3 flex w-full items-center justify-between border-b-2 px-2 pb-4 sm:mt-5 sm:px-4 sm:pb-7">
-      <Link href="/" className="flex items-center space-x-3">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="h-10 w-10"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
-          />
-        </svg>
-
-        <h1 className="ml-2 text-2xl font-bold tracking-tight sm:text-4xl">
-          timetime.cc
-        </h1>
-      </Link>
-      {/* Link to events */}
-      <div className="flex place-items-center gap-4">
-        <ClerkLoading>
-          <div className="flex place-items-center gap-2">
-            <div className="h-4 w-16 animate-pulse rounded bg-gray-200"></div>
-            <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200"></div>
-          </div>
-        </ClerkLoading>
-        <ClerkLoaded>
-          <SignedIn>
-            <NavigationMenu>
-              <NavigationMenuItem className="list-none">
-                <Link
-                  href={`/${user?.username}/events`}
-                  legacyBehavior
-                  passHref
-                >
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    My Events
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem className="list-none">
-                <Link
-                  href={`/${user?.username}/following`}
-                  legacyBehavior
-                  passHref
-                >
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Following
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem className="list-none">
-                <Link href={`/${user?.username}/saved`} legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Saved
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-            </NavigationMenu>
-            <div className="h-8 w-8">
-              <UserButton afterSignOutUrl="/" />
-            </div>
-          </SignedIn>
-          <SignedOut>
-            <NavigationMenu>
-              <NavigationMenuItem className="list-none">
-                <Link href={`/events`} legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    All Events
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-            </NavigationMenu>
-            <SignInButton afterSignUpUrl="/onboarding" />
-          </SignedOut>
-        </ClerkLoaded>
+      <div className="flex items-center justify-between gap-2 sm:grow sm:gap-0">
+        <Link href="/" className="flex items-center space-x-3">
+          <Calendar className="h-8 w-8" />
+          <h1 className="ml-2 hidden text-2xl font-bold tracking-tight sm:block sm:text-4xl">
+            timetime.cc
+          </h1>
+        </Link>
+        <Nav />
       </div>
+      <SignedIn>
+        <UserButton afterSignOutUrl="/" />
+      </SignedIn>
+      <SignedOut>
+        <SignInButton afterSignUpUrl="/onboarding">
+          <button className={navigationMenuTriggerStyle()}>Sign In</button>
+        </SignInButton>
+      </SignedOut>
     </header>
   );
 }
+
+export function Nav() {
+  const { user } = useUser();
+
+  return (
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Events</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[300px] gap-3 p-4 sm:w-[400px]">
+              <SignedIn>
+                {userEvents.map((component) => (
+                  <ListItem
+                    key={component.title}
+                    title={component.title}
+                    href={`${user?.username}${component.href}`}
+                  >
+                    {component.description}
+                  </ListItem>
+                ))}
+              </SignedIn>
+              {allEvents.map((component) => (
+                <ListItem
+                  key={component.title}
+                  title={component.title}
+                  href={component.href}
+                >
+                  {component.description}
+                </ListItem>
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Users</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[300px] gap-3 p-4 sm:w-[400px]">
+              <SignedIn>
+                {userFollowing.map((component) => (
+                  <ListItem
+                    key={component.title}
+                    title={component.title}
+                    href={`${user?.username}${component.href}`}
+                  >
+                    {component.description}
+                  </ListItem>
+                ))}
+              </SignedIn>
+              {allUsers.map((component) => (
+                <ListItem
+                  key={component.title}
+                  title={component.title}
+                  href={component.href}
+                >
+                  {component.description}
+                </ListItem>
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <Link href="/onboarding" legacyBehavior passHref>
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              About
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+  );
+}
+
+const ListItemSimple = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, href, ...props }, ref) => {
+  return (
+    <NavigationMenuItem>
+      <Link href="href" legacyBehavior passHref className={className} ref={ref}>
+        <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+          {title}
+        </NavigationMenuLink>
+      </Link>
+    </NavigationMenuItem>
+  );
+});
+ListItemSimple.displayName = "ListItemSimple";
+
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, href, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <Link legacyBehavior passHref ref={ref} href={href!} {...props}>
+          <a
+            className={cn(
+              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+              className
+            )}
+          >
+            <div className="text-sm font-medium leading-none">{title}</div>
+            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+              {children}
+            </p>
+          </a>
+        </Link>
+      </NavigationMenuLink>
+    </li>
+  );
+});
+ListItem.displayName = "ListItem";
