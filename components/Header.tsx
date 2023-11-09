@@ -64,6 +64,24 @@ export default function Header() {
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
+              <NavigationMenuItem className="list-none">
+                <Link
+                  href={`/${user?.username}/following`}
+                  legacyBehavior
+                  passHref
+                >
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Following
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem className="list-none">
+                <Link href={`/${user?.username}/saved`} legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Saved
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
             </NavigationMenu>
             <div className="h-8 w-8">
               <UserButton afterSignOutUrl="/" />

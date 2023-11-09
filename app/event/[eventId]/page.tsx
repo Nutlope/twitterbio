@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { Metadata, ResolvingMetadata } from "next/types";
+import { currentUser } from "@clerk/nextjs";
 import EventCard from "@/components/EventCard";
 import { UserInfo } from "@/components/UserInfo";
 import { db } from "@/lib/db";
 import { AddToCalendarButtonProps } from "@/types";
+import { FollowEventButton } from "@/components/FollowButtons";
 
 const getEvent = async (eventId: string) => {
   const event = await db.event.findUnique({
@@ -64,13 +66,27 @@ export async function generateMetadata(
 }
 
 export default async function Page({ params }: Props) {
+  const user = await currentUser();
   const event = await getEvent(params.eventId);
+  const following = await db.followEvent.findFirst({
+    where: {
+      userId: user?.id,
+      eventId: params.eventId,
+    },
+  });
+  const isCreator = user?.id === event?.userId;
 
   if (!event) {
     return <p className="text-lg text-gray-500">No event found.</p>;
   }
   return (
     <>
+      {!isCreator && (
+        <>
+          <FollowEventButton eventId={params.eventId} following={!!following} />
+          <div className="p-4"></div>
+        </>
+      )}
       <EventCard
         userId={event.userId}
         key={event.id}
@@ -80,13 +96,10 @@ export default async function Page({ params }: Props) {
         singleEvent
       />
       <div className="p-4"></div>
-      <Link
-        href={`/${event.User?.username}/events`}
-        className="flex place-items-center gap-2"
-      >
+      <div className="flex place-items-center gap-2">
         <div className="font-medium">Collected by</div>
         <UserInfo userId={event.userId} />
-      </Link>
+      </div>
     </>
   );
 }

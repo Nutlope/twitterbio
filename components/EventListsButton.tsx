@@ -52,7 +52,7 @@ export default function EventListsButton({
     const updatedSelectedLists = updateCheckedListAtIndex(selectedLists, index);
     const toAdd = updatedSelectedLists[index];
     const listId = userLists[index].id;
-    const endpoint = toAdd ? "/api/event/list/add" : "/api/event/list/remove";
+    const endpoint = toAdd ? "/api/events/list/add" : "/api/events/list/remove";
     setSelectedLists(updatedSelectedLists);
 
     console.log(eventId, listId);

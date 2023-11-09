@@ -1,9 +1,11 @@
 import { Metadata, ResolvingMetadata } from "next/types";
+import { currentUser } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 import { UserInfo } from "@/components/UserInfo";
 import { ListEditButton } from "@/components/ListEditButton";
 import { ListDeleteButton } from "@/components/ListDeleteButton";
 import EventList from "@/components/EventList";
+import { FollowListButton } from "@/components/FollowButtons";
 
 type Props = { params: { listId: string } };
 
@@ -23,6 +25,7 @@ const getList = async (listId: string) => {
       },
       createdAt: true,
       updatedAt: true,
+      FollowList: true,
     },
   });
   return list;
@@ -81,6 +84,7 @@ export async function generateMetadata(
 }
 
 export default async function Page({ params }: Props) {
+  const user = await currentUser();
   const list = await getList(params.listId);
 
   if (!list) {
@@ -93,6 +97,9 @@ export default async function Page({ params }: Props) {
   const futureEvents = events.filter(
     (item) => item.startDateTime >= new Date()
   );
+
+  const following =
+    user && list.FollowList.find((item) => item.userId === user.id);
 
   return (
     <>
@@ -107,6 +114,8 @@ export default async function Page({ params }: Props) {
         <ListEditButton listId={params.listId} listUserId={list.userId} />
         <ListDeleteButton listId={params.listId} listUserId={list.userId} />
       </div>
+      <div className="p-2"></div>
+      <FollowListButton listId={params.listId} following={!!following} />
       <div className="p-2"></div>
       <EventList futureEvents={futureEvents} pastEvents={pastEvents} />
       <div className="p-5"></div>
