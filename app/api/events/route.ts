@@ -74,11 +74,11 @@ export async function POST(req: Request) {
 
     // start time is 00:00 if not specified
     if (!startTime) {
-      event.startTime = "00:00";
+      startTime = "00:00";
     }
     // end time is 23:59 if not specified
     if (!endTime) {
-      event.endTime = "23:59";
+      endTime = "23:59";
     }
 
     const start = Temporal.ZonedDateTime.from(
