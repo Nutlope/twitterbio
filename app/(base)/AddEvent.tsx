@@ -219,6 +219,7 @@ export default function AddEvent() {
                 setIssueStatus={setIssueStatus}
                 lastAssistantMessage={"Manual entry"}
                 lastUserMessage={"Manual entry"}
+                hideErrorReporter={true}
                 reportIssue={reportIssue}
                 setEvents={setEvents}
                 setTrackedAddToCalendarGoal={setTrackedAddToCalendarGoal}

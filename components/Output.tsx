@@ -20,6 +20,7 @@ export function Output({
   setIssueStatus,
   lastAssistantMessage,
   lastUserMessage,
+  hideErrorReporter,
   reportIssue,
   setEvents,
   setTrackedAddToCalendarGoal,
@@ -32,6 +33,7 @@ export function Output({
   setIssueStatus: (status: Status) => void;
   lastAssistantMessage: string;
   lastUserMessage: string;
+  hideErrorReporter?: boolean;
   reportIssue: (
     title: string,
     description: string,
@@ -130,44 +132,48 @@ export function Output({
               ))}
             </div>
           )}
-          {issueStatus === "submitting" && (
-            <Button
-              className="fixed bottom-5 right-3 z-50"
-              variant="destructive"
-              disabled
-            >
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Please wait
-            </Button>
-          )}
-          {issueStatus === "idle" && (
-            <Button
-              variant="destructive"
-              className="fixed bottom-5 right-3 z-50 "
-              onClick={() =>
-                reportIssue(
-                  generateIssueTitle(lastUserMessage),
-                  generateIssueDescription(
-                    lastUserMessage,
-                    lastAssistantMessage,
-                    convertIcsToJson(lastAssistantMessage),
-                    events
-                  ),
-                  setIssueStatus("submitting")
-                )
-              }
-            >
-              <Bug className="mr-2 h-4 w-4" /> Report issue
-            </Button>
-          )}
-          {issueStatus === "success" && (
-            <Button
-              variant="destructive"
-              className="fixed bottom-5 right-3 z-50 "
-              disabled
-            >
-              <Check className="mr-2 h-4 w-4" /> Reported
-            </Button>
+          {!hideErrorReporter && (
+            <>
+              {issueStatus === "submitting" && (
+                <Button
+                  className="fixed bottom-5 right-3 z-50"
+                  variant="destructive"
+                  disabled
+                >
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </Button>
+              )}
+              {issueStatus === "idle" && (
+                <Button
+                  variant="destructive"
+                  className="fixed bottom-5 right-3 z-50 "
+                  onClick={() =>
+                    reportIssue(
+                      generateIssueTitle(lastUserMessage),
+                      generateIssueDescription(
+                        lastUserMessage,
+                        lastAssistantMessage,
+                        convertIcsToJson(lastAssistantMessage),
+                        events
+                      ),
+                      setIssueStatus("submitting")
+                    )
+                  }
+                >
+                  <Bug className="mr-2 h-4 w-4" /> Report issue
+                </Button>
+              )}
+              {issueStatus === "success" && (
+                <Button
+                  variant="destructive"
+                  className="fixed bottom-5 right-3 z-50 "
+                  disabled
+                >
+                  <Check className="mr-2 h-4 w-4" /> Reported
+                </Button>
+              )}
+            </>
           )}
           {/* {isDev && (
             <div className="mt-20 grid gap-4">
