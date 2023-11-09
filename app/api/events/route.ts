@@ -63,6 +63,19 @@ export async function POST(req: Request) {
     const event = body.event as AddToCalendarButtonProps;
     devLog("processed event: ", event);
 
+    // time zone is America/Los_Angeles if not specified
+    if (!event.timeZone) {
+      event.timeZone = "America/Los_Angeles";
+    }
+    // start time is 00:00 if not specified
+    if (!event.startTime) {
+      event.startTime = "00:00";
+    }
+    // end time is 23:59 if not specified
+    if (!event.endTime) {
+      event.endTime = "23:59";
+    }
+
     const start = Temporal.ZonedDateTime.from(
       `${event.startDate}T${event.startTime}[${event.timeZone}]`
     );
