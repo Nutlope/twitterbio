@@ -4,6 +4,8 @@ export const getText = (
 # General
 - ONLY RETURN A VALID ICAL FILE
 - DO NOT RETURN ADDITIONAL INFORMATION
+- MAKE ALL ASSUMPTIONS NECESSARY TO MAKE A VALID ICAL FILE
+- DO NOT INCLUDE ANY NOTES OR COMMENTS
 # Time
 - For calculating relative dates/times, it is currently ${date}
 - Include timezone (use America/Los Angeles if not specified)
@@ -58,6 +60,6 @@ export const getPrompt = () => {
 
   return {
     text: getText(date),
-    version: "v2023.11.07",
+    version: "v2023.11.09",
   };
 };
