@@ -63,24 +63,29 @@ export async function POST(req: Request) {
     const event = body.event as AddToCalendarButtonProps;
     devLog("processed event: ", event);
 
+    let startTime = event.startTime;
+    let endTime = event.endTime;
+    let timeZone = event.timeZone;
+
     // time zone is America/Los_Angeles if not specified
-    if (!event.timeZone) {
-      event.timeZone = "America/Los_Angeles";
+    if (!timeZone) {
+      timeZone = "America/Los_Angeles";
     }
+
     // start time is 00:00 if not specified
-    if (!event.startTime) {
+    if (!startTime) {
       event.startTime = "00:00";
     }
     // end time is 23:59 if not specified
-    if (!event.endTime) {
+    if (!endTime) {
       event.endTime = "23:59";
     }
 
     const start = Temporal.ZonedDateTime.from(
-      `${event.startDate}T${event.startTime}[${event.timeZone}]`
+      `${event.startDate}T${startTime}[${timeZone}]`
     );
     const end = Temporal.ZonedDateTime.from(
-      `${event.endDate}T${event.endTime}[${event.timeZone}]`
+      `${event.endDate}T${endTime}[${timeZone}]`
     );
     devLog("calculated start and end: ", start, end);
     const startUtc = start.toInstant().toString();
