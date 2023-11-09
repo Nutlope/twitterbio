@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import AddEvent from "./AddEvent";
+import AddEvent from "../AddEvent";
 import Leaderboard from "@/components/Leaderboard";
 import LeaderboardSkeleton from "@/components/LeaderboardSkeleton";
 import {

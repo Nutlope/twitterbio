@@ -1,6 +1,6 @@
 import React from "react";
 import { CheckCircleIcon, CurrencyDollarIcon } from "@heroicons/react/20/solid";
-import OnboardingContinueButton from "./OnboardingContinueButton";
+import Link from "next/link";
 import RainbowText from "@/components/RainbowText";
 import {
   Accordion,
@@ -8,6 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/Accordian";
+import { Button } from "@/components/ui/button";
 
 export const metadata = {
   title: "Get Started | timetime.cc",
@@ -251,7 +252,25 @@ export default function Page() {
             </p>
           </div>
         </div>
-        <OnboardingContinueButton />
+        <div className="p-6"></div>
+        <div className="flex items-center gap-x-6 lg:shrink-0">
+          <Button asChild>
+            <a
+              href="https://calendly.com/jaronheard/timetime"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="mr-2">🌈</span> Let us show you how
+            </a>
+          </Button>
+          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+            <Button variant="link" asChild>
+              <Link href="/old-landing">
+                Explore <span aria-hidden="true">→</span>
+              </Link>
+            </Button>
+          </a>
+        </div>
       </div>
     </div>
   );

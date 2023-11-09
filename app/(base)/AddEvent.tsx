@@ -5,8 +5,8 @@ import { useChat } from "ai/react";
 import { trackGoal } from "fathom-client";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
-import { Form } from "../components/Form";
-import { Output } from "../components/Output";
+import { Form } from "../../components/Form";
+import { Output } from "../../components/Output";
 import {
   Status,
   generatedIcsArrayToEvents,

@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 const userEvents: { title: string; href: string; description: string }[] = [
   {
     title: "My Events",
-    href: "/",
+    href: "/events",
     description: "All events you have created",
   },
   {
@@ -77,24 +77,28 @@ const allUsers: { title: string; href: string; description: string }[] = [
 
 export default function Header() {
   return (
-    <header className="mt-3 flex w-full items-center justify-between border-b-2 px-2 pb-4 sm:mt-5 sm:px-4 sm:pb-7">
+    <header className="mt-3 flex w-full items-center justify-between px-2 pb-4 sm:mt-5 sm:px-4 sm:pb-7">
       <div className="flex items-center justify-between gap-2 sm:grow sm:gap-0">
-        <Link href="/" className="flex items-center space-x-3">
-          <Calendar className="h-8 w-8" />
-          <h1 className="ml-2 hidden text-2xl font-bold tracking-tight sm:block sm:text-4xl">
-            timetime.cc
-          </h1>
-        </Link>
+        <NavigationMenu>
+          <Link href="/" className="flex items-center space-x-3">
+            <Calendar className="h-8 w-8" />
+            <h1 className="ml-2 hidden text-2xl font-bold tracking-tight sm:block sm:text-4xl">
+              timetime.cc
+            </h1>
+          </Link>
+        </NavigationMenu>
         <Nav />
       </div>
-      <SignedIn>
-        <UserButton afterSignOutUrl="/" />
-      </SignedIn>
-      <SignedOut>
-        <SignInButton afterSignUpUrl="/onboarding">
-          <button className={navigationMenuTriggerStyle()}>Sign In</button>
-        </SignInButton>
-      </SignedOut>
+      <NavigationMenu>
+        <SignedIn>
+          <UserButton afterSignOutUrl="/" />
+        </SignedIn>
+        <SignedOut>
+          <SignInButton afterSignUpUrl="/onboarding">
+            <button className={navigationMenuTriggerStyle()}>Sign In</button>
+          </SignInButton>
+        </SignedOut>
+      </NavigationMenu>
     </header>
   );
 }

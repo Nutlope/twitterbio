@@ -3,7 +3,7 @@ import { buttonVariants } from "./ui/button";
 import EventList from "@/components/EventList";
 import { db } from "@/lib/db";
 
-export default async function NextEvents() {
+export default async function NextEvents({ limit = 5 } = {}) {
   const events = await db.event.findMany({
     orderBy: {
       startDateTime: "asc",
@@ -13,7 +13,7 @@ export default async function NextEvents() {
         gte: new Date(),
       },
     },
-    take: 5,
+    take: limit,
   });
 
   const pastEvents = events.filter((item) => item.startDateTime < new Date());
