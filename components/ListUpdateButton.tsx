@@ -4,6 +4,8 @@ import { SignInButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import { Button } from "./ui/button";
+import { CardDescription } from "./ui/card";
 import { cn } from "@/lib/utils";
 
 type ListUpdateButtonProps = {
@@ -76,13 +78,10 @@ export default function ListUpdateButton(props: ListUpdateButtonProps) {
           afterSignInUrl={`${process.env.NEXT_PUBLIC_URL}/`}
           afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/`}
         >
-          <button
-            className={cn(
-              "mt-8 w-full rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80 sm:mt-10"
-            )}
-          >
-            Sign in to update
-          </button>
+          <Button>Sign in to update</Button>
+          <CardDescription className="italic">
+            *TODO: Will not save your progress
+          </CardDescription>
         </SignInButton>
       </SignedOut>
     </>

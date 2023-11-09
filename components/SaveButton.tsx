@@ -7,6 +7,7 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { Loader2, UploadCloud } from "lucide-react";
 import { Button } from "./ui/button";
+import { CardDescription } from "./ui/card";
 
 export function SaveButton(props: AddToCalendarButtonType) {
   const router = useRouter();
@@ -61,6 +62,9 @@ export function SaveButton(props: AddToCalendarButtonType) {
           afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/onboarding?saveIntent=true`}
         >
           <Button className="w-full">Sign in to publish</Button>
+          <CardDescription className="italic">
+            *TODO: Will not save your progress
+          </CardDescription>
         </SignInButton>
       </SignedOut>
     </>

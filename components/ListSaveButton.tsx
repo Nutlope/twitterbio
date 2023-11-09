@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { Loader2, Save } from "lucide-react";
 import { Button } from "./ui/button";
+import { CardDescription } from "./ui/card";
 import { cn } from "@/lib/utils";
 
 type ListSaveButtonProps = {
@@ -69,6 +70,9 @@ export default function ListSaveButton(props: ListSaveButtonProps) {
           afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/`}
         >
           <Button>Sign in to save</Button>
+          <CardDescription className="italic">
+            *TODO: Will not save your progress
+          </CardDescription>
         </SignInButton>
       </SignedOut>
     </>
