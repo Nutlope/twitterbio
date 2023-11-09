@@ -46,8 +46,9 @@ export const getText = (
       - ONLY USE LINE BREAKS WHERE ABSOLUTELY NECESSARY.
       - DO NOT INCLUDE ANY LINE BREAKS AT THE BEGINNING OF A DESCRIPTION.
       - DO NOT INCLUDE ANY LINE BREAKS AT THE END OF A DESCRIPTION.
-    - Define a link text with the following schema: [url]https://....|URL Text[/url].
-      - MUST use | as a separator between the URL and the URL Text.
+    - Define a link text with the following schema: 
+      - [url]https://www.example.com|Example Domain[/url].
+      - MUST use | as a separator between the URL and title.
 `;
 
 export const getPrompt = () => {
@@ -60,6 +61,6 @@ export const getPrompt = () => {
 
   return {
     text: getText(date),
-    version: "v2023.11.09",
+    version: "v2023.11.09.1",
   };
 };
