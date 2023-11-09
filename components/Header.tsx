@@ -19,8 +19,16 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "./ui/navigation-menu";
+import { Separator } from "./ui/separator";
 import { cn } from "@/lib/utils";
 
+const newEvent: { title: string; href: string; description: string }[] = [
+  {
+    title: "New Event",
+    href: "/new",
+    description: "Add a new event",
+  },
+];
 const userEvents: { title: string; href: string; description: string }[] = [
   {
     title: "My Events",
@@ -30,12 +38,12 @@ const userEvents: { title: string; href: string; description: string }[] = [
   {
     title: "Saved",
     href: "/saved",
-    description: "All events you have saved.",
+    description: "All events you have saved",
   },
   {
     title: "Following",
     href: "/following",
-    description: "All events from users or lists you are following.",
+    description: "All events from users or lists you are following",
   },
 ];
 
@@ -43,35 +51,35 @@ const allEvents: { title: string; href: string; description: string }[] = [
   {
     title: "All Events",
     href: "/events",
-    description: "All events from all users.",
+    description: "All events from all users",
   },
 ];
 const allLists: { title: string; href: string; description: string }[] = [
   {
     title: "All Lists",
     href: "/lists",
-    description: "All lists you have created.",
+    description: "All lists you have created",
   },
 ];
 const userLists: { title: string; href: string; description: string }[] = [
   {
     title: "My Lists",
     href: "/lists",
-    description: "All lists you have created.",
+    description: "All lists you have created",
   },
 ];
 const userFollowing: { title: string; href: string; description: string }[] = [
   {
-    title: "Users",
+    title: "Following",
     href: "/following/users",
-    description: "Users you are following.",
+    description: "Users you are following",
   },
 ];
 const allUsers: { title: string; href: string; description: string }[] = [
   {
     title: "All Users",
     href: "/users",
-    description: "All users.",
+    description: "All users",
   },
 ];
 
@@ -113,6 +121,16 @@ export function Nav() {
           <NavigationMenuTrigger>Events</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[300px] gap-3 p-4 sm:w-[400px]">
+              {newEvent.map((component) => (
+                <ListItem
+                  key={component.title}
+                  title={component.title}
+                  href={component.href}
+                >
+                  {component.description}
+                </ListItem>
+              ))}
+              <Separator />
               <SignedIn>
                 {userEvents.map((component) => (
                   <ListItem

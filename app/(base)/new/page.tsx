@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import AddEvent from "../AddEvent";
 import EventsFromRawText from "./EventsFromRawText";
 import Loading from "./Loading";
 import ImageUpload from "./ImageUpload";
@@ -13,12 +14,19 @@ type Props = {
 export default function Page({ params, searchParams }: Props) {
   return (
     <>
-      <ImageUpload />
-      <div className="p-4"></div>
-      {searchParams.rawText && (
-        <Suspense fallback={<Loading rawText={searchParams.rawText} />}>
-          <EventsFromRawText rawText={searchParams.rawText} />
+      {!searchParams.rawText && (
+        <Suspense>
+          <AddEvent />
         </Suspense>
+      )}
+      {searchParams.rawText && (
+        <>
+          <ImageUpload />
+          <div className="p-4"></div>
+          <Suspense fallback={<Loading rawText={searchParams.rawText} />}>
+            <EventsFromRawText rawText={searchParams.rawText} />
+          </Suspense>
+        </>
       )}
     </>
   );

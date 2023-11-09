@@ -5,15 +5,48 @@ import { useChat } from "ai/react";
 import { trackGoal } from "fathom-client";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
+import { Download, Share, Sparkles } from "lucide-react";
 import { Form } from "@/components/Form";
 import { Output } from "@/components/Output";
 import {
   Status,
+  cn,
   generatedIcsArrayToEvents,
   getLastMessages,
   reportIssue,
 } from "@/lib/utils";
 import { formatDataOnPaste } from "@/lib/turndown";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+function Code({
+  children,
+  className,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <code
+      className={cn(
+        "relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold",
+        className
+      )}
+    >
+      {children}
+    </code>
+  );
+}
 
 export default function AddEvent() {
   // State variables
@@ -81,14 +114,121 @@ export default function AddEvent() {
   };
 
   return (
-    <>
-      <Form
-        handleInputChange={handleInputChange}
-        handlePaste={handlePaste}
-        input={input}
-        isLoading={isLoading}
-        onSubmit={onSubmit}
-      />
+    <div className="min-h-[60vh] ">
+      <Tabs defaultValue="text" className="max-w-screen sm:max-w-xl">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="text">
+            <Sparkles className="mr-2 h-4 w-4" />
+            Text
+          </TabsTrigger>
+          <TabsTrigger value="shortcut">
+            <Sparkles className="mr-2 h-4 w-4" />
+            Shortcut
+          </TabsTrigger>
+          <TabsTrigger value="manual">Manual</TabsTrigger>
+        </TabsList>
+        <TabsContent value="text">
+          <Card>
+            <CardHeader>
+              <CardTitle>Text</CardTitle>
+              <CardDescription>
+                Add an event by typing or pasting text in any format. We&apos;ll
+                use a little AI to figure out the details.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Form
+                handleInputChange={handleInputChange}
+                handlePaste={handlePaste}
+                input={input}
+                isLoading={isLoading}
+                onSubmit={onSubmit}
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="shortcut">
+          <Card>
+            <CardHeader>
+              <CardTitle>Shortcut</CardTitle>
+              <CardDescription>
+                Add an event from the share menu on iOS or Mac. We&apos;ll use a
+                little AI to figure out the details.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button asChild>
+                <a
+                  href="https://www.icloud.com/shortcuts/1aecbd2ee98c42edb613642a1382e718"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Install timetime.cc shortcut
+                </a>
+              </Button>
+              <div className="p-3"></div>
+              <ol className="flex list-outside list-disc flex-col gap-2">
+                <li>
+                  Click button above, then click the <Code>Get Shortcut</Code>{" "}
+                  button to add it to your devices.
+                </li>
+                <li>
+                  Use{" "}
+                  <Code>
+                    <Share className="inline-block h-4 w-4" /> Share
+                  </Code>{" "}
+                  on any screenshot, photo, or text.
+                </li>
+                <li>
+                  Scroll down to select <Code>Add event to timetime.cc</Code>.
+                </li>
+                <li>
+                  Click <Code>Always Allow</Code> when prompted for permissions.
+                </li>
+                <li>
+                  Choose <Code>New timetime.cc event</Code> from the share
+                  options.
+                </li>
+                <li>
+                  Edit the event draft and tap <Code>Save</Code>.
+                </li>
+              </ol>
+            </CardContent>
+            <CardFooter>
+              <CardDescription className="italic">
+                *Requires up-to-date software (iOS 17+/macOS 14+)
+              </CardDescription>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+        <TabsContent value="manual">
+          <Card>
+            <CardHeader>
+              <CardTitle>Text</CardTitle>
+              <CardDescription>
+                Add an event manually by filling out a form.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Output
+                events={[]}
+                finished={true}
+                isDev={isDev}
+                issueStatus={issueStatus}
+                setIssueStatus={setIssueStatus}
+                lastAssistantMessage={"Manual entry"}
+                lastUserMessage={"Manual entry"}
+                reportIssue={reportIssue}
+                setEvents={setEvents}
+                setTrackedAddToCalendarGoal={setTrackedAddToCalendarGoal}
+                trackedAddToCalendarGoal={trackedAddToCalendarGoal}
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+
       <div ref={eventRef}></div>
       {finished && <div className="p-6"></div>}
       <Output
@@ -104,77 +244,6 @@ export default function AddEvent() {
         setTrackedAddToCalendarGoal={setTrackedAddToCalendarGoal}
         trackedAddToCalendarGoal={trackedAddToCalendarGoal}
       />
-    </>
-  );
-}
-
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-export function TabsDemo() {
-  return (
-    <Tabs defaultValue="account" className="w-[400px]">
-      <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="account">Text</TabsTrigger>
-        <TabsTrigger value="password">iOS Shortcut</TabsTrigger>
-        <TabsTrigger value="password">Image</TabsTrigger>
-      </TabsList>
-      <TabsContent value="account">
-        <Card>
-          <CardHeader>
-            <CardTitle>Account</CardTitle>
-            <CardDescription>
-              Make changes to your account here. Click save when you're done.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" defaultValue="Pedro Duarte" />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" defaultValue="@peduarte" />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button>Save changes</Button>
-          </CardFooter>
-        </Card>
-      </TabsContent>
-      <TabsContent value="password">
-        <Card>
-          <CardHeader>
-            <CardTitle>Password</CardTitle>
-            <CardDescription>
-              Change your password here. After saving, you'll be logged out.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="current">Current password</Label>
-              <Input id="current" type="password" />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="new">New password</Label>
-              <Input id="new" type="password" />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button>Save password</Button>
-          </CardFooter>
-        </Card>
-      </TabsContent>
-    </Tabs>
+    </div>
   );
 }

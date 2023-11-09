@@ -32,7 +32,7 @@ export function Form({
         onChange={handleInputChange}
         rows={6}
         placeholder={
-          "Paste a description from a website, a text message from a friend, or anything else. Or you can describe your event."
+          "A description from a website, a text message, your words..."
         }
       />
       {!isLoading && (
@@ -41,12 +41,15 @@ export function Form({
           <p className="mt-4 text-center">
             <span className="text-slate-500">
               Or look at a sample{" "}
-              <a href="/event/4" className="font-bold text-slate-900">
+              <a
+                href="/event/cloqaw5z80001l8086s39cxk3"
+                className="font-bold text-slate-900"
+              >
                 event
               </a>{" "}
               or{" "}
               <Link
-                href="/user_2X9kPFHoj4O6EHsHDTHRsbxyS8X/events"
+                href="/jaronheard/events"
                 className="font-bold text-slate-900"
               >
                 list
