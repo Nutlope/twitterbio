@@ -65,11 +65,14 @@ export default function EventList({
             </span>
           </div>
         </AccordionTrigger>
-        <AccordionContent className="-mx-6">
+        <AccordionContent className="-mx-6 rounded-xl">
           {futureEvents.length === 0 ? (
             <p className="mx-6 text-lg text-gray-500">No future events.</p>
           ) : (
-            <ul role="list" className="max-w-full divide-y divide-gray-100">
+            <ul
+              role="list"
+              className="max-w-full divide-y divide-gray-100 rounded-xl"
+            >
               {futureEvents.map((item) => (
                 <EventCard
                   key={item.id}

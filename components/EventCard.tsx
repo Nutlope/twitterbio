@@ -33,19 +33,11 @@ type EventCardProps = {
 };
 
 function LiContainer(props: { children: React.ReactNode }) {
-  return (
-    <li className="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
-      {props.children}
-    </li>
-  );
+  return <li className="px-4 py-5 sm:px-6">{props.children}</li>;
 }
 
 function DivContainer(props: { children: React.ReactNode }) {
-  return (
-    <div className="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
-      {props.children}
-    </div>
-  );
+  return <div className="px-4 py-5 sm:px-6">{props.children}</div>;
 }
 
 function NoLink(props: { children: React.ReactNode; id: string }) {
