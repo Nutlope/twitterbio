@@ -53,17 +53,28 @@ const advancedFeatures = [
 ];
 
 const featuredTestimonial = {
-  body: "As an organizer of dance parties and environmental justice activist, I've been dreaming of making event lists this easy for years!",
+  body: "The commitment to community and collective growth is evident, and I'm here for it.",
   author: {
-    name: "Sarah Baker",
-    handle: "boogiebuffet",
+    name: "jennifer batchelor",
+    handle: "jennybatch",
     imageUrl:
-      "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWEJKQ0oxZDdVc05BcW9tUHhielljR0t0QmQifQ&w=750&q=75",
-    logoUrl: makingEarthCool.src,
+      "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWE45MmZWcW5PdUE2T0VCalVBMVRRM3ViaEMifQ&w=750&q=75",
   },
 };
 const testimonials = [
   [
+    // [
+    //   {
+    //     body: "As an organizer of dance parties and environmental justice activist, I've been dreaming of making event lists this easy for years!",
+    //     author: {
+    //       name: "Sarah Baker",
+    //       handle: "boogiebuffet",
+    //       imageUrl:
+    //         "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWEJKQ0oxZDdVc05BcW9tUHhielljR0t0QmQifQ&w=750&q=75",
+    //       logoUrl: makingEarthCool.src,
+    //     },
+    //   },
+    // ],
     [
       {
         body: "Screenshotting an Instagram story and turning it into a calendar event on the open web in seconds feels like getting away with something!",
@@ -76,44 +87,32 @@ const testimonials = [
       },
       // More testimonials...
     ],
-    [
-      {
-        body: "The commitment to community and collective growth is evident, and I'm here for it.",
-        author: {
-          name: "jennifer batchelor",
-          handle: "jennybatch",
-          imageUrl:
-            "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWE45MmZWcW5PdUE2T0VCalVBMVRRM3ViaEMifQ&w=750&q=75",
-        },
-      },
-      // More testimonials...
-    ],
   ],
   [
-    [
-      {
-        body: "The personal calendar sync feature is brilliant – it keeps me organized and connected with my community's activities.",
-        author: {
-          name: "Josh Carr",
-          handle: "joshcarr",
-          imageUrl:
-            "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWEJJUDFzTW9JWmN4eURvU3JISERnTDFpbTQifQ&w=750&q=75",
-        },
-      },
-      // More testimonials...
-    ],
-    [
-      {
-        body: "Even in these early stages, the vision for how this can benefit communities is clear and it's exciting to be part of.",
-        author: {
-          name: "Jenny M Ng",
-          handle: "jenny",
-          imageUrl:
-            "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWHJ6Smw3NWE3ckVUY0F5R2tjWW5lTWdteTkifQ&w=750&q=75",
-        },
-      },
-      // More testimonials...
-    ],
+    // [
+    //   {
+    //     body: "The personal calendar sync feature is brilliant – it keeps me organized and connected with my community's activities.",
+    //     author: {
+    //       name: "Josh Carr",
+    //       handle: "joshcarr",
+    //       imageUrl:
+    //         "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWEJJUDFzTW9JWmN4eURvU3JISERnTDFpbTQifQ&w=750&q=75",
+    //     },
+    //   },
+    //   // More testimonials...
+    // ],
+    // [
+    //   {
+    //     body: "Even in these early stages, the vision for how this can benefit communities is clear and it's exciting to be part of.",
+    //     author: {
+    //       name: "Jenny M Ng",
+    //       handle: "jenny",
+    //       imageUrl:
+    //         "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWHJ6Smw3NWE3ckVUY0F5R2tjWW5lTWdteTkifQ&w=750&q=75",
+    //     },
+    //   },
+    //   // More testimonials...
+    // ],
   ],
 ];
 
@@ -301,9 +300,6 @@ export default function Page() {
             </RainbowText>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               People are already excited
-            </p>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              *Not real quotes, but they could be!
             </p>
           </div>
           <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 grid-rows-1 gap-8 text-sm leading-6 text-gray-900 sm:mt-20 sm:grid-cols-2 xl:mx-0 xl:max-w-none xl:grid-flow-col xl:grid-cols-4">
