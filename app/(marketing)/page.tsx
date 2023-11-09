@@ -319,11 +319,11 @@ export default function Page() {
                   </div>
                   <div className="text-gray-600">{`@${featuredTestimonial.author.handle}`}</div>
                 </div>
-                <img
+                {/* <img
                   className="h-10 w-auto flex-none rounded-full"
                   src={featuredTestimonial.author.logoUrl}
                   alt=""
-                />
+                /> */}
               </figcaption>
             </figure>
             {testimonials.map((columnGroup, columnGroupIdx) => (
