@@ -146,17 +146,6 @@ export default function EventCard(props: EventCardProps) {
           </div>
           <div className="p-1"></div>
           <div className="flex min-w-0 gap-x-4">
-            {imageUrl && !singleEvent && (
-              <div className="h-14 w-14 sm:hidden">
-                <Image
-                  alt=""
-                  width={56}
-                  height={56}
-                  src={imageUrl}
-                  className="object-cover"
-                />
-              </div>
-            )}
             <div className="min-w-0 flex-auto" suppressHydrationWarning>
               <p
                 className={cn("mt-1 text-sm leading-6 text-gray-600", {
@@ -182,17 +171,6 @@ export default function EventCard(props: EventCardProps) {
             </div>
           </div>
         </LinkOrNot>
-        {imageUrl && !singleEvent && (
-          <div className="mx-auto hidden h-full w-28 sm:ml-auto sm:mr-2 sm:block">
-            <Image
-              alt=""
-              width={112}
-              height={112}
-              src={imageUrl}
-              className="object-cover"
-            />
-          </div>
-        )}
         <DropdownMenu>
           <DropdownMenuTrigger className="absolute right-0 top-0 flex h-8 w-8 items-center justify-center rounded-md border transition-colors hover:bg-muted">
             <EllipsisVerticalIcon className="h-8 w-8" />
