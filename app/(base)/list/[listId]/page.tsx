@@ -98,6 +98,7 @@ export default async function Page({ params }: Props) {
     (item) => item.startDateTime >= new Date()
   );
 
+  const isOwner = user && user.id === list.userId;
   const following =
     user && list.FollowList.find((item) => item.userId === user.id);
 
@@ -114,8 +115,12 @@ export default async function Page({ params }: Props) {
         <ListEditButton listId={params.listId} listUserId={list.userId} />
         <ListDeleteButton listId={params.listId} listUserId={list.userId} />
       </div>
-      <div className="p-2"></div>
-      <FollowListButton listId={params.listId} following={!!following} />
+      {!isOwner && (
+        <>
+          <div className="p-2"></div>
+          <FollowListButton listId={params.listId} following={!!following} />
+        </>
+      )}
       <div className="p-2"></div>
       <EventList futureEvents={futureEvents} pastEvents={pastEvents} />
       <div className="p-5"></div>

@@ -35,8 +35,10 @@ export default async function ListCardsForUser({
   });
 
   const user = await currentUser();
-  const showAdd = user && user.username === userName;
-  const hideAll = !showAdd && lists.length === 0;
+  const isOwner = user && user.username === userName;
+  const hideAll = !isOwner && lists.length === 0;
+  const listsToShow = lists.filter((list) => list._count.events > 0);
+  const listsToUse = isOwner ? lists : listsToShow;
 
   if (!lists || hideAll) {
     return <> </>;
@@ -50,8 +52,8 @@ export default async function ListCardsForUser({
           role="list"
           className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
         >
-          {showAdd && <ListCardAdd />}
-          {lists.map((list) => (
+          {isOwner && <ListCardAdd />}
+          {listsToUse.map((list) => (
             <ListCard
               key={list.name}
               name={list.name}

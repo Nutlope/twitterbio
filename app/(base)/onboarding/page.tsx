@@ -263,13 +263,11 @@ export default function Page() {
               <span className="mr-2">🌈</span> Let us show you how
             </a>
           </Button>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            <Button variant="link" asChild>
-              <Link href="/explore">
-                Explore <span aria-hidden="true">→</span>
-              </Link>
-            </Button>
-          </a>
+          <Button variant="link" asChild>
+            <Link href="/explore">
+              Explore <span aria-hidden="true">→</span>
+            </Link>
+          </Button>
         </div>
       </div>
     </div>
