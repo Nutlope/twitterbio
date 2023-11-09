@@ -115,10 +115,10 @@ export function AddToCalendarCard({
       <CardContent className="grid grid-cols-1 gap-6 py-6 shadow-md sm:grid-cols-6">
         <CardTitle className="col-span-full flex items-center justify-between">
           <div>Event Details</div>
-          <div className="col-span-full" onClick={initialProps?.onClick}>
-            {initialProps.children || <AddToCalendarButton {...updatedProps} />}
-          </div>
         </CardTitle>
+        <div className="col-span-full" onClick={initialProps?.onClick}>
+          {initialProps.children || <AddToCalendarButton {...updatedProps} />}
+        </div>
         <div className="col-span-full">
           <Label htmlFor="name">Event</Label>
           <Input

@@ -1,8 +1,9 @@
 "use client";
 
 import { SignedIn, useUser } from "@clerk/nextjs";
-import { PencilIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import { Pencil } from "lucide-react";
+import { DropdownMenuItem } from "./DropdownMenu";
 
 export type EditButtonProps = {
   userId: string;
@@ -18,9 +19,12 @@ export function EditButton(props: EditButtonProps) {
 
   return (
     <SignedIn>
-      <Link href={`/event/${props.id}/edit`}>
-        <PencilIcon className="h-6 w-6 text-blue-600 hover:text-blue-700" />
-      </Link>
+      <DropdownMenuItem>
+        <Link href={`/event/${props.id}/edit`} className="flex items-center">
+          <Pencil className="mr-2 h-4 w-4" />
+          Edit
+        </Link>
+      </DropdownMenuItem>
     </SignedIn>
   );
 }

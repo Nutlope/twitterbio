@@ -97,6 +97,7 @@ export default function Header() {
         </NavigationMenu>
         <Nav />
       </div>
+      <div className="p-1"></div>
       <NavigationMenu>
         <SignedIn>
           <UserButton afterSignOutUrl="/" />
@@ -136,7 +137,7 @@ export function Nav() {
                   <ListItem
                     key={component.title}
                     title={component.title}
-                    href={`${user?.username}${component.href}`}
+                    href={`/${user?.username}${component.href}`}
                   >
                     {component.description}
                   </ListItem>
@@ -163,7 +164,7 @@ export function Nav() {
                   <ListItem
                     key={component.title}
                     title={component.title}
-                    href={`${user?.username}${component.href}`}
+                    href={`/${user?.username}${component.href}`}
                   >
                     {component.description}
                   </ListItem>

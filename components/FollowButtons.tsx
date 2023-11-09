@@ -57,13 +57,13 @@ export function FollowEventButton({
             {following && (
               <>
                 <Check className="mr-2 h-4 w-4" />
-                Following Event
+                Event Saved
               </>
             )}
             {!following && (
               <>
                 <Plus className="mr-2 h-4 w-4" />
-                Follow Event
+                Save Event
               </>
             )}
           </Button>

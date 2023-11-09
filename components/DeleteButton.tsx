@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { SignedIn, useUser } from "@clerk/nextjs";
 import { TrashIcon } from "@heroicons/react/24/solid";
+import { DropdownMenuItem } from "./DropdownMenu";
 import { cn } from "@/lib/utils";
 
 export type DeleteButtonProps = {
@@ -50,16 +51,19 @@ export function DeleteButton(props: DeleteButtonProps) {
 
   return (
     <SignedIn>
-      <button
-        type="button"
-        onClick={onClick}
-        disabled={isLoading}
-        className={cn("p-2", {
-          "cursor-not-allowed opacity-60": isLoading,
-        })}
-      >
-        <TrashIcon className="h-6 w-6 text-red-600 hover:text-red-700" />
-      </button>
+      <DropdownMenuItem>
+        <button
+          type="button"
+          onClick={onClick}
+          disabled={isLoading}
+          className={cn("flex items-center text-red-600", {
+            "cursor-not-allowed opacity-60": isLoading,
+          })}
+        >
+          <TrashIcon className="mr-2 h-4 w-4" />
+          Delete
+        </button>
+      </DropdownMenuItem>
     </SignedIn>
   );
 }

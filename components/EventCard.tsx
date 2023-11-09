@@ -4,8 +4,19 @@ import { AddToCalendarButton } from "add-to-calendar-button-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { CircleEllipsis } from "lucide-react";
+import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
+import { useUser } from "@clerk/nextjs";
 import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./DropdownMenu";
+import { CalendarButton } from "./CalendarButton";
 import {
   translateToHtml,
   getDateInfoUTC,
@@ -52,12 +63,14 @@ function EventLink(props: { children: React.ReactNode; id: string }) {
 }
 
 export default function EventCard(props: EventCardProps) {
+  const { user } = useUser();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
   const { userId, id, event, singleEvent } = props;
+  const isOwner = user?.id === userId;
   const startDateInfo = getDateInfoUTC(event.startDate!);
   const endDateInfo = getDateInfoUTC(event.endDate!);
   const showMultiDay = showMultipleDays(startDateInfo, endDateInfo);
@@ -73,9 +86,12 @@ export default function EventCard(props: EventCardProps) {
   return (
     <Container>
       <div
-        className={cn("flex h-full flex-col items-center justify-between", {
-          "sm:flex-row": !singleEvent,
-        })}
+        className={cn(
+          "relative flex h-full flex-col items-center justify-between",
+          {
+            "sm:flex-row": !singleEvent,
+          }
+        )}
       >
         <LinkOrNot id={id}>
           <div className="flex items-center">
@@ -108,7 +124,7 @@ export default function EventCard(props: EventCardProps) {
                 </div>
               )}
             </div>
-            <div className="-mt-1 ml-4">
+            <div className="-mt-1 ml-4 mr-6">
               <h3 className="text-base font-semibold leading-6 text-gray-900">
                 {event.name}
               </h3>
@@ -179,38 +195,29 @@ export default function EventCard(props: EventCardProps) {
             />
           </div>
         )}
-        <div
-          className={cn(
-            "hidden w-12 shrink-0 flex-col items-center justify-between",
-            {
-              "sm:flex": !singleEvent,
-            }
-          )}
-        >
-          <AddToCalendarButton
-            {...(event as AddToCalendarButtonProps)}
-            hideTextLabelButton
-            hideTextLabelList
-            size="8"
-          />
-          <EditButton userId={userId} id={id} />
-          <DeleteButton userId={userId} id={id} />
-        </div>
-        <div
-          className={cn(
-            "flex w-full shrink-0 items-center justify-between self-center py-2",
-            { "sm:hidden": !singleEvent }
-          )}
-        >
-          <AddToCalendarButton
-            {...(event as AddToCalendarButtonProps)}
-            size="4"
-          />
-          <div className="flex items-center gap-8">
-            <EditButton userId={userId} id={id} />
-            <DeleteButton userId={userId} id={id} />
-          </div>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="absolute right-0 top-0 flex h-8 w-8 items-center justify-center rounded-md border transition-colors hover:bg-muted">
+            <EllipsisVerticalIcon className="h-8 w-8" />
+            <span className="sr-only">Open</span>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>
+              <CalendarButton event={event} />
+            </DropdownMenuItem>
+            {isOwner && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <EditButton userId={userId} id={id} />
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <DeleteButton userId={userId} id={id} />
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       {fullImageUrl && singleEvent && (
         <>
