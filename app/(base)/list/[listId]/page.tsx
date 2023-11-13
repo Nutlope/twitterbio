@@ -76,8 +76,11 @@ export default async function Page({ params }: Props) {
   }
   const events = list.events;
 
-  const pastEvents = events.filter((item) => item.startDateTime < new Date());
+  const pastEvents = events.filter((item) => item.endDateTime < new Date());
 
+  const currentEvents = events.filter(
+    (item) => item.startDateTime < new Date() && item.endDateTime > new Date()
+  );
   const futureEvents = events.filter(
     (item) => item.startDateTime >= new Date()
   );
@@ -106,7 +109,11 @@ export default async function Page({ params }: Props) {
         </>
       )}
       <div className="p-2"></div>
-      <EventList futureEvents={futureEvents} pastEvents={pastEvents} />
+      <EventList
+        currentEvents={currentEvents}
+        futureEvents={futureEvents}
+        pastEvents={pastEvents}
+      />
       <div className="p-5"></div>
     </>
   );

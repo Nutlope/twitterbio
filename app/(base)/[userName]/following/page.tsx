@@ -63,6 +63,9 @@ export async function generateMetadata(
     };
   }
 
+  const currentEvents = events.filter(
+    (item) => item.startDateTime < new Date() && item.endDateTime > new Date()
+  );
   const futureEvents = events.filter(
     (item) => item.startDateTime >= new Date()
   );
@@ -87,8 +90,11 @@ export async function generateMetadata(
 export default async function Page({ params }: Props) {
   const events = await getFollowingEvents(params.userName);
 
-  const pastEvents = events.filter((item) => item.startDateTime < new Date());
+  const pastEvents = events.filter((item) => item.endDateTime < new Date());
 
+  const currentEvents = events.filter(
+    (item) => item.startDateTime < new Date() && item.endDateTime > new Date()
+  );
   const futureEvents = events.filter(
     (item) => item.startDateTime >= new Date()
   );
@@ -105,7 +111,11 @@ export default async function Page({ params }: Props) {
       </div>
       <div className="p-4"></div>
       <h2 className="text-sm font-medium text-gray-500">All Events</h2>
-      <EventList pastEvents={pastEvents} futureEvents={futureEvents} />
+      <EventList
+        pastEvents={pastEvents}
+        futureEvents={futureEvents}
+        currentEvents={currentEvents}
+      />
       <div className="p-5"></div>
     </>
   );

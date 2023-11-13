@@ -39,9 +39,13 @@ export async function generateMetadata(
     };
   }
 
+  const currentEvents = events.filter(
+    (item) => item.startDateTime < new Date() && item.endDateTime > new Date()
+  );
   const futureEvents = events.filter(
     (item) => item.startDateTime >= new Date()
   );
+
   const futureEventsCount = futureEvents.length;
 
   // optionally access and extend (rather than replace) parent metadata
@@ -65,6 +69,9 @@ export default async function Page({ params }: Props) {
 
   const pastEvents = events.filter((item) => item.startDateTime < new Date());
 
+  const currentEvents = events.filter(
+    (item) => item.startDateTime < new Date() && item.endDateTime > new Date()
+  );
   const futureEvents = events.filter(
     (item) => item.startDateTime >= new Date()
   );
@@ -81,6 +88,7 @@ export default async function Page({ params }: Props) {
       <ListCardsForUser userName={params.userName} limit={10} />
       <h2 className="text-sm font-medium text-gray-500">All Events</h2>
       <EventList
+        currentEvents={currentEvents}
         pastEvents={pastEvents}
         futureEvents={futureEvents}
         hideCurator
