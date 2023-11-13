@@ -169,19 +169,13 @@ export default function EventCard(props: EventCardProps) {
             <span className="sr-only">Open</span>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              <CalendarButton event={event} />
-            </DropdownMenuItem>
+            <CalendarButton event={event} />
             {isOwner && (
               <>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <EditButton userId={userId} id={id} />
-                </DropdownMenuItem>
+                <EditButton userId={userId} id={id} />
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <DeleteButton userId={userId} id={id} />
-                </DropdownMenuItem>
+                <DeleteButton userId={userId} id={id} />
               </>
             )}
           </DropdownMenuContent>
