@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "./DropdownMenu";
 import { CalendarButton } from "./CalendarButton";
+import { ShareButton } from "./ShareButton";
 import {
   translateToHtml,
   getDateInfoUTC,
@@ -184,6 +185,7 @@ export default function EventCard(props: EventCardProps) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <CalendarButton event={event} />
+            <ShareButton eventId={id} />
             {isOwner && (
               <>
                 <DropdownMenuSeparator />
