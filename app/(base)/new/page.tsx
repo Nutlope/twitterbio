@@ -23,11 +23,11 @@ export default function Page({ params, searchParams }: Props) {
       )}
       {searchParams.rawText && (
         <>
-          <ImageUpload />
-          <div className="p-4"></div>
           <Suspense fallback={<AddToCalendarCardSkeleton />}>
             <EventsFromRawText rawText={searchParams.rawText} />
           </Suspense>
+          <div className="p-4"></div>
+          <ImageUpload />
         </>
       )}
     </>
