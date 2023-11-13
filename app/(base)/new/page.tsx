@@ -1,8 +1,8 @@
 import { Suspense } from "react";
 import AddEvent from "../AddEvent";
 import EventsFromRawText from "./EventsFromRawText";
-import Loading from "./Loading";
 import ImageUpload from "./ImageUpload";
+import { AddToCalendarCardSkeleton } from "@/components/AddToCalendarCardSkeleton";
 
 export const maxDuration = 60;
 
@@ -25,7 +25,7 @@ export default function Page({ params, searchParams }: Props) {
         <>
           <ImageUpload />
           <div className="p-4"></div>
-          <Suspense fallback={<Loading rawText={searchParams.rawText} />}>
+          <Suspense fallback={<AddToCalendarCardSkeleton />}>
             <EventsFromRawText rawText={searchParams.rawText} />
           </Suspense>
         </>

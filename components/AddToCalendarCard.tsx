@@ -158,7 +158,7 @@ export function AddToCalendarCard({
           </div>
         </div>
         <div className="col-span-full">
-          <Label htmlFor="endDate">Start Date</Label>
+          <Label htmlFor="endDate">End Date</Label>
           <div>
             <input
               type="date"

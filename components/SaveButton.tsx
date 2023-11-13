@@ -62,10 +62,10 @@ export function SaveButton(props: AddToCalendarButtonType) {
           afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/onboarding?saveIntent=true`}
         >
           <Button className="w-full">Sign in to publish</Button>
-          <CardDescription className="italic">
-            *TODO: Will not save your progress
-          </CardDescription>
         </SignInButton>
+        <CardDescription className="italic">
+          *TODO: Will not save your progress
+        </CardDescription>
       </SignedOut>
     </>
   );

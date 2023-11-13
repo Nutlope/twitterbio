@@ -28,6 +28,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AddToCalendarCardSkeleton } from "@/components/AddToCalendarCardSkeleton";
 
 function Code({
   children,
@@ -231,7 +232,8 @@ export default function AddEvent() {
       </Tabs>
 
       <div ref={eventRef}></div>
-      {finished && <div className="p-6"></div>}
+      {(finished || isLoading) && <div className="p-6"></div>}
+      {isLoading && <AddToCalendarCardSkeleton />}
       <Output
         events={events}
         finished={finished}

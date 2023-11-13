@@ -70,10 +70,10 @@ export default function ListSaveButton(props: ListSaveButtonProps) {
           afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/`}
         >
           <Button>Sign in to save</Button>
-          <CardDescription className="italic">
-            *TODO: Will not save your progress
-          </CardDescription>
         </SignInButton>
+        <CardDescription className="italic">
+          *TODO: Will not save your progress
+        </CardDescription>
       </SignedOut>
     </>
   );
