@@ -1,6 +1,7 @@
 import { Toaster } from "react-hot-toast";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import { CallToAction } from "@/components/CallToActions";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -14,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <main className="my-12 flex w-full flex-1 flex-col items-center justify-center px-4 sm:my-20">
         {children}
       </main>
-      <Footer />
+      <Footer cta />
     </div>
   );
 }

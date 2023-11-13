@@ -6,6 +6,7 @@ import NextEvents from "@/components/NextEvents";
 import { cn } from "@/lib/utils";
 import RainbowText from "@/components/RainbowText";
 import makingEarthCool from "@/assets/making-earth-cool.jpeg";
+import { CTAButton } from "@/components/CallToActions";
 
 const features = [
   {
@@ -153,15 +154,7 @@ export default function Page() {
               events.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Button asChild>
-                <a
-                  href="https://calendly.com/jaronheard/timetime"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span className="mr-2">🌈</span> Let us show you how
-                </a>
-              </Button>
+              <CTAButton />
               <Button variant="link" asChild>
                 <Link href="/explore">
                   Explore <span aria-hidden="true">→</span>
@@ -380,15 +373,7 @@ export default function Page() {
               Book a free 1-1 intro call.
             </h2>
             <div className="mt-10 flex items-center gap-x-6 lg:mt-0 lg:shrink-0">
-              <Button asChild>
-                <a
-                  href="https://calendly.com/jaronheard/timetime"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span className="mr-2">🌈</span> Let us show you how
-                </a>
-              </Button>
+              <CTAButton />
               <Button variant="link" asChild>
                 <Link href="/explore">
                   Explore <span aria-hidden="true">→</span>

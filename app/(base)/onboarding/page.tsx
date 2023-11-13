@@ -1,6 +1,7 @@
 import React from "react";
 import { CheckCircleIcon, CurrencyDollarIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
+import { CTAButton } from "@/components/CallToActions";
 import RainbowText from "@/components/RainbowText";
 import {
   Accordion,
@@ -254,15 +255,7 @@ export default function Page() {
         </div>
         <div className="p-6"></div>
         <div className="flex items-center gap-x-6 lg:shrink-0">
-          <Button asChild>
-            <a
-              href="https://calendly.com/jaronheard/timetime"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span className="mr-2">🌈</span> Let us show you how
-            </a>
-          </Button>
+          <CTAButton />
           <Button variant="link" asChild>
             <Link href="/explore">
               Explore <span aria-hidden="true">→</span>

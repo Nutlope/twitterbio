@@ -15,9 +15,11 @@ export default function Page({ params, searchParams }: Props) {
   return (
     <>
       {!searchParams.rawText && (
-        <Suspense>
-          <AddEvent />
-        </Suspense>
+        <>
+          <Suspense>
+            <AddEvent />
+          </Suspense>
+        </>
       )}
       {searchParams.rawText && (
         <>
