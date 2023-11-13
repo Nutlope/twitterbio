@@ -251,7 +251,7 @@ export default function ImageUpload() {
                   `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`
                 }
                 alt="Preview"
-                className="mx-auto block w-24"
+                className="mx-auto block w-36"
                 onLoad={croppedImages?.cropped ? () => null : onImageLoad}
               />
               <div className="p-1"></div>
