@@ -54,28 +54,28 @@ const advancedFeatures = [
 ];
 
 const featuredTestimonial = {
-  body: "The commitment to community and collective growth is evident, and I'm here for it.",
+  body: "As an organizer of dance parties and environmental justice activist, I've been dreaming of making event lists this easy for years!",
   author: {
-    name: "jennifer batchelor",
-    handle: "jennybatch",
+    name: "Sarah Baker",
+    handle: "boogiebuffet",
     imageUrl:
-      "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWE45MmZWcW5PdUE2T0VCalVBMVRRM3ViaEMifQ&w=750&q=75",
+      "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWEJKQ0oxZDdVc05BcW9tUHhielljR0t0QmQifQ&w=750&q=75",
+    logoUrl: makingEarthCool.src,
   },
 };
 const testimonials = [
   [
-    // [
-    //   {
-    //     body: "As an organizer of dance parties and environmental justice activist, I've been dreaming of making event lists this easy for years!",
-    //     author: {
-    //       name: "Sarah Baker",
-    //       handle: "boogiebuffet",
-    //       imageUrl:
-    //         "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWEJKQ0oxZDdVc05BcW9tUHhielljR0t0QmQifQ&w=750&q=75",
-    //       logoUrl: makingEarthCool.src,
-    //     },
-    //   },
-    // ],
+    [
+      {
+        body: "The commitment to community and collective growth is evident, and I'm here for it.",
+        author: {
+          name: "jennifer batchelor",
+          handle: "jennybatch",
+          imageUrl:
+            "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWE45MmZWcW5PdUE2T0VCalVBMVRRM3ViaEMifQ&w=750&q=75",
+        },
+      },
+    ],
     [
       {
         body: "Screenshotting an Instagram story and turning it into a calendar event on the open web in seconds feels like getting away with something!",
