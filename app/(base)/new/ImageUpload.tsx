@@ -233,7 +233,7 @@ export default function ImageUpload() {
   };
 
   return (
-    <Card>
+    <Card className="max-w-screen w-full sm:max-w-xl">
       <CardContent className="grid grid-cols-1 place-items-center gap-0 py-4 shadow-md">
         <CardTitle>Event Image</CardTitle>
         <div className="p-2"></div>
