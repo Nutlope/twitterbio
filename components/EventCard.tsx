@@ -125,14 +125,15 @@ export default function EventCard(props: EventCardProps) {
                   {event.startTime}-{event.endTime}
                 </div>
                 {event.location && (
-                  <div
+                  <Link
+                    href={`https://www.google.com/maps/search/?api=1&query=${event.location}`}
                     className={cn(
-                      "shrink items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10",
+                      "z-10 shrink items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10",
                       { "line-clamp-1": !singleEvent }
                     )}
                   >
                     📍 {event.location}
-                  </div>
+                  </Link>
                 )}
               </div>
             </div>
