@@ -19,12 +19,12 @@ export function EditButton(props: EditButtonProps) {
 
   return (
     <SignedIn>
-      <DropdownMenuItem>
-        <Link href={`/event/${props.id}/edit`} className="flex items-center">
+      <Link href={`/event/${props.id}/edit`}>
+        <DropdownMenuItem>
           <Pencil className="mr-2 h-4 w-4" />
           Edit
-        </Link>
-      </DropdownMenuItem>
+        </DropdownMenuItem>
+      </Link>
     </SignedIn>
   );
 }
