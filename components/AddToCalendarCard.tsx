@@ -98,6 +98,9 @@ export function AddToCalendarCard({
     ]
   );
 
+  const eventForCalendar = { ...updatedProps };
+  eventForCalendar.description = `${updatedProps.description}[br][br]Collected with [url]${process.env.NEXT_PUBLIC_URL}|timetime.cc[/url]`;
+
   // save updatedProps to localStorage
   useEffect(() => {
     localStorage.setItem("updatedProps", JSON.stringify(updatedProps));
@@ -226,7 +229,10 @@ export function AddToCalendarCard({
           {initialProps.update && (
             <UpdateButton id={initialProps.updateId!} {...updatedProps} />
           )}
-          <Button variant="secondary" onClick={() => atcb_action(updatedProps)}>
+          <Button
+            variant="secondary"
+            onClick={() => atcb_action(eventForCalendar)}
+          >
             <CalendarPlus className="mr-2 h-4 w-4" />
             Add to Calendar
           </Button>
