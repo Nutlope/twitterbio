@@ -16,7 +16,7 @@ END:VEVENT
 END:VCALENDAR
 ` as string;
 
-type ICSJson = {
+export type ICSJson = {
   startDate: string;
   endDate: string;
   summary: string;
@@ -152,7 +152,7 @@ export function generateIssueTitle(input: string) {
   return `🐛: ${input.substring(0, 20)}...`;
 }
 
-type DateInfo = {
+export type DateInfo = {
   month: number;
   day: number;
   year: number;

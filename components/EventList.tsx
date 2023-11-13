@@ -1,6 +1,6 @@
 import { Event, User } from "@prisma/client";
 import { clsx } from "clsx";
-import EventCard from "@/components/EventCard";
+import { EventCard } from "@/components/EventCard";
 import {
   Accordion,
   AccordionItem,

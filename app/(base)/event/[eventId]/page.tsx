@@ -1,6 +1,7 @@
 import { Metadata, ResolvingMetadata } from "next/types";
 import { currentUser } from "@clerk/nextjs";
-import EventCard from "@/components/EventCard";
+import Image from "next/image";
+import { EventCard } from "@/components/EventCard";
 import { UserInfo } from "@/components/UserInfo";
 import { db } from "@/lib/db";
 import { AddToCalendarButtonProps } from "@/types";
@@ -70,6 +71,8 @@ export default async function Page({ params }: Props) {
     },
   });
   const isCreator = user?.id === event?.userId;
+  const eventData = event?.event as AddToCalendarButtonProps;
+  const fullImageUrl = eventData.images?.[3];
 
   if (!event) {
     return <p className="text-lg text-gray-500">No event found.</p>;
@@ -89,7 +92,20 @@ export default async function Page({ params }: Props) {
         event={event.event as AddToCalendarButtonProps}
         createdAt={event.createdAt}
         singleEvent
+        hideCurator
       />
+      {fullImageUrl && (
+        <>
+          <div className="p-2"></div>
+          <Image
+            src={fullImageUrl}
+            className="mx-auto h-auto w-2/3 object-cover sm:w-1/3"
+            alt=""
+            width={640}
+            height={480}
+          />
+        </>
+      )}
       <div className="p-4"></div>
       <div className="flex place-items-center gap-2">
         <div className="font-medium">Collected by</div>
