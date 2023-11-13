@@ -51,18 +51,13 @@ export function DeleteButton(props: DeleteButtonProps) {
 
   return (
     <SignedIn>
-      <DropdownMenuItem>
-        <button
-          type="button"
-          onClick={onClick}
-          disabled={isLoading}
-          className={cn("flex items-center text-red-600", {
-            "cursor-not-allowed opacity-60": isLoading,
-          })}
-        >
-          <TrashIcon className="mr-2 h-4 w-4" />
-          Delete
-        </button>
+      <DropdownMenuItem
+        onSelect={onClick}
+        disabled={isLoading}
+        className="text-red-600"
+      >
+        <TrashIcon className="mr-2 h-4 w-4" />
+        Delete
       </DropdownMenuItem>
     </SignedIn>
   );
