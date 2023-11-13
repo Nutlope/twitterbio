@@ -7,14 +7,6 @@ import EventList from "@/components/EventList";
 type Props = { params: { userName: string } };
 
 const getFollowingEvents = async (userName: string) => {
-  const user = await db.user.findUnique({
-    where: {
-      username: userName,
-    },
-    select: {
-      id: true,
-    },
-  });
   const events = await db.event.findMany({
     where: {
       OR: [
@@ -50,11 +42,7 @@ const getFollowingEvents = async (userName: string) => {
       startDateTime: "asc",
     },
     include: {
-      User: {
-        select: {
-          username: true,
-        },
-      },
+      User: true,
     },
   });
   return events;

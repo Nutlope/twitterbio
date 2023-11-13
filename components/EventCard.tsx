@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import { useUser } from "@clerk/nextjs";
+import { User } from "@prisma/client";
 import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./DropdownMenu";
@@ -25,11 +25,12 @@ import {
 import { AddToCalendarButtonProps } from "@/types";
 
 type EventCardProps = {
-  userId: string;
+  User: User;
   id: string;
   createdAt: Date;
   event: AddToCalendarButtonProps;
   singleEvent?: boolean;
+  hideCurator?: boolean;
 };
 
 function LiContainer(props: { children: React.ReactNode }) {
@@ -59,14 +60,13 @@ export default function EventCard(props: EventCardProps) {
   useEffect(() => {
     setIsClient(true);
   }, []);
-  const { userId, id, event, singleEvent } = props;
-  const isOwner = user?.id === userId;
+  const { User, id, event, singleEvent } = props;
+  const isOwner = user?.id === User.id;
   const startDateInfo = getDateInfoUTC(event.startDate!);
   const endDateInfo = getDateInfoUTC(event.endDate!);
   const showMultiDay = showMultipleDays(startDateInfo, endDateInfo);
   const showNightIcon =
     endsNextDayBeforeMorning(startDateInfo, endDateInfo) && !showMultiDay;
-  const imageUrl = event?.images?.[0];
   const fullImageUrl = event?.images?.[3];
 
   const Container = singleEvent ? DivContainer : LiContainer;
@@ -162,6 +162,20 @@ export default function EventCard(props: EventCardProps) {
               </p>
             </div>
           </div>
+          {!props.hideCurator && !singleEvent && (
+            <>
+              <div className="p-1"></div>
+              <div className="flex items-center gap-2">
+                <p className="text-xs font-medium text-gray-500">
+                  Collected by{" "}
+                  <Link
+                    href={`/${User.username}/events`}
+                    className="font-bold text-gray-900"
+                  >{`@${User.username}`}</Link>
+                </p>
+              </div>
+            </>
+          )}
         </LinkOrNot>
         <DropdownMenu>
           <DropdownMenuTrigger className="absolute right-0 top-0 flex h-8 w-8 items-center justify-center rounded-md border transition-colors hover:bg-muted">
@@ -173,9 +187,9 @@ export default function EventCard(props: EventCardProps) {
             {isOwner && (
               <>
                 <DropdownMenuSeparator />
-                <EditButton userId={userId} id={id} />
+                <EditButton userId={User.id} id={id} />
                 <DropdownMenuSeparator />
-                <DeleteButton userId={userId} id={id} />
+                <DeleteButton userId={User.id} id={id} />
               </>
             )}
           </DropdownMenuContent>

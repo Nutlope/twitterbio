@@ -6,6 +6,9 @@ export default async function Page({ params }: { params: { userId: string } }) {
     orderBy: {
       startDateTime: "asc",
     },
+    include: {
+      User: true,
+    },
   });
 
   const pastEvents = events.filter((item) => item.startDateTime < new Date());

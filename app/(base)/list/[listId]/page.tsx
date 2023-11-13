@@ -22,25 +22,17 @@ const getList = async (listId: string) => {
         orderBy: {
           startDateTime: "asc",
         },
+        include: {
+          User: true,
+        },
       },
       createdAt: true,
       updatedAt: true,
       FollowList: true,
+      User: true,
     },
   });
   return list;
-};
-
-const getUsername = async (userId: string) => {
-  const user = await db.user.findUnique({
-    where: {
-      id: userId,
-    },
-    select: {
-      username: true,
-    },
-  });
-  return user;
 };
 
 export async function generateMetadata(
@@ -55,14 +47,6 @@ export async function generateMetadata(
     };
   }
 
-  const user = await getUsername(list.userId);
-
-  if (!user) {
-    return {
-      title: "No user found | timetime.cc",
-    };
-  }
-
   const futureEvents = list.events.filter(
     (item) => item.startDateTime >= new Date()
   );
@@ -71,9 +55,9 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
-    title: `${list.name} by @${user.username} | timetime.cc`,
+    title: `${list.name} by @${list.User.username} | timetime.cc`,
     openGraph: {
-      title: `${list.name} by @${user.username} (${futureEventsCount} upcoming) | timetime.cc`,
+      title: `${list.name} by @${list.User.username} (${futureEventsCount} upcoming) | timetime.cc`,
       description: `${list.description}`,
       locale: "en_US",
       url: `${process.env.NEXT_PUBLIC_URL}/list/${params.listId}`,

@@ -5,6 +5,9 @@ import { db } from "@/lib/db";
 
 export default async function NextEvents({ limit = 5 } = {}) {
   const events = await db.event.findMany({
+    include: {
+      User: true,
+    },
     orderBy: {
       startDateTime: "asc",
     },

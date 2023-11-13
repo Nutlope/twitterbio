@@ -18,11 +18,7 @@ const getEventsForUser = async (userName: string) => {
       startDateTime: "asc",
     },
     include: {
-      User: {
-        select: {
-          username: true,
-        },
-      },
+      User: true,
     },
   });
   return events;
@@ -84,7 +80,11 @@ export default async function Page({ params }: Props) {
       <div className="p-4"></div>
       <ListCardsForUser userName={params.userName} limit={10} />
       <h2 className="text-sm font-medium text-gray-500">All Events</h2>
-      <EventList pastEvents={pastEvents} futureEvents={futureEvents} />
+      <EventList
+        pastEvents={pastEvents}
+        futureEvents={futureEvents}
+        hideCurator
+      />
       <div className="p-5"></div>
     </>
   );

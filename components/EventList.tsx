@@ -1,4 +1,4 @@
-import { Event } from "@prisma/client";
+import { Event, User } from "@prisma/client";
 import { clsx } from "clsx";
 import EventCard from "@/components/EventCard";
 import {
@@ -9,14 +9,20 @@ import {
 } from "@/components/Accordian";
 import { AddToCalendarButtonProps } from "@/types";
 
+type EventWithUser = Event & {
+  User: User;
+};
+
 export default function EventList({
   futureEvents,
   pastEvents,
   variant,
+  hideCurator,
 }: {
-  futureEvents: Event[];
-  pastEvents: Event[];
+  futureEvents: EventWithUser[];
+  pastEvents: EventWithUser[];
   variant?: "future-minimal";
+  hideCurator?: boolean;
 }) {
   const showPastEvents = variant !== "future-minimal";
 
@@ -40,10 +46,11 @@ export default function EventList({
                 {pastEvents.map((item) => (
                   <EventCard
                     key={item.id}
-                    userId={item.userId}
+                    User={item.User}
                     id={item.id}
                     event={item.event as AddToCalendarButtonProps}
                     createdAt={item.createdAt}
+                    hideCurator={hideCurator}
                   />
                 ))}
               </ul>
@@ -76,10 +83,11 @@ export default function EventList({
               {futureEvents.map((item) => (
                 <EventCard
                   key={item.id}
-                  userId={item.userId}
+                  User={item.User}
                   id={item.id}
                   event={item.event as AddToCalendarButtonProps}
                   createdAt={item.createdAt}
+                  hideCurator={hideCurator}
                 />
               ))}
             </ul>

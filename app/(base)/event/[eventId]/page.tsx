@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Metadata, ResolvingMetadata } from "next/types";
 import { currentUser } from "@clerk/nextjs";
 import EventCard from "@/components/EventCard";
@@ -17,11 +16,7 @@ const getEvent = async (eventId: string) => {
       event: true,
       createdAt: true,
       userId: true,
-      User: {
-        select: {
-          username: true,
-        },
-      },
+      User: true,
     },
   });
   return event;
@@ -88,7 +83,7 @@ export default async function Page({ params }: Props) {
         </>
       )}
       <EventCard
-        userId={event.userId}
+        User={event.User}
         key={event.id}
         id={event.id}
         event={event.event as AddToCalendarButtonProps}
