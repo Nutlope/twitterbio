@@ -20,6 +20,7 @@ import {
   NavigationMenuTrigger,
 } from "./ui/navigation-menu";
 import { Separator } from "./ui/separator";
+import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
 
 const newEvent: { title: string; href: string; description: string }[] = [
@@ -88,26 +89,33 @@ export default function Header() {
     <header className="mt-3 flex w-full items-center justify-between px-2 pb-4 sm:mt-5 sm:px-4 sm:pb-7">
       <div className="flex items-center justify-between gap-2 sm:grow sm:gap-0">
         <NavigationMenu>
-          <Link href="/" className="flex items-center space-x-3">
+          <Link href="/" className="relative flex items-center space-x-3">
             <Calendar className="h-8 w-8" />
             <h1 className="ml-2 hidden text-2xl font-bold tracking-tight sm:block sm:text-4xl">
               timetime.cc
             </h1>
+            <Badge
+              variant="secondary"
+              className="absolute -bottom-2 left-[-1.9rem] scale-50 sm:static sm:scale-100"
+            >
+              Preview
+            </Badge>
           </Link>
         </NavigationMenu>
-        <Nav />
       </div>
-      <div className="p-1"></div>
-      <NavigationMenu>
-        <SignedIn>
-          <UserButton afterSignOutUrl="/" />
-        </SignedIn>
-        <SignedOut>
-          <SignInButton afterSignUpUrl="/onboarding">
-            <button className={navigationMenuTriggerStyle()}>Sign In</button>
-          </SignInButton>
-        </SignedOut>
-      </NavigationMenu>
+      <div className="flex gap-2">
+        <Nav />
+        <NavigationMenu>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
+          <SignedOut>
+            <SignInButton afterSignUpUrl="/onboarding">
+              <button className={navigationMenuTriggerStyle()}>Sign In</button>
+            </SignInButton>
+          </SignedOut>
+        </NavigationMenu>
+      </div>
     </header>
   );
 }
