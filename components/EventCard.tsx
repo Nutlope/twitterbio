@@ -122,7 +122,7 @@ function EventDetails({
           <Link
             href={`https://www.google.com/maps/search/?api=1&query=${location}`}
             className={cn(
-              "z-10 shrink items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10",
+              "shrink items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10",
               { "line-clamp-1 break-all": !singleEvent }
             )}
           >
