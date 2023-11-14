@@ -2,15 +2,16 @@
 
 import { SignInButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { AddToCalendarButtonType } from "add-to-calendar-button-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { Loader2, UploadCloud } from "lucide-react";
 import { Button } from "./ui/button";
-import { CardDescription } from "./ui/card";
 
 export function SaveButton(props: AddToCalendarButtonType) {
   const router = useRouter();
+  const params = useSearchParams();
+  const filePath = params.get("filePath") || "";
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function onClick() {
@@ -60,14 +61,17 @@ export function SaveButton(props: AddToCalendarButtonType) {
       <SignedOut>
         {/* TODO: instead convert from the AddToCalendarButtonProps */}
         <SignInButton
-          afterSignInUrl={`${process.env.NEXT_PUBLIC_URL}/new?saveIntent=true`}
-          afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/onboarding?saveIntent=true`}
+          afterSignInUrl={`${process.env.NEXT_PUBLIC_URL}/new?saveIntent=true&filePath=${filePath}`}
+          afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/new?saveIntent=true&filePath=${filePath}`}
         >
-          <Button className="w-full">Sign in to publish</Button>
+          <Button
+            onClick={() => {
+              localStorage.setItem("updatedProps", JSON.stringify(props));
+            }}
+          >
+            Sign in to publish
+          </Button>
         </SignInButton>
-        <CardDescription className="italic">
-          *TODO: Will not save your progress
-        </CardDescription>
       </SignedOut>
     </>
   );

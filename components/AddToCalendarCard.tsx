@@ -101,20 +101,6 @@ export function AddToCalendarCard({
   const eventForCalendar = { ...updatedProps };
   eventForCalendar.description = `${updatedProps.description}[br][br]Collected with [url]${process.env.NEXT_PUBLIC_URL}|timetime.cc[/url]`;
 
-  // save updatedProps to localStorage
-  useEffect(() => {
-    localStorage.setItem("updatedProps", JSON.stringify(updatedProps));
-  }, [updatedProps]);
-
-  // // load updatedProps from localStorage
-  // useEffect(() => {
-  //   const data = localStorage.getItem("updatedProps");
-  //   if (data) {
-  //     setAddToCalendarButtonProps(JSON.parse(data));
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   return (
     <Card className="max-w-screen sm:max-w-xl">
       <CardContent className="grid grid-cols-1 gap-6 py-6 shadow-md sm:grid-cols-6">

@@ -9,11 +9,12 @@ export default function OnboardingContinueButton() {
   const { user } = useUser();
   const searchParams = useSearchParams();
   const saveIntent = searchParams.get("saveIntent") || "";
+  const filePath = searchParams.get("filePath") || "";
   const signedInPath = saveIntent
-    ? `/new?saveIntent=true`
+    ? `/new?saveIntent=true&filePath=${filePath}`
     : `/${user?.username}/events`;
   const signedOutUrl = saveIntent
-    ? `${process.env.NEXT_PUBLIC_URL}/new?saveIntent=true`
+    ? `${process.env.NEXT_PUBLIC_URL}/new?saveIntent=true&filePath=${filePath}`
     : process.env.NEXT_PUBLIC_URL;
 
   return (
