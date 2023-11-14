@@ -16,7 +16,7 @@ export default function Page() {
     <>
       <div className="max-w-xl">
         <Suspense fallback={<LeaderboardSkeleton />}>
-          <NextEvents />
+          <NextEvents upcoming />
         </Suspense>
       </div>
       <div className="p-6"></div>

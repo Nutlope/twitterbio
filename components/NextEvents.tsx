@@ -3,7 +3,7 @@ import { buttonVariants } from "./ui/button";
 import EventList from "@/components/EventList";
 import { db } from "@/lib/db";
 
-export default async function NextEvents({ limit = 5 } = {}) {
+export default async function NextEvents({ limit = 5, upcoming = false } = {}) {
   const events = await db.event.findMany({
     include: {
       User: true,
@@ -14,7 +14,10 @@ export default async function NextEvents({ limit = 5 } = {}) {
     },
     where: {
       startDateTime: {
-        gte: new Date(),
+        gte: upcoming ? undefined : new Date(),
+      },
+      endDateTime: {
+        gte: upcoming ? new Date() : undefined,
       },
     },
     take: limit,

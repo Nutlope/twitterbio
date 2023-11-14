@@ -29,7 +29,7 @@ export default function EventList({
   hideCurator?: boolean;
 }) {
   const showPastEvents = variant !== "future-minimal";
-  const showCurrentEvents = variant !== "future-minimal";
+  const showCurrentEvents = true;
 
   return (
     <Accordion
@@ -76,7 +76,7 @@ export default function EventList({
       {showCurrentEvents && currentEvents.length > 0 && (
         <AccordionItem
           value="current-events"
-          className="relative rounded-2xl border-b-0 bg-gradient-to-tr from-blue-500/10 via-indigo-500/10 to-purple-500/10 px-6 ring-1 ring-black/10"
+          className="relative border-b-0 bg-gradient-to-tr from-blue-500/10 via-indigo-500/10 to-purple-500/10 px-6 ring-1 ring-black/10 sm:rounded-2xl"
         >
           <AccordionTrigger>
             <div className="flex gap-1.5 font-semibold">

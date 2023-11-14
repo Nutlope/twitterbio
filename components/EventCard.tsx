@@ -105,7 +105,8 @@ function EventDetails({
           className={cn(
             "text-lg font-semibold leading-6 text-gray-900 sm:text-xl",
             {
-              "md:line-clamp-1 line-clamp-2": !singleEvent,
+              "md:line-clamp-1 line-clamp-2 md:break-all break-words":
+                !singleEvent,
             }
           )}
         >
@@ -122,7 +123,7 @@ function EventDetails({
             href={`https://www.google.com/maps/search/?api=1&query=${location}`}
             className={cn(
               "z-10 shrink items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10",
-              { "line-clamp-1": !singleEvent }
+              { "line-clamp-1 break-all": !singleEvent }
             )}
           >
             📍 {location}
@@ -217,7 +218,7 @@ export function EventCard(props: EventCardProps) {
 
   return (
     <li className="relative grid px-4 py-5 sm:px-6">
-      <div className="flex items-center gap-4 pr-10">
+      <div className="flex items-center gap-4 pr-8">
         <EventDateDisplay
           startDate={event.startDate!}
           endDate={event.endDate!}
