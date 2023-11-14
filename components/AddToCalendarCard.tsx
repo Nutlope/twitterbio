@@ -57,7 +57,7 @@ export function AddToCalendarCard({
     croppedImagesUrls.square,
     croppedImagesUrls.fourThree,
     croppedImagesUrls.sixteenNine,
-    croppedImagesUrls.original!,
+    croppedImagesUrls.original,
   ]);
 
   // state

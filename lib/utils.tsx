@@ -417,3 +417,8 @@ export const getLastMessages = (messages: Message[]) => {
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export function extractFilePath(url: string) {
+  const match = url.match(/\/uploads\/\d{4}\/\d{2}\/\d{2}\/[^?]+/);
+  return match ? match[0] : "";
+}

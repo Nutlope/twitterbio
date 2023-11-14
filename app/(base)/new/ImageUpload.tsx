@@ -1,7 +1,7 @@
 "use client";
 
 import * as Bytescale from "@bytescale/sdk";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useState, useRef } from "react";
 import "react-image-crop/dist/ReactCrop.css";
 import { SwitchCamera, Trash, Upload, Scissors } from "lucide-react";
@@ -12,10 +12,18 @@ import { Button } from "@/components/ui/button";
 import { useCroppedImageContext } from "@/context/CroppedImageContext";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
-export default function ImageUpload() {
+export default function ImageUpload({
+  savedFilePath,
+}: {
+  savedFilePath?: string;
+}) {
   // ImageUpload
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [filePath, setFilePath] = useState(searchParams.get("filePath") || "");
+  const [filePath, setFilePath] = useState(
+    searchParams.get("filePath") || savedFilePath || ""
+  );
   const imageUrl = filePath
     ? Bytescale.UrlBuilder.url({
         accountId: "12a1yek",
@@ -245,6 +253,7 @@ export default function ImageUpload() {
             <>
               <div className="p-1"></div>
               <img
+                key={filePath}
                 ref={croppedImages?.original ? previewImageRef : fullImageRef}
                 src={
                   croppedImages?.cropped ||
@@ -332,7 +341,13 @@ export default function ImageUpload() {
             }}
             onComplete={(files) => {
               if (files.length > 0) {
-                setFilePath(files[0].filePath);
+                // push the file path to the search params
+                const filePath = files[0].filePath;
+                setFilePath(filePath);
+                setCroppedImages({});
+                router.push(
+                  pathname + "?" + new URLSearchParams({ filePath }).toString()
+                );
               }
             }}
           >

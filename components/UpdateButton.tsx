@@ -7,7 +7,6 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { Loader2, Save } from "lucide-react";
 import { Button } from "./ui/button";
-import { CardDescription } from "./ui/card";
 
 type UpdateButtonProps = AddToCalendarButtonType & {
   id: string;
@@ -54,13 +53,13 @@ export function UpdateButton(props: UpdateButtonProps) {
     <>
       <SignedIn>
         {isLoading && (
-          <Button className="w-full" disabled>
+          <Button disabled>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Please wait
           </Button>
         )}
         {!isLoading && (
-          <Button className="w-full" onClick={() => onClickUpdate(props.id)}>
+          <Button onClick={() => onClickUpdate(props.id)}>
             <Save className="mr-2 h-4 w-4" /> Update
           </Button>
         )}
@@ -71,11 +70,8 @@ export function UpdateButton(props: UpdateButtonProps) {
           afterSignInUrl={`${process.env.NEXT_PUBLIC_URL}/`}
           afterSignUpUrl={`${process.env.NEXT_PUBLIC_URL}/`}
         >
-          <Button className="w-full">Sign in to update</Button>
+          <Button>Sign in to update</Button>
         </SignInButton>
-        <CardDescription className="italic">
-          *TODO: Will not save your progress
-        </CardDescription>
       </SignedOut>
     </>
   );
