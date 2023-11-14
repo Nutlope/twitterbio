@@ -1,5 +1,6 @@
 import { Event, FollowEvent, User } from "@prisma/client";
 import { clsx } from "clsx";
+import RainbowText from "./RainbowText";
 import { EventCard } from "@/components/EventCard";
 import {
   Accordion,
@@ -37,7 +38,12 @@ export default function EventList({
       defaultValue={["current-events", "future-events"]}
     >
       {showPastEvents && (
-        <AccordionItem value="past-events" className="px-6 opacity-80">
+        <AccordionItem
+          value="past-events"
+          className={clsx("px-6 opacity-80", {
+            "border-b-0": currentEvents.length > 0,
+          })}
+        >
           <AccordionTrigger>
             <div className="flex gap-1.5">
               Past events
@@ -70,11 +76,11 @@ export default function EventList({
       {showCurrentEvents && currentEvents.length > 0 && (
         <AccordionItem
           value="current-events"
-          className={clsx("px-6", { "border-b-0": currentEvents.length > 0 })}
+          className="relative rounded-md border-b-0 bg-gradient-to-tr from-blue-500/10 via-indigo-500/10 to-purple-500/10 px-6"
         >
           <AccordionTrigger>
-            <div className="flex gap-1.5">
-              Events happening now
+            <div className="flex gap-1.5 font-semibold">
+              Happening now
               <span className="mr-2 inline-flex items-center justify-center rounded-full bg-gray-600 px-2 py-1 text-xs font-bold leading-none text-slate-100">
                 {currentEvents.length}
               </span>

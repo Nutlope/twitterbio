@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 export function CallToAction() {
   return (
-    <div className="rounded-lg bg-indigo-100 py-4">
+    <div className="rounded-lg bg-indigo-50 py-4">
       <div className="w-full px-6 lg:flex lg:items-center lg:justify-between lg:px-8">
         <h2 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
           Curious to learn more?
