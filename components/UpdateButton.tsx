@@ -42,6 +42,8 @@ export function UpdateButton(props: UpdateButtonProps) {
 
     const event = await response.json();
 
+    toast.success("Event updated.");
+
     // This forces a cache invalidation.
     router.refresh();
 

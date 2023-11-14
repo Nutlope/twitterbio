@@ -24,6 +24,7 @@ const getList = async (listId: string) => {
         },
         include: {
           User: true,
+          FollowEvent: true,
         },
       },
       createdAt: true,

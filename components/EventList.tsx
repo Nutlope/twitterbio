@@ -1,4 +1,4 @@
-import { Event, User } from "@prisma/client";
+import { Event, FollowEvent, User } from "@prisma/client";
 import { clsx } from "clsx";
 import { EventCard } from "@/components/EventCard";
 import {
@@ -11,6 +11,7 @@ import { AddToCalendarButtonProps } from "@/types";
 
 type EventWithUser = Event & {
   User: User;
+  FollowEvent: FollowEvent[];
 };
 
 export default function EventList({
@@ -54,6 +55,7 @@ export default function EventList({
                   <EventCard
                     key={item.id}
                     User={item.User}
+                    FollowEvent={item.FollowEvent}
                     id={item.id}
                     event={item.event as AddToCalendarButtonProps}
                     createdAt={item.createdAt}
@@ -89,6 +91,7 @@ export default function EventList({
                 {currentEvents.map((item) => (
                   <EventCard
                     key={item.id}
+                    FollowEvent={item.FollowEvent}
                     User={item.User}
                     id={item.id}
                     event={item.event as AddToCalendarButtonProps}
@@ -127,6 +130,7 @@ export default function EventList({
                 <EventCard
                   key={item.id}
                   User={item.User}
+                  FollowEvent={item.FollowEvent}
                   id={item.id}
                   event={item.event as AddToCalendarButtonProps}
                   createdAt={item.createdAt}

@@ -5,7 +5,6 @@ import { EventCard } from "@/components/EventCard";
 import { UserInfo } from "@/components/UserInfo";
 import { db } from "@/lib/db";
 import { AddToCalendarButtonProps } from "@/types";
-import { FollowEventButton } from "@/components/FollowButtons";
 
 const getEvent = async (eventId: string) => {
   const event = await db.event.findUnique({
@@ -18,6 +17,7 @@ const getEvent = async (eventId: string) => {
       createdAt: true,
       userId: true,
       User: true,
+      FollowEvent: true,
     },
   });
   return event;
@@ -79,14 +79,9 @@ export default async function Page({ params }: Props) {
   }
   return (
     <>
-      {!isCreator && (
-        <>
-          <FollowEventButton eventId={params.eventId} following={!!following} />
-          <div className="p-4"></div>
-        </>
-      )}
       <EventCard
         User={event.User}
+        FollowEvent={event.FollowEvent}
         key={event.id}
         id={event.id}
         event={event.event as AddToCalendarButtonProps}

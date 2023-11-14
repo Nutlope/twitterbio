@@ -7,6 +7,7 @@ export default async function NextEvents({ limit = 5 } = {}) {
   const events = await db.event.findMany({
     include: {
       User: true,
+      FollowEvent: true,
     },
     orderBy: {
       startDateTime: "asc",

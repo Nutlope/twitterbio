@@ -34,6 +34,8 @@ export function SaveButton(props: AddToCalendarButtonType) {
 
     const event = await response.json();
 
+    toast.success("Event saved.");
+
     // This forces a cache invalidation.
     router.refresh();
 

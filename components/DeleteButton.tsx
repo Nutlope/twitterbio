@@ -39,6 +39,8 @@ export function DeleteButton(props: DeleteButtonProps) {
 
     const event = await response.json();
 
+    toast.success("Event deleted.");
+
     // This forces a cache invalidation.
     router.refresh();
 

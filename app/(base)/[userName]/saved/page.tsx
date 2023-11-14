@@ -22,6 +22,7 @@ const getSavedEvents = async (userName: string) => {
     },
     include: {
       User: true,
+      FollowEvent: true,
     },
   });
   return events;

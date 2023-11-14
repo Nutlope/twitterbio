@@ -78,6 +78,14 @@ export default function EventListsButton({
 
     const event = await response.json();
 
+    if (toAdd) {
+      toast.success("Event added to list.");
+    }
+
+    if (!toAdd) {
+      toast.success("Event removed from list.");
+    }
+
     // This forces a cache invalidation.
     router.refresh();
   }

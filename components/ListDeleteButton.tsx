@@ -41,6 +41,8 @@ export function ListDeleteButton(props: ListDeleteButtonProps) {
     // This forces a cache invalidation.
     router.refresh();
 
+    toast.success("List deleted.");
+
     router.push(`/${user?.username}/events`);
   }
 

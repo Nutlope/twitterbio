@@ -42,6 +42,8 @@ export default function ListSaveButton(props: ListSaveButtonProps) {
 
     const list = await response.json();
 
+    toast.success("List saved.");
+
     // This forces a cache invalidation.
     router.refresh();
 

@@ -43,6 +43,7 @@ const getFollowingEvents = async (userName: string) => {
     },
     include: {
       User: true,
+      FollowEvent: true,
     },
   });
   return events;

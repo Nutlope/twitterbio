@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import { useUser } from "@clerk/nextjs";
-import { User } from "@prisma/client";
+import { FollowEvent, User } from "@prisma/client";
 import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
 import {
@@ -15,6 +15,7 @@ import {
 import { CalendarButton } from "./CalendarButton";
 import { ShareButton } from "./ShareButton";
 import { ConditionalWrapper } from "./ConditionalWrapper";
+import { FollowEventDropdownButton } from "./FollowButtons";
 import {
   translateToHtml,
   getDateInfoUTC,
@@ -26,6 +27,7 @@ import { AddToCalendarButtonProps } from "@/types";
 
 type EventCardProps = {
   User: User;
+  FollowEvent: FollowEvent[];
   id: string;
   createdAt: Date;
   event: AddToCalendarButtonProps;
@@ -162,11 +164,13 @@ function EventActionButton({
   event,
   id,
   isOwner,
+  isFollowing,
 }: {
   User: User;
   event: AddToCalendarButtonProps;
   id: string;
   isOwner: boolean;
+  isFollowing?: boolean;
 }) {
   return (
     <DropdownMenu>
@@ -176,6 +180,7 @@ function EventActionButton({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <CalendarButton event={event} id={id} username={User.username} />
+        <FollowEventDropdownButton eventId={id} following={isFollowing} />
         <ShareButton event={event} id={id} />
         {isOwner && (
           <>
@@ -206,8 +211,9 @@ function EventCuratedBy({ username }: { username: string }) {
 
 export function EventCard(props: EventCardProps) {
   const { user } = useUser();
-  const { User, id, event, singleEvent } = props;
+  const { User, FollowEvent, id, event, singleEvent } = props;
   const isOwner = user?.id === User.id;
+  const isFollowing = !!FollowEvent.find((item) => item.userId === user?.id);
 
   return (
     <li className="relative grid px-4 py-5 sm:px-6">
@@ -236,6 +242,7 @@ export function EventCard(props: EventCardProps) {
           event={event}
           id={id}
           isOwner={isOwner}
+          isFollowing={isFollowing}
         />
       </div>
       {!props.hideCurator && (
