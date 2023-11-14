@@ -7,7 +7,9 @@ export default function Footer({ cta }: { cta?: boolean }) {
     <footer className="mt-5 grid w-full ">
       {cta && (
         <SignedOut>
-          <CallToAction />
+          <div className="px-4">
+            <CallToAction />
+          </div>
         </SignedOut>
       )}
       <div className="flex h-16 w-full flex-col items-center justify-between space-y-3 px-3 pt-4 text-center sm:mb-0 sm:h-20 sm:flex-row sm:pt-2">
