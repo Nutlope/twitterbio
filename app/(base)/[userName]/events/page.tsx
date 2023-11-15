@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Metadata, ResolvingMetadata } from "next/types";
+import { currentUser } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 import { UserInfo } from "@/components/UserInfo";
 import ListCardsForUser from "@/components/ListCardsForUser";
@@ -20,6 +21,7 @@ const getEventsForUser = async (userName: string) => {
     include: {
       User: true,
       FollowEvent: true,
+      Comment: true,
     },
   });
   return events;
@@ -66,6 +68,8 @@ export async function generateMetadata(
 }
 
 export default async function Page({ params }: Props) {
+  const activeUser = await currentUser();
+  const self = activeUser?.username === params.userName;
   const events = await getEventsForUser(params.userName);
 
   const pastEvents = events.filter((item) => item.startDateTime < new Date());
@@ -93,6 +97,7 @@ export default async function Page({ params }: Props) {
         pastEvents={pastEvents}
         futureEvents={futureEvents}
         hideCurator
+        showPrivateEvents={self}
       />
       <div className="p-5"></div>
     </>

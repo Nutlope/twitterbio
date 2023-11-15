@@ -6,6 +6,9 @@ import { trackGoal } from "fathom-client";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Download, Share, Sparkles } from "lucide-react";
+import { List } from "@prisma/client";
+import { YourDetails } from "./new/YourDetails";
+import ImageUpload from "./new/ImageUpload";
 import { Form } from "@/components/Form";
 import { Output } from "@/components/Output";
 import {
@@ -49,16 +52,13 @@ function Code({
   );
 }
 
-export default function AddEvent() {
+export default function AddEvent({ lists }: { lists?: List[] }) {
   // State variables
   const [issueStatus, setIssueStatus] = useState<Status>("idle");
   const [finished, setFinished] = useState(false);
   const [events, setEvents] = useState<AddToCalendarButtonType[] | null>(null);
   const [trackedAddToCalendarGoal, setTrackedAddToCalendarGoal] =
     useState(false);
-
-  // Refs
-  const eventRef = useRef<null | HTMLDivElement>(null);
 
   // Custom hooks and utility functions
   const {
@@ -100,19 +100,11 @@ export default function AddEvent() {
           "Something went wrong. Add you event manually or try again."
         );
       }
-      scrollToEvents();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finished]);
 
   const isDev = process.env.NODE_ENV === "development";
-
-  // Helper functions
-  const scrollToEvents = () => {
-    if (eventRef.current !== null) {
-      eventRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <div className="min-h-[60vh] ">
@@ -230,9 +222,11 @@ export default function AddEvent() {
           </Card>
         </TabsContent>
       </Tabs>
-
-      <div ref={eventRef}></div>
-      {(finished || isLoading) && <div className="p-6"></div>}
+      <div className="p-4"></div>
+      <YourDetails lists={lists || undefined} />
+      <div className="p-4"></div>
+      <ImageUpload />
+      <div className="p-4"></div>
       {isLoading && <AddToCalendarCardSkeleton />}
       <Output
         events={events}

@@ -44,6 +44,7 @@ const getFollowingEvents = async (userName: string) => {
     include: {
       User: true,
       FollowEvent: true,
+      Comment: true,
     },
   });
   return events;

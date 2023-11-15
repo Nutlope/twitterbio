@@ -82,7 +82,7 @@ export function Form({
           <div className="p-1"></div>
           <p className="text-center">
             <span className="text-slate-500">
-              ⏳ Be patient, takes ~4 seconds/event.
+              You can add other details while event details are being generated.
             </span>
           </p>
         </>

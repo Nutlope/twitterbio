@@ -8,6 +8,7 @@ export default async function NextEvents({ limit = 5, upcoming = false } = {}) {
     include: {
       User: true,
       FollowEvent: true,
+      Comment: true,
     },
     orderBy: {
       startDateTime: "asc",

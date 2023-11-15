@@ -13,6 +13,7 @@ datasource db {
 
 model Event {
   id            String        @id @default(cuid()) @map("cuid")
+  visibility    Visibility    @default(public)
   event         Json
   userId        String
   startDateTime DateTime      @default(now())
@@ -22,6 +23,7 @@ model Event {
   eventList     List[]
   User          User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   FollowEvent   FollowEvent[]
+  Comment       Comment[]
 
   @@index([userId])
 }
@@ -66,6 +68,7 @@ model User {
   followingUsers  FollowUser[]  @relation(name: "Follower")
   followedByUsers FollowUser[]  @relation(name: "Following")
   followingLists  FollowList[]
+  Comment         Comment[]
 }
 
 enum Status {
@@ -115,4 +118,24 @@ model FollowList {
   @@id([userId, listId])
   @@index([userId])
   @@index([listId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String   @db.MediumText
+  eventId   String
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Event Event @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  User  User  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([eventId])
+  @@index([userId])
+}
+
+enum Visibility {
+  public
+  private
 }

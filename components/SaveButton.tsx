@@ -7,12 +7,23 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { Loader2, UploadCloud } from "lucide-react";
 import { Button } from "./ui/button";
+import { useCroppedImageContext } from "@/context/CroppedImageContext";
+import { useFormContext } from "@/context/FormContext";
 
-export function SaveButton(props: AddToCalendarButtonType) {
+type SaveButtonProps = {
+  event: AddToCalendarButtonType;
+  notes?: string;
+  visibility: "public" | "private";
+  lists: Record<string, string>[];
+};
+
+export function SaveButton(props: SaveButtonProps) {
   const router = useRouter();
   const params = useSearchParams();
   const filePath = params.get("filePath") || "";
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { setCroppedImagesUrls } = useCroppedImageContext();
+  const { setFormData } = useFormContext();
 
   async function onClick() {
     setIsLoading(true);
@@ -23,7 +34,10 @@ export function SaveButton(props: AddToCalendarButtonType) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        event: props,
+        event: props.event,
+        comment: props.notes,
+        visibility: props.visibility,
+        lists: props.lists,
       }),
     });
 
@@ -36,6 +50,14 @@ export function SaveButton(props: AddToCalendarButtonType) {
     const event = await response.json();
 
     toast.success("Event saved.");
+
+    // Clear context state
+    setCroppedImagesUrls({});
+    setFormData({
+      notes: "",
+      visibility: "public",
+      lists: [],
+    });
 
     // This forces a cache invalidation.
     router.refresh();

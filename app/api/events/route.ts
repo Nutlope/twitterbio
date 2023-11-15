@@ -8,11 +8,17 @@ export const dynamic = "force-dynamic";
 
 const eventCreateSchema = z.object({
   event: z.any(), //TODO: add validation
+  comment: z.string().optional(),
+  lists: z.array(z.record(z.string().trim())),
+  visibility: z.enum(["public", "private"]).optional(),
 });
 
 const eventUpdateSchema = z.object({
   id: z.string(),
-  event: z.any(), //TODO: add validation
+  event: z.any(),
+  comment: z.string().optional(),
+  lists: z.array(z.record(z.string().trim())),
+  visibility: z.enum(["public", "private"]).optional(),
 });
 
 const eventDeleteSchema = z.object({
@@ -62,6 +68,15 @@ export async function POST(req: Request) {
     const body = eventCreateSchema.parse(json);
     const event = body.event as AddToCalendarButtonProps;
     devLog("processed event: ", event);
+    const comment = body.comment;
+    const lists = body.lists;
+    const visibility = body.visibility;
+    const hasComment = comment && comment.length > 0;
+    const hasLists = lists && lists.length > 0;
+    const hasVisibility = visibility && visibility.length > 0;
+    devLog("hasComment: ", hasComment, comment);
+    devLog("hasLists: ", hasLists, lists);
+    devLog("hasVisibility: ", hasVisibility, visibility);
 
     let startTime = event.startTime;
     let endTime = event.endTime;
@@ -98,6 +113,26 @@ export async function POST(req: Request) {
         userId: userId,
         startDateTime: startUtc,
         endDateTime: endUtc,
+        ...(hasVisibility && {
+          visibility: visibility,
+        }),
+        ...(hasComment && {
+          Comment: {
+            create: [
+              {
+                content: comment,
+                userId: userId,
+              },
+            ],
+          },
+        }),
+        ...(hasLists && {
+          eventList: {
+            connect: lists.map((list) => ({
+              id: list.value,
+            })),
+          },
+        }),
       },
       select: {
         id: true,
@@ -127,6 +162,16 @@ export async function PATCH(req: Request) {
     const body = eventUpdateSchema.parse(json);
     const id = body.id;
     const event = body.event as AddToCalendarButtonProps;
+    devLog("processed event: ", event);
+    const comment = body.comment;
+    const lists = body.lists;
+    const visibility = body.visibility;
+    const hasComment = comment && comment.length > 0;
+    const hasLists = lists && lists.length > 0;
+    const hasVisibility = visibility && visibility.length > 0;
+    devLog("hasComment: ", hasComment, comment);
+    devLog("hasLists: ", hasLists, lists);
+    devLog("hasVisibility: ", hasVisibility, visibility);
 
     const start = Temporal.ZonedDateTime.from(
       `${event.startDate}T${event.startTime}[${event.timeZone}]`
@@ -146,6 +191,36 @@ export async function PATCH(req: Request) {
         userId: userId,
         startDateTime: startUtc,
         endDateTime: endUtc,
+        ...(hasVisibility && {
+          visibility: visibility,
+        }),
+        ...(hasComment && {
+          Comment: {
+            create: [
+              {
+                content: comment,
+                userId: userId,
+              },
+            ],
+          },
+        }),
+        ...(!hasComment && {
+          Comment: {
+            deleteMany: {},
+          },
+        }),
+        ...(hasLists && {
+          eventList: {
+            connect: lists.map((list) => ({
+              id: list.value,
+            })),
+          },
+        }),
+        ...(!hasLists && {
+          eventList: {
+            set: [],
+          },
+        }),
       },
     });
 

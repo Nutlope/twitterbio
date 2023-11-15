@@ -3,9 +3,9 @@ import { UserInfo } from "@/components/UserInfo";
 import { db } from "@/lib/db";
 import { AddToCalendarCard } from "@/components/AddToCalendarCard";
 import { AddToCalendarButtonProps } from "@/types";
-import EventListsButton from "@/components/EventListsButton";
 import { extractFilePath } from "@/lib/utils";
 import ImageUpload from "@/app/(base)/new/ImageUpload";
+import { YourDetails } from "@/app/(base)/new/YourDetails";
 
 export default async function Page({
   params,
@@ -28,6 +28,8 @@ export default async function Page({
           lists: true,
         },
       },
+      Comment: true,
+      visibility: true,
     },
   });
 
@@ -39,25 +41,28 @@ export default async function Page({
   const savedFilePath = eventData?.images?.[0]
     ? extractFilePath(eventData?.images?.[0])
     : undefined;
-
+  const mostRecentComment = event.Comment.findLast(
+    (comment) => comment.content
+  )?.content;
   return (
     <>
       {event && event.event ? (
         <>
+          <YourDetails
+            lists={event.User.lists || undefined}
+            eventLists={event.eventList}
+            comment={mostRecentComment}
+            visibility={event.visibility}
+          />
+          <div className="p-4"></div>
+          <ImageUpload savedFilePath={savedFilePath} />
+          <div className="p-4"></div>
           <AddToCalendarCard
             {...(event.event as AddToCalendarButtonProps)}
             key={event.id}
             update
             updateId={params.eventId}
-          >
-            <EventListsButton
-              userLists={event.User.lists}
-              eventId={params.eventId}
-              eventLists={event.eventList}
-            />
-          </AddToCalendarCard>
-          <div className="p-4"></div>
-          <ImageUpload savedFilePath={savedFilePath} />
+          />
         </>
       ) : (
         <p className="text-lg text-gray-500">No event found.</p>

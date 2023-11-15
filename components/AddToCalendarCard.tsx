@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { atcb_action } from "add-to-calendar-button";
 import { AddToCalendarButtonType } from "add-to-calendar-button-react";
 import { useSearchParams } from "next/navigation";
@@ -13,6 +13,7 @@ import { Textarea } from "./ui/textarea";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { useCroppedImageContext } from "@/context/CroppedImageContext";
+import { useFormContext } from "@/context/FormContext";
 
 type AddToCalendarCardProps = AddToCalendarButtonType & {
   update?: boolean;
@@ -30,12 +31,14 @@ export function AddToCalendarCard({
 }: AddToCalendarCardProps) {
   // get croppedImagesUrls from context
   const { croppedImagesUrls, setCroppedImagesUrls } = useCroppedImageContext();
+  const { formData, setFormData } = useFormContext();
   const searchParams = useSearchParams();
   const filePath = searchParams.get("filePath");
+  const { notes, visibility, lists } = formData;
 
   // TODO: only use croppedImagesUrls if query param is set and same image
   const hasFilePath = croppedImagesUrls.filePath;
-  const matchesFilePath = croppedImagesUrls.filePath === filePath;
+  const matchesFilePath = true;
   const hasAllAspectRatios =
     croppedImagesUrls.original &&
     croppedImagesUrls.square &&
@@ -43,22 +46,14 @@ export function AddToCalendarCard({
     croppedImagesUrls.sixteenNine;
   const validImages = hasFilePath && matchesFilePath && hasAllAspectRatios;
 
-  const images = useMemo(() => {
-    return validImages
-      ? [
-          croppedImagesUrls.square!,
-          croppedImagesUrls.fourThree!,
-          croppedImagesUrls.sixteenNine!,
-          croppedImagesUrls.original!,
-        ]
-      : undefined;
-  }, [
-    validImages,
-    croppedImagesUrls.square,
-    croppedImagesUrls.fourThree,
-    croppedImagesUrls.sixteenNine,
-    croppedImagesUrls.original,
-  ]);
+  const images = validImages
+    ? [
+        croppedImagesUrls.square!,
+        croppedImagesUrls.fourThree!,
+        croppedImagesUrls.sixteenNine!,
+        croppedImagesUrls.original!,
+      ]
+    : undefined;
 
   // state
   const [name, setName] = useState(initialProps.name);
@@ -70,33 +65,19 @@ export function AddToCalendarCard({
   const [endTime, setEndTime] = useState(initialProps.endTime);
   const [link, setLink] = useState("");
 
-  const updatedProps = useMemo(
-    () => ({
-      ...initialProps,
-      name,
-      location,
-      description: link
-        ? description + "\n\n" + `[url]${link}|More Info[/url]`
-        : description,
-      startDate,
-      startTime,
-      endDate,
-      endTime,
-      images,
-    }),
-    [
-      initialProps,
-      name,
-      location,
-      link,
-      description,
-      startDate,
-      startTime,
-      endDate,
-      endTime,
-      images,
-    ]
-  );
+  const updatedProps = {
+    ...initialProps,
+    name,
+    location,
+    description: link
+      ? description + "\n\n" + `[url]${link}|More Info[/url]`
+      : description,
+    startDate,
+    startTime,
+    endDate,
+    endTime,
+    images,
+  };
 
   const eventForCalendar = { ...updatedProps };
   eventForCalendar.description = `${updatedProps.description}[br][br]Collected with [url]${process.env.NEXT_PUBLIC_URL}|timetime.cc[/url]`;
@@ -107,11 +88,6 @@ export function AddToCalendarCard({
         <CardTitle className="col-span-full flex items-center justify-between">
           <div>Event Details</div>
         </CardTitle>
-        {initialProps.children && (
-          <div className="col-span-full" onClick={initialProps?.onClick}>
-            {initialProps.children}
-          </div>
-        )}
         <div className="col-span-full">
           <Label htmlFor="name">Event</Label>
           <Input
@@ -211,9 +187,22 @@ export function AddToCalendarCard({
           />
         </div>
         <div className="flex gap-3">
-          {!initialProps.update && <SaveButton {...updatedProps} />}
+          {!initialProps.update && (
+            <SaveButton
+              notes={notes}
+              visibility={visibility}
+              lists={lists}
+              event={updatedProps}
+            />
+          )}
           {initialProps.update && (
-            <UpdateButton id={initialProps.updateId!} {...updatedProps} />
+            <UpdateButton
+              id={initialProps.updateId!}
+              notes={notes}
+              visibility={visibility}
+              lists={lists}
+              event={updatedProps}
+            />
           )}
           <Button
             variant="secondary"

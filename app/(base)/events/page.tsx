@@ -9,6 +9,7 @@ export default async function Page({ params }: { params: { userId: string } }) {
     include: {
       User: true,
       FollowEvent: true,
+      Comment: true,
     },
   });
 

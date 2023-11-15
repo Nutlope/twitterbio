@@ -25,6 +25,7 @@ const getList = async (listId: string) => {
         include: {
           User: true,
           FollowEvent: true,
+          Comment: true,
         },
       },
       createdAt: true,
@@ -114,6 +115,7 @@ export default async function Page({ params }: Props) {
         currentEvents={currentEvents}
         futureEvents={futureEvents}
         pastEvents={pastEvents}
+        showPrivateEvents={!!isOwner}
       />
       <div className="p-5"></div>
     </>

@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Fathom from "@/components/Fathom";
 import { CroppedImageProvider } from "@/context/CroppedImageContext";
+import { FormProvider } from "@/context/FormContext";
 
 const title = "timetime.cc";
 const description = "Create, collect, curate & share events";
@@ -33,13 +34,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <CroppedImageProvider>
-      <ClerkProvider>
-        <html lang="en">
-          <Fathom />
-          <body>{children}</body>
-        </html>
-      </ClerkProvider>
-    </CroppedImageProvider>
+    <FormProvider>
+      <CroppedImageProvider>
+        <ClerkProvider>
+          <html lang="en">
+            <Fathom />
+            <body>{children}</body>
+          </html>
+        </ClerkProvider>
+      </CroppedImageProvider>
+    </FormProvider>
   );
 }
