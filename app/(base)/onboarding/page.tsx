@@ -10,6 +10,7 @@ import {
   AccordionTrigger,
 } from "@/components/Accordian";
 import { Button } from "@/components/ui/button";
+import { ContactUs } from "@/components/ContactUs";
 
 export const metadata = {
   title: "Get Started | timetime.cc",
@@ -189,8 +190,9 @@ export default function Page() {
               Business Model
             </h3>
             <p className="mt-6">
-              We want are exploring sources of revenue that support our goal of
-              community ownership. Our three best ideas:
+              We are exploring sources of revenue that support our goal of
+              community ownership. Have an idea?{" "}
+              <ContactUs>Let us know!</ContactUs> Our three best ideas:
             </p>
             <ul role="list" className="mt-8 max-w-xl space-y-8 text-gray-600">
               <li className="flex gap-x-3">
