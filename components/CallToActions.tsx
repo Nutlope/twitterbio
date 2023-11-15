@@ -8,7 +8,7 @@ export function CallToAction() {
     <div className="bg-gradient-to-tr from-yellow-500/10 via-green-500/10 to-blue-500/10 py-4 ring-1 ring-black/10 sm:rounded-2xl">
       <div className="w-full px-6 lg:flex lg:items-center lg:justify-between lg:px-8">
         <h2 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
-          Curious to learn more?
+          Want to add your own events?
           <br />
           Book a free 1-1 intro call.
         </h2>
