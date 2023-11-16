@@ -125,10 +125,14 @@ export default function ImageUpload({
           fourThree: 4 / 3,
           sixteenNine: 16 / 9,
         };
-
+        const cropAspectRatio = crop.width / crop.height;
+        const imageAspectRatio =
+          fullImageRef.current.naturalWidth /
+          fullImageRef.current.naturalHeight;
+        const croppedImageAspectRatio = cropAspectRatio * imageAspectRatio;
         const aspectRatioWithOriginalAndCropped = {
           ...aspectRatios,
-          cropped: crop.width / crop.height,
+          cropped: croppedImageAspectRatio,
           original:
             fullImageRef.current.naturalWidth /
             fullImageRef.current.naturalHeight,
@@ -210,7 +214,6 @@ export default function ImageUpload({
             <>
               <div className="p-1"></div>
               <img
-                ref={fullImageRef}
                 src={`/api/image-proxy?url=${encodeURIComponent(imageUrl)}`}
                 alt="Full Image Preview"
                 className={cn(
@@ -255,6 +258,7 @@ export default function ImageUpload({
                       onChange={onCropChange}
                     >
                       <img
+                        ref={fullImageRef}
                         src={`/api/image-proxy?url=${encodeURIComponent(
                           imageUrl
                         )}`}
