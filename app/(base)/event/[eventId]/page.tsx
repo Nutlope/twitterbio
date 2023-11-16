@@ -5,6 +5,41 @@ import { EventCard } from "@/components/EventCard";
 import { UserInfo } from "@/components/UserInfo";
 import { db } from "@/lib/db";
 import { AddToCalendarButtonProps } from "@/types";
+import { collapseSimilarEvents } from "@/lib/similarEvents";
+import { EventWithUser } from "@/components/EventList";
+
+const getPossibleDuplicateEvents = async (
+  startDateTime: Date,
+  eventId: string
+) => {
+  // start date time should be within 1 hour of the start date time of the event
+  const startDateTimeLowerBound = new Date(startDateTime);
+  startDateTimeLowerBound.setHours(startDateTime.getHours() - 1);
+  const startDateTimeUpperBound = new Date(startDateTime);
+  startDateTimeUpperBound.setHours(startDateTime.getHours() + 1);
+
+  const possibleDuplicateEvents = await db.event.findMany({
+    where: {
+      startDateTime: {
+        gte: startDateTimeLowerBound,
+        lte: startDateTimeUpperBound,
+      },
+    },
+    select: {
+      startDateTime: true,
+      endDateTime: true,
+      id: true,
+      event: true,
+      createdAt: true,
+      userId: true,
+      User: true,
+      FollowEvent: true,
+      Comment: true,
+      visibility: true,
+    },
+  });
+  return possibleDuplicateEvents;
+};
 
 const getEvent = async (eventId: string) => {
   const event = await db.event.findUnique({
@@ -12,6 +47,8 @@ const getEvent = async (eventId: string) => {
       id: eventId,
     },
     select: {
+      startDateTime: true,
+      endDateTime: true,
       id: true,
       event: true,
       createdAt: true,
@@ -79,6 +116,17 @@ export default async function Page({ params }: Props) {
   if (!event) {
     return <p className="text-lg text-gray-500">No event found.</p>;
   }
+
+  const possibleDuplicateEvents = (await getPossibleDuplicateEvents(
+    event.startDateTime,
+    params.eventId
+  )) as EventWithUser[];
+
+  // find the event that matches the current event
+  const similarEvents = collapseSimilarEvents(possibleDuplicateEvents).find(
+    (similarEvent) => similarEvent.event.id === event.id
+  )?.similarEvents;
+
   return (
     <>
       <EventCard
@@ -90,6 +138,7 @@ export default async function Page({ params }: Props) {
         event={event.event as AddToCalendarButtonProps}
         createdAt={event.createdAt}
         visibility={event.visibility}
+        similarEvents={similarEvents}
         singleEvent
         hideCurator
       />

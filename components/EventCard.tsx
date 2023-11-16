@@ -17,6 +17,7 @@ import { ShareButton } from "./ShareButton";
 import { ConditionalWrapper } from "./ConditionalWrapper";
 import { FollowEventDropdownButton } from "./FollowButtons";
 import { Badge } from "./ui/badge";
+import { EventWithUser } from "./EventList";
 import {
   translateToHtml,
   getDateInfoUTC,
@@ -25,6 +26,7 @@ import {
   endsNextDayBeforeMorning,
 } from "@/lib/utils";
 import { AddToCalendarButtonProps } from "@/types";
+import { SimilarityDetails } from "@/lib/similarEvents";
 
 type EventCardProps = {
   User: User;
@@ -36,6 +38,10 @@ type EventCardProps = {
   visibility: "public" | "private";
   singleEvent?: boolean;
   hideCurator?: boolean;
+  similarEvents?: {
+    event: EventWithUser;
+    similarityDetails: SimilarityDetails;
+  }[];
 };
 
 function EventDateDisplay({
@@ -202,9 +208,14 @@ function EventActionButton({
 function EventCuratedBy({
   username,
   comment,
+  similarEvents,
 }: {
   username: string;
   comment?: Comment;
+  similarEvents?: {
+    event: EventWithUser;
+    similarityDetails: SimilarityDetails;
+  }[];
 }) {
   return (
     <div className="flex items-center gap-2">
@@ -214,6 +225,12 @@ function EventCuratedBy({
           href={`/${username}/events`}
           className="font-bold text-gray-900"
         >{`@${username}`}</Link>
+        {similarEvents && similarEvents.length > 0 && (
+          <SimilarEventsSummary
+            similarEvents={similarEvents}
+            curatorUsername={username}
+          />
+        )}
       </p>
       {comment && (
         <Badge className="inline-flex" variant="outline">
@@ -222,6 +239,76 @@ function EventCuratedBy({
       )}
     </div>
   );
+}
+
+function SimilarEventsForSingleEvent({
+  similarEvents,
+}: {
+  similarEvents: {
+    event: EventWithUser;
+    similarityDetails: SimilarityDetails;
+  }[];
+}) {
+  return (
+    <p className="whitespace-nowrap text-xs font-medium text-gray-500">
+      Similar events by{" "}
+      <SimilarEventsSummary similarEvents={similarEvents} singleEvent />
+    </p>
+  );
+}
+
+function SimilarEventsSummary({
+  similarEvents,
+  curatorUsername,
+  singleEvent,
+}: {
+  similarEvents: {
+    event: EventWithUser;
+    similarityDetails: SimilarityDetails;
+  }[];
+  curatorUsername?: string;
+  singleEvent?: boolean;
+}) {
+  // Create a map to group events by username
+  const eventsByUser = new Map<string, EventWithUser[]>();
+
+  // Iterate over similarEvents and populate the map
+  similarEvents.forEach(({ event }) => {
+    const userEvents = eventsByUser.get(event.User.username) || [];
+    userEvents.push(event);
+    eventsByUser.set(event.User.username, userEvents);
+  });
+
+  // Convert the map to an array of JSX elements
+  const userEventLinks = Array.from(eventsByUser).map(
+    ([username, events], index) => (
+      <span key={username}>
+        {username !== curatorUsername && (
+          <>
+            {!singleEvent && ", "}
+            <Link
+              href={`/user/${username}`}
+              className="font-bold text-gray-900"
+            >
+              @{username}
+            </Link>
+          </>
+        )}
+        {events.map((event, eventIndex) => (
+          <sup key={event.id}>
+            <Link
+              href={`/event/${event.id}`}
+              className="font-bold text-gray-900"
+            >
+              *
+            </Link>
+          </sup>
+        ))}
+      </span>
+    )
+  );
+
+  return <>{userEventLinks}</>;
 }
 
 function CuratorComment({ comment }: { comment?: Comment }) {
@@ -290,7 +377,16 @@ export function EventCard(props: EventCardProps) {
       {!props.hideCurator && (
         <>
           <div className="p-1"></div>
-          <EventCuratedBy username={User.username} comment={comment} />
+          <EventCuratedBy
+            username={User.username}
+            comment={comment}
+            similarEvents={props.similarEvents}
+          />
+        </>
+      )}
+      {singleEvent && props.similarEvents && props.similarEvents.length > 0 && (
+        <>
+          <SimilarEventsForSingleEvent similarEvents={props.similarEvents} />
         </>
       )}
     </li>
