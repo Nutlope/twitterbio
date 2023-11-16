@@ -11,12 +11,18 @@ export type ShareButtonProps = {
 };
 
 export function ShareButton(props: ShareButtonProps) {
+  // TODO: Add support for all day events
+  const isAllDay = props.event.startTime && props.event.endTime ? false : true;
+  const shareText = isAllDay
+    ? `(${props.event.startDate} ${props.event.description}`
+    : `(${props.event.startDate} ${props.event.startTime}-${props.event.endTime}) ${props.event.description}`;
+
   const handleShareClick = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
           title: `${props.event.name} | timetime.cc`,
-          text: `(${props.event.startDate} ${props.event.startTime}-${props.event.endTime}) ${props.event.description}`,
+          text: shareText,
           url: `${process.env.NEXT_PUBLIC_URL}/event/${props.id}`,
         });
         console.log("Event shared successfully");
