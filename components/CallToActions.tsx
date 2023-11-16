@@ -10,7 +10,7 @@ export function CallToAction() {
         <h2 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
           Want to add your own events?
           <br />
-          Book a free 1-1 intro call.
+          Book a free 1-1 onboarding.
         </h2>
         <div className="mt-2 flex items-center gap-x-6 lg:mt-0 lg:shrink-0">
           <CTAButton />

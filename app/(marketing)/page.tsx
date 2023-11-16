@@ -368,9 +368,9 @@ export default function Page() {
         <div>
           <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:flex lg:items-center lg:justify-between lg:px-8">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Want to add your own events?
+              Want to add events?
               <br />
-              Book a free 1-1 intro call.
+              Book a free 1-1 onboarding.
             </h2>
             <div className="mt-10 flex items-center gap-x-6 lg:mt-0 lg:shrink-0">
               <CTAButton />
