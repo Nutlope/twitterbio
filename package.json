@@ -34,6 +34,7 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "@tailwindcss/forms": "^0.5.6",
     "@vercel/kv": "^0.2.3",
+    "@vercel/toolbar": "^0.1.5",
     "add-to-calendar-button-react": "^2.4.3",
     "ai": "^2.2.20",
     "class-variance-authority": "^0.7.0",
