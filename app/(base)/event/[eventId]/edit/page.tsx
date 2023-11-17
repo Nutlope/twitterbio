@@ -64,13 +64,10 @@ export default async function Page({
         <p className="text-lg text-gray-500">No event found.</p>
       )}
       <div className="p-4"></div>
-      <Link
-        href={`/${event.userId}/events`}
-        className="flex place-items-center gap-2"
-      >
+      <div className="flex place-items-center gap-2">
         <div className="font-medium">Collected by</div>
         <UserInfo userId={event.userId} />
-      </Link>
+      </div>
     </>
   );
 }
