@@ -47,7 +47,10 @@ export function DeleteButton(props: DeleteButtonProps) {
     router.push(`/${user?.username}/events`);
   }
 
-  if (!user || user.id !== props.userId) {
+  const roles = user?.unsafeMetadata.roles as string[] | undefined;
+  const isOwner = user?.id === props.userId || roles?.includes("admin");
+
+  if (!isOwner) {
     return null;
   }
 

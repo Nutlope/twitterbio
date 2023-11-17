@@ -326,7 +326,8 @@ function CuratorComment({ comment }: { comment?: Comment }) {
 export function EventCard(props: EventCardProps) {
   const { user } = useUser();
   const { User, FollowEvent, id, event, singleEvent, visibility } = props;
-  const isOwner = user?.id === User.id;
+  const roles = user?.unsafeMetadata.roles as string[] | undefined;
+  const isOwner = user?.id === User.id || roles?.includes("admin");
   const isFollowing = !!FollowEvent.find((item) => item.userId === user?.id);
   const comment = props.Comment.findLast((item) => item.userId === user?.id);
 
@@ -364,7 +365,7 @@ export function EventCard(props: EventCardProps) {
           User={User}
           event={event}
           id={id}
-          isOwner={isOwner}
+          isOwner={!!isOwner}
           isFollowing={isFollowing}
         />
       </div>

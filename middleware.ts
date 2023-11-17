@@ -26,6 +26,7 @@ export default authMiddleware({
     "/event/(.*)",
     "/list/(.*)",
     "/.well-known/acme-challenge/(.*)",
+    "/.well-known/vercel-user-meta",
   ],
 });
 
