@@ -3,7 +3,6 @@ import { UserInfo } from "@/components/UserInfo";
 import { db } from "@/lib/db";
 import { AddToCalendarCard } from "@/components/AddToCalendarCard";
 import { AddToCalendarButtonProps } from "@/types";
-import { extractFilePath } from "@/lib/utils";
 import ImageUpload from "@/app/(base)/new/ImageUpload";
 import { YourDetails } from "@/app/(base)/new/YourDetails";
 
@@ -38,9 +37,6 @@ export default async function Page({
   }
 
   const eventData = event.event as AddToCalendarButtonProps;
-  const savedFilePath = eventData?.images?.[0]
-    ? extractFilePath(eventData?.images?.[0])
-    : undefined;
   const mostRecentComment = event.Comment.findLast(
     (comment) => comment.content
   )?.content;
@@ -55,10 +51,10 @@ export default async function Page({
             visibility={event.visibility}
           />
           <div className="p-4"></div>
-          <ImageUpload savedFilePath={savedFilePath} />
+          <ImageUpload images={eventData.images as string[]} />
           <div className="p-4"></div>
           <AddToCalendarCard
-            {...(event.event as AddToCalendarButtonProps)}
+            {...(eventData as AddToCalendarButtonProps)}
             key={event.id}
             update
             updateId={params.eventId}

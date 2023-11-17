@@ -40,20 +40,25 @@ export function AddToCalendarCard({
   const hasFilePath = croppedImagesUrls.filePath;
   const matchesFilePath = true;
   const hasAllAspectRatios =
-    croppedImagesUrls.original &&
+    croppedImagesUrls.cropped &&
     croppedImagesUrls.square &&
     croppedImagesUrls.fourThree &&
     croppedImagesUrls.sixteenNine;
-  const validImages = hasFilePath && matchesFilePath && hasAllAspectRatios;
+  const validImagesFromContext =
+    hasFilePath && matchesFilePath && hasAllAspectRatios;
 
-  const images = validImages
+  const imagesFromContext = validImagesFromContext
     ? [
         croppedImagesUrls.square!,
         croppedImagesUrls.fourThree!,
         croppedImagesUrls.sixteenNine!,
-        croppedImagesUrls.original!,
+        croppedImagesUrls.cropped!,
       ]
     : undefined;
+
+  const removeImage = croppedImagesUrls.deleted;
+  // use images from context or initial props
+  const images = removeImage ? [] : imagesFromContext || initialProps.images;
 
   // state
   const [name, setName] = useState(initialProps.name);

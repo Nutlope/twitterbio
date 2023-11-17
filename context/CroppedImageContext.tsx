@@ -9,6 +9,7 @@ type CroppedImagesUrls = {
   sixteenNine?: string;
   cropped?: string;
   filePath?: string;
+  deleted?: string;
 };
 type CroppedImageContextType = {
   croppedImagesUrls: CroppedImagesUrls;
