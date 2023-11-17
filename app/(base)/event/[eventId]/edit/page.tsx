@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { UserInfo } from "@/components/UserInfo";
 import { db } from "@/lib/db";
 import { AddToCalendarCard } from "@/components/AddToCalendarCard";
