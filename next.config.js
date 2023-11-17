@@ -3,7 +3,7 @@ const dotenvExpand = require("dotenv-expand");
 dotenvExpand.expand({ parsed: { ...process.env } });
 
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
   productionBrowserSourceMaps: true,
   images: {
     remotePatterns: [
@@ -22,3 +22,6 @@ module.exports = {
     ],
   },
 };
+
+const withVercelToolbar = require("@vercel/toolbar/plugins/next")();
+module.exports = withVercelToolbar(nextConfig);

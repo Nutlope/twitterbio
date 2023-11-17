@@ -1,9 +1,11 @@
 import { Metadata } from "next";
 import "@/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Suspense } from "react";
 import Fathom from "@/components/Fathom";
 import { CroppedImageProvider } from "@/context/CroppedImageContext";
 import { FormProvider } from "@/context/FormContext";
+import { VercelToolbar } from "@/components/VercelToolbar";
 
 const title = "timetime.cc";
 const description = "Create, collect, curate & share events";
@@ -39,7 +41,12 @@ export default function RootLayout({
         <ClerkProvider>
           <html lang="en">
             <Fathom />
-            <body>{children}</body>
+            <body>
+              {children}
+              <Suspense>
+                <VercelToolbar />
+              </Suspense>
+            </body>
           </html>
         </ClerkProvider>
       </CroppedImageProvider>
