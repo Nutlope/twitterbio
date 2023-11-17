@@ -37,6 +37,7 @@ export async function GET() {
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
+            /* @ts-expect-error  */
             tw="text-slate-900 h-8 w-8"
           >
             <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
