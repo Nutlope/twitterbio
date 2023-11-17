@@ -12,7 +12,7 @@ export const maxDuration = 60;
 
 type Props = {
   params: {};
-  searchParams: { rawText?: string; saveIntent?: boolean };
+  searchParams: { rawText?: string; saveIntent?: boolean; filePath?: string };
 };
 
 export default async function Page({ params, searchParams }: Props) {
@@ -69,7 +69,7 @@ export default async function Page({ params, searchParams }: Props) {
         <>
           <YourDetails lists={lists || undefined} />
           <div className="p-4"></div>
-          <ImageUpload />
+          <ImageUpload filePath={searchParams.filePath} />
           <div className="p-4"></div>
           <Suspense fallback={<AddToCalendarCardSkeleton />}>
             <EventsFromRawText rawText={searchParams.rawText} />

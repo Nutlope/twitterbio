@@ -205,7 +205,7 @@ export default function ImageUpload({
 
   useEffect(() => {
     if (imageLoaded && hasNaturalDimensions) {
-      if (imageUrl === initialImageUrl) {
+      if (imageUrl === croppedImageUrlFromProps) {
         return;
       }
       const crop = defaultCrop({
