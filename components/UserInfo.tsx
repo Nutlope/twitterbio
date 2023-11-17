@@ -90,7 +90,6 @@ export async function UserInfo(props: UserInfoProps) {
           <FollowUserButton userId={user.id} following={!!following} />
         </div>
       )}
-      {self && <div></div>}
     </div>
   );
 }

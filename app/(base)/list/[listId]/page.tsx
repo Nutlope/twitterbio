@@ -94,15 +94,19 @@ export default async function Page({ params }: Props) {
   return (
     <>
       <div className="flex flex-col place-items-center gap-4 sm:flex-row">
-        <div className="flex flex-col">
-          <div className="font-medium">{list.name}</div>
-          <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
-            {list.description}
-          </p>
+        <div className="flex place-items-center gap-4">
+          <div className="flex flex-col">
+            <div className="font-medium">{list.name}</div>
+            <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+              {list.description}
+            </p>
+          </div>
+          <UserInfo userId={list.userId} />
         </div>
-        <UserInfo userId={list.userId} />
-        <ListEditButton listId={params.listId} listUserId={list.userId} />
-        <ListDeleteButton listId={params.listId} listUserId={list.userId} />
+        <div className="flex place-items-center gap-4">
+          <ListEditButton listId={params.listId} listUserId={list.userId} />
+          <ListDeleteButton listId={params.listId} listUserId={list.userId} />
+        </div>
       </div>
       {!isOwner && (
         <>
