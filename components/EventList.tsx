@@ -22,12 +22,14 @@ export default function EventList({
   pastEvents,
   variant,
   hideCurator,
+  showOtherCurators,
   showPrivateEvents,
 }: {
   currentEvents: EventWithUser[];
   futureEvents: EventWithUser[];
   pastEvents: EventWithUser[];
   variant?: "future-minimal";
+  showOtherCurators?: boolean;
   hideCurator?: boolean;
   showPrivateEvents?: boolean;
 }) {
@@ -84,6 +86,7 @@ export default function EventList({
                     visibility={item.visibility}
                     createdAt={item.createdAt}
                     hideCurator={hideCurator}
+                    showOtherCurators={showOtherCurators}
                     similarEvents={similarEvents}
                   />
                 ))}
@@ -124,6 +127,7 @@ export default function EventList({
                     visibility={item.visibility}
                     createdAt={item.createdAt}
                     hideCurator={hideCurator}
+                    showOtherCurators={showOtherCurators}
                     similarEvents={similarEvents}
                   />
                 ))}
@@ -167,6 +171,7 @@ export default function EventList({
                   visibility={item.visibility}
                   createdAt={item.createdAt}
                   hideCurator={hideCurator}
+                  showOtherCurators={showOtherCurators}
                   similarEvents={similarEvents}
                 />
               ))}

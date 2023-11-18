@@ -34,12 +34,7 @@ const userEvents: { title: string; href: string; description: string }[] = [
   {
     title: "My Events",
     href: "/events",
-    description: "All events you have created",
-  },
-  {
-    title: "Saved",
-    href: "/saved",
-    description: "All events you have saved",
+    description: "All events you have added or saved",
   },
   {
     title: "Following",

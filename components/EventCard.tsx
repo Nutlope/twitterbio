@@ -38,6 +38,7 @@ type EventCardProps = {
   visibility: "public" | "private";
   singleEvent?: boolean;
   hideCurator?: boolean;
+  showOtherCurators?: boolean;
   similarEvents?: {
     event: EventWithUser;
     similarityDetails: SimilarityDetails;
@@ -327,9 +328,13 @@ export function EventCard(props: EventCardProps) {
   const { user } = useUser();
   const { User, FollowEvent, id, event, singleEvent, visibility } = props;
   const roles = user?.unsafeMetadata.roles as string[] | undefined;
-  const isOwner = user?.id === User.id || roles?.includes("admin");
+  const isSelf = user?.id === User.id;
+  const isOwner = isSelf || roles?.includes("admin");
   const isFollowing = !!FollowEvent.find((item) => item.userId === user?.id);
   const comment = props.Comment.findLast((item) => item.userId === user?.id);
+  // always show curator if !isSelf
+  const showOtherCurators = !isSelf && props.showOtherCurators;
+  const showCurator = showOtherCurators || !props.hideCurator;
 
   return (
     <li className="relative grid px-4 py-5 sm:px-6">
@@ -375,7 +380,7 @@ export function EventCard(props: EventCardProps) {
           <CuratorComment comment={comment} />
         </>
       )}
-      {!props.hideCurator && (
+      {showCurator && (
         <>
           <div className="p-1"></div>
           <EventCuratedBy
