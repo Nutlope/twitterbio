@@ -71,10 +71,12 @@ export default async function Page({ params, searchParams }: Props) {
           <div className="p-4"></div>
           <ImageUpload filePath={searchParams.filePath} />
           <div className="p-4"></div>
-          <Suspense fallback={<AddToCalendarCardSkeleton />}>
-            <EventsFromRawText rawText={searchParams.rawText} />
-          </Suspense>
         </>
+      )}
+      {searchParams.rawText && (
+        <Suspense fallback={<AddToCalendarCardSkeleton />}>
+          <EventsFromRawText rawText={searchParams.rawText} />
+        </Suspense>
       )}
     </>
   );
