@@ -288,7 +288,7 @@ function SimilarEventsSummary({
           <>
             {!singleEvent && ", "}
             <Link
-              href={`/user/${username}`}
+              href={`${username}/events`}
               className="font-bold text-gray-900"
             >
               @{username}
