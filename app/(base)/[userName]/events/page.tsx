@@ -114,7 +114,7 @@ export default async function Page({ params }: Props) {
         pastEvents={pastEvents}
         futureEvents={futureEvents}
         hideCurator
-        showOtherCurators={self}
+        showOtherCurators={true}
         showPrivateEvents={self}
       />
       <div className="p-5"></div>
