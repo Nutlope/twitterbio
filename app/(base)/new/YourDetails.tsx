@@ -114,7 +114,7 @@ export function YourDetails({
               )}
             />
             <SignedIn>
-              {listOptions?.length && listOptions.length > 0 && (
+              {listOptions?.length && listOptions.length > 0 ? (
                 <FormField
                   control={form.control}
                   name="lists"
@@ -130,7 +130,7 @@ export function YourDetails({
                     </FormItem>
                   )}
                 />
-              )}
+              ) : null}
             </SignedIn>
             <FormField
               control={form.control}

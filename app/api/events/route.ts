@@ -152,7 +152,10 @@ export async function POST(req: Request) {
 
 export async function PATCH(req: Request) {
   try {
-    const { userId } = auth();
+    const { userId, sessionClaims } = auth();
+
+    const roles = (sessionClaims?.roles || []) as string[];
+    const isAdmin = roles?.includes("admin");
 
     if (!userId) {
       return new Response("Unauthorized", { status: 403 });
@@ -182,49 +185,79 @@ export async function PATCH(req: Request) {
     const startUtc = start.toInstant().toString();
     const endUtc = end.toInstant().toString();
 
-    const post = await db.event.update({
+    // check if user is event owner
+    const eventOwner = await db.event.findFirst({
       where: {
         id: id,
-      },
-      data: {
-        event: event,
         userId: userId,
-        startDateTime: startUtc,
-        endDateTime: endUtc,
-        ...(hasVisibility && {
-          visibility: visibility,
-        }),
-        ...(hasComment && {
-          Comment: {
-            create: [
-              {
-                content: comment,
-                userId: userId,
-              },
-            ],
-          },
-        }),
-        ...(!hasComment && {
-          Comment: {
-            deleteMany: {},
-          },
-        }),
-        ...(hasLists && {
-          eventList: {
-            connect: lists.map((list) => ({
-              id: list.value,
-            })),
-          },
-        }),
-        ...(!hasLists && {
-          eventList: {
-            set: [],
-          },
-        }),
       },
     });
 
-    return new Response(JSON.stringify(post));
+    if (!eventOwner && !isAdmin) {
+      return new Response("Unauthorized", { status: 403 });
+    }
+
+    if (eventOwner) {
+      const post = await db.event.update({
+        where: {
+          id: id,
+        },
+        data: {
+          event: event,
+          userId: userId,
+          startDateTime: startUtc,
+          endDateTime: endUtc,
+          ...(hasVisibility && {
+            visibility: visibility,
+          }),
+          ...(hasComment && {
+            Comment: {
+              create: [
+                {
+                  content: comment,
+                  userId: userId,
+                },
+              ],
+            },
+          }),
+          ...(!hasComment && {
+            Comment: {
+              deleteMany: {},
+            },
+          }),
+          ...(hasLists && {
+            eventList: {
+              connect: lists.map((list) => ({
+                id: list.value,
+              })),
+            },
+          }),
+          ...(!hasLists && {
+            eventList: {
+              set: [],
+            },
+          }),
+        },
+      });
+
+      return new Response(JSON.stringify(post));
+    } else {
+      const post = await db.event.update({
+        where: {
+          id: id,
+        },
+        data: {
+          event: event,
+          startDateTime: startUtc,
+          endDateTime: endUtc,
+          ...(hasVisibility && {
+            visibility: visibility,
+          }),
+        },
+      });
+
+      return new Response(JSON.stringify(post));
+    }
   } catch (error) {
     devLog(error);
     if (error instanceof z.ZodError) {
@@ -237,7 +270,10 @@ export async function PATCH(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const { userId } = auth();
+    const { userId, sessionClaims } = auth();
+
+    const roles = (sessionClaims?.roles || []) as string[];
+    const isAdmin = roles?.includes("admin");
 
     if (!userId) {
       return new Response("Unauthorized", { status: 403 });
@@ -246,15 +282,27 @@ export async function DELETE(req: Request) {
     const json = await req.json();
     const body = eventDeleteSchema.parse(json);
 
-    const post = await db.event.delete({
+    // check if user is event owner
+    const eventOwner = await db.event.findFirst({
       where: {
         id: body.id,
         userId: userId,
       },
     });
 
+    if (!eventOwner && !isAdmin) {
+      return new Response("Unauthorized", { status: 403 });
+    }
+
+    const post = await db.event.delete({
+      where: {
+        id: body.id,
+      },
+    });
+
     return new Response(JSON.stringify(post));
   } catch (error) {
+    devLog(error);
     if (error instanceof z.ZodError) {
       return new Response(JSON.stringify(error.issues), { status: 422 });
     }
