@@ -52,14 +52,15 @@ export function SaveButton(props: SaveButtonProps) {
         )}
         {!updateEvent.isLoading && (
           <Button
-            onClick={() =>
+            onClick={() => {
               updateEvent.mutate({
                 event: props.event,
                 comment: props.notes,
                 visibility: props.visibility,
                 lists: props.lists,
-              })
-            }
+              });
+              localStorage.removeItem("updatedProps");
+            }}
           >
             <UploadCloud className="mr-2 h-4 w-4" /> Publish
           </Button>

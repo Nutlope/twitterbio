@@ -39,7 +39,7 @@ export default function EventsFromSaved() {
   if (typeof window !== "undefined") {
     const savedData = JSON.parse(localStorage.getItem("updatedProps") || "");
     if (savedData) {
-      data = savedData;
+      data = savedData.event;
     }
   }
 

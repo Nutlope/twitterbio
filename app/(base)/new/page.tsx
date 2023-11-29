@@ -30,11 +30,11 @@ export default async function Page({ params, searchParams }: Props) {
       <>
         <YourDetails lists={lists || undefined} />
         <div className="p-4"></div>
+        <ImageUpload filePath={searchParams.filePath} />
+        <div className="p-4"></div>
         <Suspense fallback={<AddToCalendarCardSkeleton />}>
           <EventsFromSaved />
         </Suspense>
-        <div className="p-4"></div>
-        <ImageUpload />
       </>
     );
   }
