@@ -1,12 +1,13 @@
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { currentUser } from "@clerk/nextjs";
 import AddEvent from "../AddEvent";
-import EventsFromRawText from "./EventsFromRawText";
 import ImageUpload from "./ImageUpload";
 import EventsFromSaved from "./EventsFromSaved";
 import { YourDetails } from "./YourDetails";
 import { AddToCalendarCardSkeleton } from "@/components/AddToCalendarCardSkeleton";
 import { api } from "@/trpc/server";
+
+const EventsFromRawText = lazy(() => import("./EventsFromRawText"));
 
 export const maxDuration = 60;
 
@@ -38,28 +39,27 @@ export default async function Page({ params, searchParams }: Props) {
     );
   }
 
-  return (
-    <>
-      {!searchParams.rawText && (
-        <>
-          <Suspense>
-            <AddEvent lists={lists || undefined} />
-          </Suspense>
-        </>
-      )}
-      {searchParams.rawText && (
-        <>
-          <YourDetails lists={lists || undefined} />
-          <div className="p-4"></div>
-          <ImageUpload filePath={searchParams.filePath} />
-          <div className="p-4"></div>
-        </>
-      )}
-      {searchParams.rawText && (
+  if (!searchParams.rawText) {
+    return (
+      <>
+        <Suspense>
+          <AddEvent lists={lists || undefined} />
+        </Suspense>
+      </>
+    );
+  }
+
+  if (searchParams.rawText) {
+    return (
+      <>
+        <YourDetails lists={lists || undefined} />
+        <div className="p-4"></div>
+        <ImageUpload filePath={searchParams.filePath} />
+        <div className="p-4"></div>
         <Suspense fallback={<AddToCalendarCardSkeleton />}>
           <EventsFromRawText rawText={searchParams.rawText} />
         </Suspense>
-      )}
-    </>
-  );
+      </>
+    );
+  }
 }
