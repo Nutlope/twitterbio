@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { SignedIn, useUser } from "@clerk/nextjs";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { DropdownMenuItem } from "./DropdownMenu";
-import { cn } from "@/lib/utils";
+import { api } from "@/trpc/react";
 
 export type DeleteButtonProps = {
   userId: string;
@@ -16,36 +15,16 @@ export type DeleteButtonProps = {
 export function DeleteButton(props: DeleteButtonProps) {
   const { user } = useUser();
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  async function onClick() {
-    setIsLoading(true);
-
-    const response = await fetch("/api/events", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: props.id,
-      }),
-    });
-
-    setIsLoading(false);
-
-    if (!response?.ok) {
-      return toast.error("Your event was not deleted. Please try again.");
-    }
-
-    const event = await response.json();
-
-    toast.success("Event deleted.");
-
-    // This forces a cache invalidation.
-    router.refresh();
-
-    router.push(`/${user?.username}/events`);
-  }
+  const deleteEvent = api.event.delete.useMutation({
+    onError: () => {
+      toast.error("Your event was not deleted. Please try again.");
+    },
+    onSuccess: () => {
+      toast.success("Event deleted.");
+      router.refresh();
+      router.push(`/${user?.username}/events`);
+    },
+  });
 
   const roles = user?.unsafeMetadata.roles as string[] | undefined;
   const isOwner = user?.id === props.userId || roles?.includes("admin");
@@ -57,8 +36,10 @@ export function DeleteButton(props: DeleteButtonProps) {
   return (
     <SignedIn>
       <DropdownMenuItem
-        onSelect={onClick}
-        disabled={isLoading}
+        onSelect={() => {
+          deleteEvent.mutate({ id: props.id });
+        }}
+        disabled={deleteEvent.isLoading}
         className="text-red-600"
       >
         <TrashIcon className="mr-2 h-4 w-4" />

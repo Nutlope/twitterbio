@@ -2,11 +2,11 @@
 
 import { SignInButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { Button } from "./ui/button";
 import { CardDescription } from "./ui/card";
 import { cn } from "@/lib/utils";
+import { api } from "@/trpc/react";
 
 type ListUpdateButtonProps = {
   id: string;
@@ -17,39 +17,16 @@ type ListUpdateButtonProps = {
 
 export default function ListUpdateButton(props: ListUpdateButtonProps) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  async function onClick() {
-    setIsLoading(true);
-
-    const response = await fetch("/api/lists", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: props.id,
-        name: props.name,
-        description: props.description,
-      }),
-    });
-
-    setIsLoading(false);
-
-    if (!response?.ok) {
-      console.log(response);
-      return toast.error("Your list was not saved. Please try again.");
-    }
-
-    const list = await response.json();
-
-    toast.success("List saved.");
-
-    // This forces a cache invalidation.
-    router.refresh();
-
-    router.push(props.afterSuccess ? props.afterSuccess : `/list/${list.id}`);
-  }
+  const updateList = api.list.update.useMutation({
+    onError: () => {
+      toast.error("Your list was not saved. Please try again.");
+    },
+    onSuccess: ({ id }) => {
+      toast.success("List saved.");
+      router.refresh();
+      router.push(`/list/${id}`);
+    },
+  });
 
   return (
     <>
@@ -58,12 +35,19 @@ export default function ListUpdateButton(props: ListUpdateButtonProps) {
           className={cn(
             "mt-8 w-full rounded-xl bg-black px-4 py-2 font-medium text-white hover:bg-black/80 sm:mt-10",
             {
-              "cursor-not-allowed opacity-60": isLoading,
+              "cursor-not-allowed opacity-60": updateList.isLoading,
             }
           )}
-          onClick={onClick}
+          onClick={() =>
+            updateList.mutate({
+              listId: props.id,
+              name: props.name,
+              description: props.description,
+            })
+          }
+          disabled={updateList.isLoading}
         >
-          {isLoading ? (
+          {updateList.isLoading ? (
             <span className="loading">
               <span className="bg-white" />
               <span className="bg-white" />

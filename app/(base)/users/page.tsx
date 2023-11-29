@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { Metadata, ResolvingMetadata } from "next/types";
-import { db } from "@/lib/db";
 import { UserInfo } from "@/components/UserInfo";
 import Leaderboard from "@/components/Leaderboard";
 import LeaderboardSkeleton from "@/components/LeaderboardSkeleton";
@@ -11,21 +10,13 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-
-const getAllUsers = async () => {
-  const users = await db.user.findMany({
-    orderBy: {
-      username: "asc",
-    },
-  });
-  return users;
-};
+import { api } from "@/trpc/server";
 
 export async function generateMetadata(
   {},
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const users = await getAllUsers();
+  const users = await api.user.getAll.query();
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
@@ -42,7 +33,7 @@ export async function generateMetadata(
 }
 
 export default async function Page() {
-  const users = await getAllUsers();
+  const users = await api.user.getAll.query();
 
   return (
     <>

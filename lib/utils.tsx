@@ -422,3 +422,9 @@ export function extractFilePath(url: string) {
   const match = url.match(/\/uploads\/\d{4}\/\d{2}\/\d{2}\/[^?]+/);
   return match ? match[0] : "";
 }
+
+export const devLog = (message: any, ...optionalParams: any[]) => {
+  // if (process.env.NODE_ENV === "development") {
+  console.log(message, ...optionalParams);
+  // }
+};

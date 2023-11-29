@@ -20,6 +20,7 @@ export default authMiddleware({
     "/api/leaderboard",
     "/api/webhooks/clerk",
     "/api/image-proxy",
+    "/api/trpc(.*)",
     "/(.*)/events",
     "/(.*)/events/(.*)",
     "/(.*)/following/(.*)",

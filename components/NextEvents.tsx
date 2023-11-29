@@ -1,28 +1,11 @@
 import Link from "next/link";
 import { buttonVariants } from "./ui/button";
 import EventList from "@/components/EventList";
-import { db } from "@/lib/db";
+import { api } from "@/trpc/server";
 
 export default async function NextEvents({ limit = 5, upcoming = false } = {}) {
-  const events = await db.event.findMany({
-    include: {
-      User: true,
-      FollowEvent: true,
-      Comment: true,
-    },
-    orderBy: {
-      startDateTime: "asc",
-    },
-    where: {
-      startDateTime: {
-        gte: upcoming ? undefined : new Date(),
-      },
-      endDateTime: {
-        gte: upcoming ? new Date() : undefined,
-      },
-    },
-    take: limit,
-  });
+  const excludeCurrent = !upcoming;
+  const events = await api.event.getNext.query({ limit, excludeCurrent });
 
   const pastEvents = events.filter((item) => item.endDateTime < new Date());
 

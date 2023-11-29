@@ -1,39 +1,18 @@
 import { Suspense } from "react";
 import { Metadata, ResolvingMetadata } from "next/types";
-import { db } from "@/lib/db";
 import { UserInfo } from "@/components/UserInfo";
 import EventList from "@/components/EventList";
+import { api } from "@/trpc/server";
 
 type Props = { params: { userName: string } };
-
-const getSavedEvents = async (userName: string) => {
-  const events = await db.event.findMany({
-    where: {
-      FollowEvent: {
-        some: {
-          User: {
-            username: userName,
-          },
-        },
-      },
-    },
-    orderBy: {
-      startDateTime: "asc",
-    },
-    include: {
-      User: true,
-      FollowEvent: true,
-      Comment: true,
-    },
-  });
-  return events;
-};
 
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const events = await getSavedEvents(params.userName);
+  const events = await api.event.getSavedForUser.query({
+    userName: params.userName,
+  });
 
   if (!events) {
     return {
@@ -69,7 +48,9 @@ export async function generateMetadata(
 }
 
 export default async function Page({ params }: Props) {
-  const events = await getSavedEvents(params.userName);
+  const events = await api.event.getSavedForUser.query({
+    userName: params.userName,
+  });
 
   const pastEvents = events.filter((item) => item.endDateTime < new Date());
 

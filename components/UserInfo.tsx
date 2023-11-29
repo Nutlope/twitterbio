@@ -2,45 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { currentUser } from "@clerk/nextjs";
 import { FollowUserButton } from "./FollowButtons";
-import { db } from "@/lib/db";
+import { api } from "@/trpc/server";
 
 type UserInfoProps = {
   userId?: string;
   userName?: string;
 };
-
-async function getUserInfoById(userId: string) {
-  const user = await db.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
-
-  return user;
-}
-
-async function getUserInfoByUserName(userName: string) {
-  const user = await db.user.findUnique({
-    where: {
-      username: userName,
-    },
-  });
-
-  return user;
-}
-
-async function getFollowing(followerId: string, followingId: string) {
-  const user = await db.followUser.findUnique({
-    where: {
-      followerId_followingId: {
-        followerId,
-        followingId,
-      },
-    },
-  });
-
-  return user;
-}
 
 export async function UserInfo(props: UserInfoProps) {
   const activeUser = await currentUser();
@@ -50,9 +17,9 @@ export async function UserInfo(props: UserInfoProps) {
 
   let user;
   if (props.userId) {
-    user = await getUserInfoById(props.userId);
+    user = await api.user.getById.query({ id: props.userId });
   } else if (props.userName) {
-    user = await getUserInfoByUserName(props.userName);
+    user = await api.user.getByUsername.query({ userName: props.userName });
   }
 
   if (!user) {
@@ -62,7 +29,11 @@ export async function UserInfo(props: UserInfoProps) {
   const self = activeUser?.id === user.id;
 
   const following =
-    activeUser?.id && (await getFollowing(activeUser?.id, user.id));
+    activeUser?.id &&
+    (await api.user.getIfFollowing.query({
+      followerId: activeUser.id,
+      followingId: user.id,
+    }));
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">

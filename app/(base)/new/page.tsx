@@ -6,7 +6,7 @@ import ImageUpload from "./ImageUpload";
 import EventsFromSaved from "./EventsFromSaved";
 import { YourDetails } from "./YourDetails";
 import { AddToCalendarCardSkeleton } from "@/components/AddToCalendarCardSkeleton";
-import { db } from "@/lib/db";
+import { api } from "@/trpc/server";
 
 export const maxDuration = 60;
 
@@ -20,26 +20,8 @@ export default async function Page({ params, searchParams }: Props) {
   const username = user?.username;
   const lists =
     username &&
-    (await db.list.findMany({
-      where: {
-        User: {
-          username: username,
-        },
-      },
-      select: {
-        userId: true,
-        id: true,
-        name: true,
-        description: true,
-        _count: {
-          select: { events: true },
-        },
-        createdAt: true,
-        updatedAt: true,
-      },
-      orderBy: {
-        updatedAt: "asc",
-      },
+    (await api.list.getAllForUser.query({
+      userName: username,
     }));
 
   if (searchParams.saveIntent) {

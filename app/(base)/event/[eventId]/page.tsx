@@ -3,64 +3,10 @@ import { currentUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { EventCard } from "@/components/EventCard";
 import { UserInfo } from "@/components/UserInfo";
-import { db } from "@/lib/db";
 import { AddToCalendarButtonProps } from "@/types";
 import { collapseSimilarEvents } from "@/lib/similarEvents";
 import { EventWithUser } from "@/components/EventList";
-
-const getPossibleDuplicateEvents = async (
-  startDateTime: Date,
-  eventId: string
-) => {
-  // start date time should be within 1 hour of the start date time of the event
-  const startDateTimeLowerBound = new Date(startDateTime);
-  startDateTimeLowerBound.setHours(startDateTime.getHours() - 1);
-  const startDateTimeUpperBound = new Date(startDateTime);
-  startDateTimeUpperBound.setHours(startDateTime.getHours() + 1);
-
-  const possibleDuplicateEvents = await db.event.findMany({
-    where: {
-      startDateTime: {
-        gte: startDateTimeLowerBound,
-        lte: startDateTimeUpperBound,
-      },
-    },
-    select: {
-      startDateTime: true,
-      endDateTime: true,
-      id: true,
-      event: true,
-      createdAt: true,
-      userId: true,
-      User: true,
-      FollowEvent: true,
-      Comment: true,
-      visibility: true,
-    },
-  });
-  return possibleDuplicateEvents;
-};
-
-const getEvent = async (eventId: string) => {
-  const event = await db.event.findUnique({
-    where: {
-      id: eventId,
-    },
-    select: {
-      startDateTime: true,
-      endDateTime: true,
-      id: true,
-      event: true,
-      createdAt: true,
-      userId: true,
-      User: true,
-      FollowEvent: true,
-      Comment: true,
-      visibility: true,
-    },
-  });
-  return event;
-};
+import { api } from "@/trpc/server";
 
 type Props = {
   params: {
@@ -72,7 +18,7 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const event = await getEvent(params.eventId);
+  const event = await api.event.get.query({ eventId: params.eventId });
   if (!event) {
     return {
       title: "No event found | timetime.cc",
@@ -101,15 +47,7 @@ export async function generateMetadata(
 }
 
 export default async function Page({ params }: Props) {
-  const user = await currentUser();
-  const event = await getEvent(params.eventId);
-  const following = await db.followEvent.findFirst({
-    where: {
-      userId: user?.id,
-      eventId: params.eventId,
-    },
-  });
-  const isCreator = user?.id === event?.userId;
+  const event = await api.event.get.query({ eventId: params.eventId });
   const eventData = event?.event as AddToCalendarButtonProps;
   const fullImageUrl = eventData.images?.[3];
 
@@ -117,10 +55,9 @@ export default async function Page({ params }: Props) {
     return <p className="text-lg text-gray-500">No event found.</p>;
   }
 
-  const possibleDuplicateEvents = (await getPossibleDuplicateEvents(
-    event.startDateTime,
-    params.eventId
-  )) as EventWithUser[];
+  const possibleDuplicateEvents = (await api.event.getPossibleDuplicates.query({
+    startDateTime: event.startDateTime,
+  })) as EventWithUser[];
 
   // find the event that matches the current event
   const similarEvents = collapseSimilarEvents(possibleDuplicateEvents).find(

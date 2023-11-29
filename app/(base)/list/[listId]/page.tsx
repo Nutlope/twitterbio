@@ -1,47 +1,19 @@
 import { Metadata, ResolvingMetadata } from "next/types";
 import { currentUser } from "@clerk/nextjs";
-import { db } from "@/lib/db";
 import { UserInfo } from "@/components/UserInfo";
 import { ListEditButton } from "@/components/ListEditButton";
 import { ListDeleteButton } from "@/components/ListDeleteButton";
 import EventList from "@/components/EventList";
 import { FollowListButton } from "@/components/FollowButtons";
+import { api } from "@/trpc/server";
 
 type Props = { params: { listId: string } };
-
-const getList = async (listId: string) => {
-  const list = await db.list.findUnique({
-    where: {
-      id: listId,
-    },
-    select: {
-      userId: true,
-      name: true,
-      description: true,
-      events: {
-        orderBy: {
-          startDateTime: "asc",
-        },
-        include: {
-          User: true,
-          FollowEvent: true,
-          Comment: true,
-        },
-      },
-      createdAt: true,
-      updatedAt: true,
-      FollowList: true,
-      User: true,
-    },
-  });
-  return list;
-};
 
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const list = await getList(params.listId);
+  const list = await api.list.get.query({ listId: params.listId });
 
   if (!list) {
     return {
@@ -71,7 +43,7 @@ export async function generateMetadata(
 
 export default async function Page({ params }: Props) {
   const user = await currentUser();
-  const list = await getList(params.listId);
+  const list = await api.list.get.query({ listId: params.listId });
 
   if (!list) {
     return <> </>;

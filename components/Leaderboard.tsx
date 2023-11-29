@@ -1,15 +1,10 @@
 import { Badge } from "./ui/badge";
-import { LeaderboardUsers } from "@/app/api/leaderboard/route";
-
-async function getLeaderboardUsers() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/leaderboard`, {
-    next: { revalidate: 600 },
-  });
-  return res.json();
-}
+import { api } from "@/trpc/server";
 
 export default async function Leaderboard() {
-  const leaderboardUsers = (await getLeaderboardUsers()) as LeaderboardUsers;
+  const leaderboardUsers = await api.user.getTopUsersByUpcomingEvents.query({
+    limit: 5,
+  });
 
   const people = leaderboardUsers.map((user) => ({
     name: user.displayName,

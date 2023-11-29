@@ -2,10 +2,12 @@ import { Metadata } from "next";
 import "@/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Suspense } from "react";
+import { cookies } from "next/headers";
 import Fathom from "@/components/Fathom";
 import { CroppedImageProvider } from "@/context/CroppedImageContext";
 import { FormProvider } from "@/context/FormContext";
 import { VercelToolbar } from "@/components/VercelToolbar";
+import { TRPCReactProvider } from "@/trpc/react";
 
 const title = "timetime.cc";
 const description = "Create, collect, curate & share events";
@@ -36,20 +38,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <FormProvider>
-      <CroppedImageProvider>
-        <ClerkProvider>
-          <html lang="en">
-            <Fathom />
-            <body>
-              {children}
-              <Suspense>
-                <VercelToolbar />
-              </Suspense>
-            </body>
-          </html>
-        </ClerkProvider>
-      </CroppedImageProvider>
-    </FormProvider>
+    <TRPCReactProvider cookies={cookies().toString()}>
+      <FormProvider>
+        <CroppedImageProvider>
+          <ClerkProvider>
+            <html lang="en">
+              <Fathom />
+              <body>
+                {children}
+                <Suspense>
+                  <VercelToolbar />
+                </Suspense>
+              </body>
+            </html>
+          </ClerkProvider>
+        </CroppedImageProvider>
+      </FormProvider>
+    </TRPCReactProvider>
   );
 }

@@ -1,17 +1,8 @@
 import EventList from "@/components/EventList";
-import { db } from "@/lib/db";
+import { api } from "@/trpc/server";
 
 export default async function Page({ params }: { params: { userId: string } }) {
-  const events = await db.event.findMany({
-    orderBy: {
-      startDateTime: "asc",
-    },
-    include: {
-      User: true,
-      FollowEvent: true,
-      Comment: true,
-    },
-  });
+  const events = await api.event.getAll.query();
 
   const pastEvents = events.filter((item) => item.endDateTime < new Date());
 

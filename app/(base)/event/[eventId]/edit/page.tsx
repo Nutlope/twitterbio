@@ -1,36 +1,16 @@
-import Link from "next/link";
 import { UserInfo } from "@/components/UserInfo";
-import { db } from "@/lib/db";
 import { AddToCalendarCard } from "@/components/AddToCalendarCard";
 import { AddToCalendarButtonProps } from "@/types";
 import ImageUpload from "@/app/(base)/new/ImageUpload";
 import { YourDetails } from "@/app/(base)/new/YourDetails";
+import { api } from "@/trpc/server";
 
 export default async function Page({
   params,
 }: {
   params: { eventId: string };
 }) {
-  const event = await db.event.findUnique({
-    where: {
-      id: params.eventId,
-    },
-    select: {
-      id: true,
-      userId: true,
-      event: true,
-      createdAt: true,
-      eventList: true,
-      User: {
-        select: {
-          username: true,
-          lists: true,
-        },
-      },
-      Comment: true,
-      visibility: true,
-    },
-  });
+  const event = await api.event.get.query({ eventId: params.eventId });
 
   if (!event) {
     return <p className="text-lg text-gray-500">No event found.</p>;

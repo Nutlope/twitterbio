@@ -1,54 +1,20 @@
 import { Suspense } from "react";
 import { Metadata, ResolvingMetadata } from "next/types";
 import { currentUser } from "@clerk/nextjs";
-import { db } from "@/lib/db";
 import { UserInfo } from "@/components/UserInfo";
 import ListCardsForUser from "@/components/ListCardsForUser";
 import EventList from "@/components/EventList";
+import { api } from "@/trpc/server";
 
 type Props = { params: { userName: string } };
-
-const getEventsForUser = async (userName: string) => {
-  const events = await db.event.findMany({
-    where: {
-      OR: [
-        {
-          User: {
-            username: {
-              equals: userName,
-            },
-          },
-        },
-        {
-          FollowEvent: {
-            some: {
-              User: {
-                username: {
-                  equals: userName,
-                },
-              },
-            },
-          },
-        },
-      ],
-    },
-    orderBy: {
-      startDateTime: "asc",
-    },
-    include: {
-      User: true,
-      FollowEvent: true,
-      Comment: true,
-    },
-  });
-  return events;
-};
 
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const events = await getEventsForUser(params.userName);
+  const events = await api.event.getForUser.query({
+    userName: params.userName,
+  });
 
   if (!events) {
     return {
@@ -87,7 +53,9 @@ export async function generateMetadata(
 export default async function Page({ params }: Props) {
   const activeUser = await currentUser();
   const self = activeUser?.username === params.userName;
-  const events = await getEventsForUser(params.userName);
+  const events = await api.event.getForUser.query({
+    userName: params.userName,
+  });
 
   const pastEvents = events.filter((item) => item.startDateTime < new Date());
 

@@ -1,65 +1,25 @@
 import { Metadata, ResolvingMetadata } from "next/types";
-import { db } from "@/lib/db";
 import { UserInfo } from "@/components/UserInfo";
 import ListCard from "@/components/ListCard";
 import { FollowListButton } from "@/components/FollowButtons";
+import { api } from "@/trpc/server";
 
 type Props = { params: { userName: string } };
-
-const getFollowingLists = async (userName: string) => {
-  const user = await db.user.findUnique({
-    where: {
-      username: userName,
-    },
-    select: {
-      id: true,
-    },
-  });
-  const lists = await db.list.findMany({
-    where: {
-      FollowList: {
-        some: {
-          User: {
-            username: userName,
-          },
-        },
-      },
-    },
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      _count: {
-        select: { events: true },
-      },
-      createdAt: true,
-      updatedAt: true,
-      User: {
-        select: {
-          username: true,
-        },
-      },
-    },
-    orderBy: {
-      updatedAt: "asc",
-    },
-  });
-
-  return lists;
-};
 
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const users = await getFollowingLists(params.userName);
-  const userCount = users.length;
+  const lists = await api.list.getFollowing.query({
+    userName: params.userName,
+  });
+  const listCount = lists.length;
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
-    title: `@${params.userName} is following (${userCount} lists) | timetime.cc`,
+    title: `@${params.userName} is following (${listCount} lists) | timetime.cc`,
     openGraph: {
-      title: `@${params.userName} is following (${userCount} lists) | timetime.cc`,
+      title: `@${params.userName} is following (${listCount} lists) | timetime.cc`,
       description: `See the lists @${params.userName} is following on  timetime.cc`,
       locale: "en_US",
       url: `${process.env.NEXT_PUBLIC_URL}/${params.userName}/following/users`,
@@ -70,7 +30,9 @@ export async function generateMetadata(
 }
 
 export default async function Page({ params }: Props) {
-  const lists = await getFollowingLists(params.userName);
+  const lists = await api.list.getFollowing.query({
+    userName: params.userName,
+  });
 
   return (
     <>

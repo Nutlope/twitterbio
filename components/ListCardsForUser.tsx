@@ -1,7 +1,7 @@
 import { currentUser } from "@clerk/nextjs";
 import ListCard from "./ListCard";
 import ListCardAdd from "./ListCardAdd";
-import { db } from "@/lib/db";
+import { api } from "@/trpc/server";
 
 type ListCardsForUserProps = {
   userName: string;
@@ -10,28 +10,10 @@ type ListCardsForUserProps = {
 
 export default async function ListCardsForUser({
   userName,
-  limit,
+  limit, // TODO: implement limit
 }: ListCardsForUserProps) {
-  const lists = await db.list.findMany({
-    where: {
-      User: {
-        username: userName,
-      },
-    },
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      _count: {
-        select: { events: true },
-      },
-      createdAt: true,
-      updatedAt: true,
-    },
-    orderBy: {
-      updatedAt: "asc",
-    },
-    take: limit,
+  const lists = await api.list.getAllForUser.query({
+    userName,
   });
 
   const user = await currentUser();
