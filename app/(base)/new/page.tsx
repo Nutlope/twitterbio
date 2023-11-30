@@ -19,11 +19,14 @@ type Props = {
 export default async function Page({ params, searchParams }: Props) {
   const user = await currentUser();
   const username = user?.username;
+  console.log(username, "username");
   const lists =
     username &&
     (await api.list.getAllForUser.query({
       userName: username,
     }));
+
+  console.log(lists, "lists");
 
   if (searchParams.saveIntent) {
     return (

@@ -42,11 +42,11 @@ const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
     // on delete key press, remove last selected item
     React.useEffect(() => {
       const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Backspace" && selected.length > 0) {
-          onChange(
-            selected.filter((_, index) => index !== selected.length - 1)
-          );
-        }
+        // if (e.key === "Backspace" && selected.length > 0) {
+        //   onChange(
+        //     selected.filter((_, index) => index !== selected.length - 1)
+        //   );
+        // }
 
         // close on escape
         if (e.key === "Escape") {
