@@ -312,6 +312,17 @@ export function showMultipleDays(
   );
 }
 
+export function timeFormat(time?: string) {
+  if (!time) {
+    return "";
+  }
+  let [hours, minutes] = time.split(":").map(Number);
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12;
+  hours = hours === 0 ? 12 : hours; // Convert 0 to 12 for 12 AM
+  return `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
+}
+
 export const translateToHtml = (input: string): string => {
   let html = input;
 

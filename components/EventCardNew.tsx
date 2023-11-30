@@ -25,6 +25,7 @@ import {
   cn,
   showMultipleDays,
   endsNextDayBeforeMorning,
+  timeFormat,
 } from "@/lib/utils";
 import { AddToCalendarButtonProps } from "@/types";
 import { SimilarityDetails } from "@/lib/similarEvents";
@@ -88,6 +89,49 @@ function EventDateDisplay({
         </div>
       )}
     </div>
+  );
+}
+
+function EventDateDisplaySimple({
+  startDate,
+  endDate,
+  startTime,
+  endTime,
+}: {
+  startDate?: string;
+  endDate?: string;
+  startTime?: string;
+  endTime?: string;
+}) {
+  if (!startDate || !endDate) {
+    console.error("startDate or endDate is missing");
+    return null;
+  }
+
+  const startDateInfo = getDateInfoUTC(startDate);
+  const endDateInfo = getDateInfoUTC(endDate);
+  const showMultiDay = showMultipleDays(startDateInfo, endDateInfo);
+  const showNightIcon =
+    endsNextDayBeforeMorning(startDateInfo, endDateInfo) && !showMultiDay;
+
+  if (!startDateInfo || !endDateInfo) {
+    console.error("startDateInfo or endDateInfo is missing");
+    return null;
+  }
+
+  // Assuming getDateInfoUTC provides hours and minutes as well
+  // Adjust the formatting based on the actual structure of startDateInfo and endDateInfo
+  const formattedStartDate = `${startDateInfo.dayOfWeek.toUpperCase()}, ${startDateInfo.monthName
+    .substring(0, 3)
+    .toUpperCase()} ${startDateInfo.day}`;
+
+  const formattedTimes = `${timeFormat(startTime)}-${timeFormat(endTime)}`;
+
+  return (
+    <span>
+      {formattedStartDate} {formattedTimes}
+      {showNightIcon && "🌛"}
+    </span>
   );
 }
 
@@ -342,6 +386,7 @@ export function EventCard(props: EventCardProps) {
   // always show curator if !isSelf
   const showOtherCurators = !isSelf && props.showOtherCurators;
   const showCurator = showOtherCurators || !props.hideCurator;
+  console.log("event", event);
 
   return (
     <div className="relative mx-6 py-6">
@@ -355,7 +400,12 @@ export function EventCard(props: EventCardProps) {
       <div className="flex flex-col border-b border-gray-200 py-4">
         <div>
           <div className="text-sm font-bold uppercase text-gray-600">
-            SUNDAY, NOV 19, 12:00-14:00
+            <EventDateDisplaySimple
+              startDate={event.startDate}
+              startTime={event.startTime}
+              endTime={event.endTime}
+              endDate={event.endDate}
+            />
           </div>
           <h1 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl">
             {event.name}
