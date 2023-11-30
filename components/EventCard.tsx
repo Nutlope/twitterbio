@@ -24,6 +24,7 @@ import {
   cn,
   showMultipleDays,
   endsNextDayBeforeMorning,
+  timeFormat,
 } from "@/lib/utils";
 import { AddToCalendarButtonProps } from "@/types";
 import { SimilarityDetails } from "@/lib/similarEvents";
@@ -126,7 +127,7 @@ function EventDetails({
       <div className="p-1"></div>
       <div className="flex gap-2">
         <div className="shrink-0 items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-          {startTime}-{endTime}
+          {timeFormat(startTime)}-{timeFormat(endTime)}
         </div>
         {location && (
           <Link
