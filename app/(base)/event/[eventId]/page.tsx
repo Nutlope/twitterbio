@@ -1,11 +1,11 @@
 import { Metadata, ResolvingMetadata } from "next/types";
 import { currentUser } from "@clerk/nextjs";
 import Image from "next/image";
-import { EventCard } from "@/components/EventCard";
+import { EventCard } from "@/components/EventCardNew";
 import { UserInfo } from "@/components/UserInfo";
 import { AddToCalendarButtonProps } from "@/types";
 import { collapseSimilarEvents } from "@/lib/similarEvents";
-import { EventWithUser } from "@/components/EventList";
+import EventList, { EventWithUser } from "@/components/EventList";
 import { api } from "@/trpc/server";
 
 type Props = {
@@ -48,12 +48,20 @@ export async function generateMetadata(
 
 export default async function Page({ params }: Props) {
   const event = await api.event.get.query({ eventId: params.eventId });
-  const eventData = event?.event as AddToCalendarButtonProps;
-  const fullImageUrl = eventData.images?.[3];
-
   if (!event) {
     return <p className="text-lg text-gray-500">No event found.</p>;
   }
+  const otherEvents = await api.event.getForUser.query({
+    userName: event.User.username,
+  });
+
+  const futureEvents = otherEvents
+    .filter((item) => item.startDateTime >= new Date())
+    .filter((item) => item.id !== event.id)
+    .slice(0, 3);
+
+  const eventData = event?.event as AddToCalendarButtonProps;
+  const fullImageUrl = eventData.images?.[3];
 
   const possibleDuplicateEvents = (await api.event.getPossibleDuplicates.query({
     startDateTime: event.startDateTime,
@@ -81,7 +89,6 @@ export default async function Page({ params }: Props) {
       />
       {fullImageUrl && (
         <>
-          <div className="p-2"></div>
           <Image
             src={fullImageUrl}
             className="mx-auto h-auto w-2/3 object-cover sm:w-1/3"
@@ -91,11 +98,20 @@ export default async function Page({ params }: Props) {
           />
         </>
       )}
-      <div className="p-4"></div>
-      <div className="flex place-items-center gap-2">
-        <div className="font-medium">Collected by</div>
-        <UserInfo userId={event.userId} />
-      </div>
+      <div className="p-12 sm:p-16"></div>
+      <EventList
+        currentEvents={[]}
+        pastEvents={[]}
+        futureEvents={futureEvents}
+        hideCurator
+        variant="future-minimal"
+        showOtherCurators={true}
+      >
+        <div className="flex place-items-center gap-2.5">
+          <div className="font-medium">More events from</div>
+          <UserInfo userId={event.userId} />
+        </div>
+      </EventList>
     </>
   );
 }

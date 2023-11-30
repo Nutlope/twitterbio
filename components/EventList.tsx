@@ -9,6 +9,7 @@ import {
 } from "@/components/Accordian";
 import { AddToCalendarButtonProps } from "@/types";
 import { collapseSimilarEvents } from "@/lib/similarEvents";
+import { cn } from "@/lib/utils";
 
 export type EventWithUser = Event & {
   User: User;
@@ -24,6 +25,7 @@ export default function EventList({
   hideCurator,
   showOtherCurators,
   showPrivateEvents,
+  children,
 }: {
   currentEvents: EventWithUser[];
   futureEvents: EventWithUser[];
@@ -32,6 +34,7 @@ export default function EventList({
   showOtherCurators?: boolean;
   hideCurator?: boolean;
   showPrivateEvents?: boolean;
+  children?: React.ReactNode;
 }) {
   function getVisibleEvents(events: EventWithUser[]) {
     return events.filter(
@@ -141,15 +144,27 @@ export default function EventList({
         className={clsx("px-6", {
           "border-b-0": futureEventsToUse.length > 0,
         })}
+        disabled={variant === "future-minimal"}
       >
-        <AccordionTrigger>
+        <AccordionTrigger
+          className={cn({
+            "hover:no-underline": variant === "future-minimal",
+          })}
+          hideTrigger={variant === "future-minimal"}
+        >
           <div className="flex gap-1.5">
-            {variant === "future-minimal"
-              ? "Portland area events happening soon"
-              : "Upcoming events"}
-            <span className="mr-2 inline-flex items-center justify-center rounded-full bg-gray-600 px-2 py-1 text-xs font-bold leading-none text-slate-100">
-              {futureEventsToUse.length}
-            </span>
+            {children ? (
+              children
+            ) : (
+              <>
+                {variant === "future-minimal"
+                  ? "Portland area events happening soon"
+                  : "Upcoming events"}
+                <span className="mr-2 inline-flex items-center justify-center rounded-full bg-gray-600 px-2 py-1 text-xs font-bold leading-none text-slate-100">
+                  {futureEventsToUse.length}
+                </span>
+              </>
+            )}
           </div>
         </AccordionTrigger>
         <AccordionContent className="-mx-6 rounded-xl">

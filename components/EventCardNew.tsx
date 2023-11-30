@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-import { useUser } from "@clerk/nextjs";
+import { SignedIn, useUser } from "@clerk/nextjs";
 import { FollowEvent, User, Comment } from "@prisma/client";
 import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
@@ -15,9 +15,10 @@ import {
 import { CalendarButton } from "./CalendarButton";
 import { ShareButton } from "./ShareButton";
 import { ConditionalWrapper } from "./ConditionalWrapper";
-import { FollowEventDropdownButton } from "./FollowButtons";
+import { FollowEventButton, FollowEventDropdownButton } from "./FollowButtons";
 import { Badge } from "./ui/badge";
 import { EventWithUser } from "./EventList";
+import { Button } from "./ui/button";
 import {
   translateToHtml,
   getDateInfoUTC,
@@ -224,8 +225,8 @@ function EventCuratedBy({
   }[];
 }) {
   return (
-    <div className="flex items-center gap-2">
-      <p className="whitespace-nowrap text-xs font-medium text-gray-500">
+    <div className="flex flex-col items-start gap-2">
+      <p className="text-xs font-medium text-gray-500">
         Collected by{" "}
         <Link
           href={`/${username}/events`}
@@ -239,8 +240,8 @@ function EventCuratedBy({
         )}
       </p>
       {comment && (
-        <Badge className="inline-flex" variant="outline">
-          <span className="line-clamp-1">&ldquo;{comment.content}&rdquo;</span>
+        <Badge className="inline" variant="outline">
+          &ldquo;{comment.content}&rdquo;
         </Badge>
       )}
     </div>
@@ -289,7 +290,7 @@ function SimilarEventsSummary({
   const userEventLinks = Array.from(eventsByUser).map(
     ([username, events], index) => (
       <span key={username}>
-        {username !== curatorUsername && (
+        {/* {username !== curatorUsername && (
           <>
             {!singleEvent && ", "}
             <Link
@@ -299,14 +300,15 @@ function SimilarEventsSummary({
               @{username}
             </Link>
           </>
-        )}
+        )} */}
         {events.map((event, eventIndex) => (
           <sup key={event.id}>
             <Link
               href={`/event/${event.id}`}
               className="font-bold text-gray-900"
             >
-              *
+              {eventIndex + 1}
+              {events.length > 1 && eventIndex !== events.length - 1 && ", "}
             </Link>
           </sup>
         ))}
@@ -314,7 +316,7 @@ function SimilarEventsSummary({
     )
   );
 
-  return <>{userEventLinks}</>;
+  return <> and others {userEventLinks}</>;
 }
 
 function CuratorComment({ comment }: { comment?: Comment }) {
@@ -342,64 +344,66 @@ export function EventCard(props: EventCardProps) {
   const showCurator = showOtherCurators || !props.hideCurator;
 
   return (
-    <li className="relative grid px-4 py-5 sm:px-6">
+    <div className="relative mx-6 py-6">
       {visibility === "private" && (
         <>
           <Badge className="max-w-fit" variant="destructive">
             Unlisted Event
           </Badge>
-          <div className="p-1"></div>
         </>
       )}
-      <div className="flex items-center gap-4 pr-8">
-        <EventDateDisplay
-          startDate={event.startDate!}
-          endDate={event.endDate!}
-        />
-        <EventDetails
-          id={id}
-          name={event.name!}
-          startTime={event.startTime!}
-          endTime={event.endTime!}
-          location={event.location}
-          singleEvent={singleEvent}
-        />
-      </div>
-      <div className="p-1"></div>
-      <EventDescription
-        description={event.description!}
-        singleEvent={singleEvent}
-      />
-      <div className="absolute right-4 top-5 sm:right-6">
-        <EventActionButton
-          User={User}
-          event={event}
-          id={id}
-          isOwner={!!isOwner}
-          isFollowing={isFollowing}
-        />
-      </div>
-      {singleEvent && (
-        <>
-          <div className="p-1"></div>
-          <CuratorComment comment={comment} />
-        </>
-      )}
-      {showCurator && (
-        <>
+      <div className="flex flex-col border-b border-gray-200 py-4">
+        <div>
+          <div className="text-sm font-bold uppercase text-gray-600">
+            SUNDAY, NOV 19, 12:00-14:00
+          </div>
+          <h1 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl">
+            {event.name}
+          </h1>
+          {event.location && (
+            <Link
+              className="mt-1 max-w-2xl border-b border-gray-200 text-sm text-gray-500 hover:border-gray-900 hover:text-gray-900"
+              href={`https://www.google.com/maps/search/?api=1&query=${event.location}`}
+            >
+              📍 {event.location}
+            </Link>
+          )}
           <div className="p-1"></div>
           <EventCuratedBy
             username={User.username}
             comment={comment}
             similarEvents={props.similarEvents}
           />
-        </>
-      )}
-      {singleEvent && props.similarEvents && props.similarEvents.length > 0 && (
-        <>
-          <SimilarEventsForSingleEvent similarEvents={props.similarEvents} />
-        </>
-      )}
-    </li>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <ShareButton type="button" event={event} id={id} />
+          <CalendarButton
+            type="button"
+            event={event}
+            id={id}
+            username={User.username}
+          />
+          <FollowEventButton eventId={id} following={isFollowing} />
+        </div>
+      </div>
+      <div className="p-1"></div>
+      <EventDescription
+        description={event.description!}
+        singleEvent={singleEvent}
+      />
+      <div className="absolute right-2 top-6">
+        {isOwner && (
+          <SignedIn>
+            <EventActionButton
+              User={User}
+              event={event}
+              id={id}
+              isOwner={!!isOwner}
+              isFollowing={isFollowing}
+            />
+          </SignedIn>
+        )}
+      </div>
+    </div>
   );
 }

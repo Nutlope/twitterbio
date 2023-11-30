@@ -3,11 +3,13 @@
 import { Share } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { DropdownMenuItem } from "./DropdownMenu";
+import { Button } from "./ui/button";
 import { AddToCalendarButtonProps } from "@/types";
 
 export type ShareButtonProps = {
   id: string;
   event: AddToCalendarButtonProps;
+  type: "button" | "dropdown";
 };
 
 export function ShareButton(props: ShareButtonProps) {
@@ -38,10 +40,20 @@ export function ShareButton(props: ShareButtonProps) {
     }
   };
 
-  return (
-    <DropdownMenuItem onSelect={handleShareClick}>
-      <Share className="mr-2 h-4 w-4" />
-      Share
-    </DropdownMenuItem>
-  );
+  if (props.type === "button") {
+    return (
+      <Button onClick={handleShareClick}>
+        <Share className="mr-2 h-4 w-4" />
+        Share
+      </Button>
+    );
+  }
+  if (props.type === "dropdown") {
+    return (
+      <DropdownMenuItem onSelect={handleShareClick}>
+        <Share className="mr-2 h-4 w-4" />
+        Share
+      </DropdownMenuItem>
+    );
+  }
 }
