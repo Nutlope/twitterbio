@@ -51,7 +51,7 @@ export default async function Page({ params }: Props) {
   if (!event) {
     return <p className="text-lg text-gray-500">No event found.</p>;
   }
-  const otherEvents = await api.event.getForUser.query({
+  const otherEvents = await api.event.getCreatedForUser.query({
     userName: event.User.username,
   });
 
@@ -99,6 +99,11 @@ export default async function Page({ params }: Props) {
         </>
       )}
       <div className="p-12 sm:p-16"></div>
+      <div className="mr-auto flex place-items-center gap-2.5 px-6">
+        <div className="font-medium">More events from</div>
+        <UserInfo userId={event.userId} />
+      </div>
+      <div className="p-2"></div>
       <EventList
         currentEvents={[]}
         pastEvents={[]}
@@ -106,12 +111,7 @@ export default async function Page({ params }: Props) {
         hideCurator
         variant="future-minimal"
         showOtherCurators={true}
-      >
-        <div className="flex place-items-center gap-2.5">
-          <div className="font-medium">More events from</div>
-          <UserInfo userId={event.userId} />
-        </div>
-      </EventList>
+      ></EventList>
     </>
   );
 }

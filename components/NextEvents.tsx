@@ -18,6 +18,9 @@ export default async function NextEvents({ limit = 5, upcoming = false } = {}) {
 
   return (
     <div className="grid place-items-center">
+      <div className="mr-auto flex place-items-center gap-2.5 px-6 font-medium">
+        Portland area events happening soon
+      </div>
       <EventList
         currentEvents={currentEvents}
         futureEvents={futureEvents}

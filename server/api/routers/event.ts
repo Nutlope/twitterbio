@@ -65,6 +65,31 @@ export const eventRouter = createTRPCRouter({
         },
       });
     }),
+  getCreatedForUser: publicProcedure
+    .input(z.object({ userName: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.event.findMany({
+        where: {
+          OR: [
+            {
+              User: {
+                username: {
+                  equals: input.userName,
+                },
+              },
+            },
+          ],
+        },
+        orderBy: {
+          startDateTime: "asc",
+        },
+        include: {
+          User: true,
+          FollowEvent: true,
+          Comment: true,
+        },
+      });
+    }),
   getFollowingForUser: publicProcedure
     .input(z.object({ userName: z.string() }))
     .query(({ ctx, input }) => {

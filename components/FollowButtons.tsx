@@ -37,37 +37,35 @@ export function FollowEventDropdownButton({
   const isLoading = follow.isLoading || unfollow.isLoading;
 
   return (
-    <>
-      <SignedIn>
-        <DropdownMenuItem
-          onSelect={() =>
-            following
-              ? unfollow.mutate({ id: eventId })
-              : follow.mutate({ id: eventId })
-          }
-          disabled={isLoading}
-        >
-          {isLoading && (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Please wait
-            </>
-          )}
-          {!isLoading && following && (
-            <>
-              <Check className="mr-2 h-4 w-4" />
-              Event Saved
-            </>
-          )}
-          {!isLoading && !following && (
-            <>
-              <Plus className="mr-2 h-4 w-4" />
-              Save Event
-            </>
-          )}
-        </DropdownMenuItem>
-      </SignedIn>
-    </>
+    <SignedIn>
+      <DropdownMenuItem
+        onSelect={() =>
+          following
+            ? unfollow.mutate({ id: eventId })
+            : follow.mutate({ id: eventId })
+        }
+        disabled={isLoading}
+      >
+        {isLoading && (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </>
+        )}
+        {!isLoading && following && (
+          <>
+            <Check className="mr-2 h-4 w-4" />
+            Event Saved
+          </>
+        )}
+        {!isLoading && !following && (
+          <>
+            <Plus className="mr-2 h-4 w-4" />
+            Save Event
+          </>
+        )}
+      </DropdownMenuItem>
+    </SignedIn>
   );
 }
 
@@ -100,38 +98,36 @@ export function FollowEventButton({
   const isLoading = follow.isLoading || unfollow.isLoading;
 
   return (
-    <>
-      <SignedIn>
-        <Button
-          onSelect={() =>
-            following
-              ? unfollow.mutate({ id: eventId })
-              : follow.mutate({ id: eventId })
-          }
-          disabled={isLoading}
-          variant="ghost"
-        >
-          {isLoading && (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Please wait
-            </>
-          )}
-          {!isLoading && following && (
-            <>
-              <Check className="mr-2 h-4 w-4" />
-              Event Saved
-            </>
-          )}
-          {!isLoading && !following && (
-            <>
-              <Plus className="mr-2 h-4 w-4" />
-              Save Event
-            </>
-          )}
-        </Button>
-      </SignedIn>
-    </>
+    <SignedIn>
+      <Button
+        onSelect={() =>
+          following
+            ? unfollow.mutate({ id: eventId })
+            : follow.mutate({ id: eventId })
+        }
+        disabled={isLoading}
+        variant="ghost"
+      >
+        {isLoading && (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </>
+        )}
+        {!isLoading && following && (
+          <>
+            <Check className="mr-2 h-4 w-4" />
+            Event Saved
+          </>
+        )}
+        {!isLoading && !following && (
+          <>
+            <Plus className="mr-2 h-4 w-4" />
+            Save Event
+          </>
+        )}
+      </Button>
+    </SignedIn>
   );
 }
 
@@ -163,39 +159,37 @@ export function FollowUserButton({
   });
   const isLoading = follow.isLoading || unfollow.isLoading;
   return (
-    <>
-      <SignedIn>
-        {isLoading && (
-          <Button disabled size="sm">
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Please wait
-          </Button>
-        )}
-        {!isLoading && (
-          <Button
-            onClick={() =>
-              following
-                ? unfollow.mutate({ followingId: userId })
-                : follow.mutate({ followingId: userId })
-            }
-            size="sm"
-          >
-            {following && (
-              <>
-                <Check className="mr-2 h-4 w-4" />
-                Following
-              </>
-            )}
-            {!following && (
-              <>
-                <Plus className="mr-2 h-4 w-4" />
-                Follow
-              </>
-            )}
-          </Button>
-        )}
-      </SignedIn>
-    </>
+    <SignedIn>
+      {isLoading && (
+        <Button disabled size="sm">
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Please wait
+        </Button>
+      )}
+      {!isLoading && (
+        <Button
+          onClick={() =>
+            following
+              ? unfollow.mutate({ followingId: userId })
+              : follow.mutate({ followingId: userId })
+          }
+          size="sm"
+        >
+          {following && (
+            <>
+              <Check className="mr-2 h-4 w-4" />
+              Following
+            </>
+          )}
+          {!following && (
+            <>
+              <Plus className="mr-2 h-4 w-4" />
+              Follow
+            </>
+          )}
+        </Button>
+      )}
+    </SignedIn>
   );
 }
 
@@ -228,38 +222,36 @@ export function FollowListButton({
   const isLoading = follow.isLoading || unfollow.isLoading;
 
   return (
-    <>
-      <SignedIn>
-        {isLoading && (
-          <Button disabled size="sm">
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Please wait
-          </Button>
-        )}
-        {!isLoading && (
-          <Button
-            onClick={() =>
-              following
-                ? unfollow.mutate({ listId: listId })
-                : follow.mutate({ listId: listId })
-            }
-            size="sm"
-          >
-            {following && (
-              <>
-                <Check className="mr-2 h-4 w-4" />
-                Following List
-              </>
-            )}
-            {!following && (
-              <>
-                <Plus className="mr-2 h-4 w-4" />
-                Follow List
-              </>
-            )}
-          </Button>
-        )}
-      </SignedIn>
-    </>
+    <SignedIn>
+      {isLoading && (
+        <Button disabled size="sm">
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Please wait
+        </Button>
+      )}
+      {!isLoading && (
+        <Button
+          onClick={() =>
+            following
+              ? unfollow.mutate({ listId: listId })
+              : follow.mutate({ listId: listId })
+          }
+          size="sm"
+        >
+          {following && (
+            <>
+              <Check className="mr-2 h-4 w-4" />
+              Following List
+            </>
+          )}
+          {!following && (
+            <>
+              <Plus className="mr-2 h-4 w-4" />
+              Follow List
+            </>
+          )}
+        </Button>
+      )}
+    </SignedIn>
   );
 }

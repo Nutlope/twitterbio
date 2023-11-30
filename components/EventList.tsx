@@ -25,7 +25,6 @@ export default function EventList({
   hideCurator,
   showOtherCurators,
   showPrivateEvents,
-  children,
 }: {
   currentEvents: EventWithUser[];
   futureEvents: EventWithUser[];
@@ -146,27 +145,20 @@ export default function EventList({
         })}
         disabled={variant === "future-minimal"}
       >
-        <AccordionTrigger
-          className={cn({
-            "hover:no-underline": variant === "future-minimal",
-          })}
-          hideTrigger={variant === "future-minimal"}
-        >
-          <div className="flex gap-1.5">
-            {children ? (
-              children
-            ) : (
-              <>
-                {variant === "future-minimal"
-                  ? "Portland area events happening soon"
-                  : "Upcoming events"}
-                <span className="mr-2 inline-flex items-center justify-center rounded-full bg-gray-600 px-2 py-1 text-xs font-bold leading-none text-slate-100">
-                  {futureEventsToUse.length}
-                </span>
-              </>
-            )}
-          </div>
-        </AccordionTrigger>
+        {variant !== "future-minimal" && (
+          <AccordionTrigger
+            className={cn({
+              "hover:no-underline": variant === "future-minimal",
+            })}
+          >
+            <div className="flex gap-1.5">
+              Upcoming events
+              <span className="mr-2 inline-flex items-center justify-center rounded-full bg-gray-600 px-2 py-1 text-xs font-bold leading-none text-slate-100">
+                {futureEventsToUse.length}
+              </span>
+            </div>
+          </AccordionTrigger>
+        )}
         <AccordionContent className="-mx-6 rounded-xl">
           {futureEventsToUse.length === 0 ? (
             <p className="mx-6 text-lg text-gray-500">No future events.</p>
