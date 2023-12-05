@@ -7,7 +7,8 @@
     "lint": "next lint",
     "db": "pscale connect timetime dev --port 3309",
     "db-prod": "pscale connect timetime main --port 3309",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "studio": "prisma studio"
   },
   "dependencies": {
     "@bytescale/sdk": "^3.9.0",
