@@ -100,7 +100,7 @@ export function FollowEventButton({
   return (
     <SignedIn>
       <Button
-        onSelect={() =>
+        onClick={() =>
           following
             ? unfollow.mutate({ id: eventId })
             : follow.mutate({ id: eventId })
