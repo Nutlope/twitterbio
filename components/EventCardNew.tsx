@@ -25,6 +25,7 @@ import {
   cn,
   showMultipleDays,
   endsNextDayBeforeMorning,
+  eventTimesAreDefined,
   timeFormat,
 } from "@/lib/utils";
 import { AddToCalendarButtonProps } from "@/types";
@@ -113,6 +114,7 @@ function EventDateDisplaySimple({
   const showMultiDay = showMultipleDays(startDateInfo, endDateInfo);
   const showNightIcon =
     endsNextDayBeforeMorning(startDateInfo, endDateInfo) && !showMultiDay;
+  const showTimeRange = eventTimesAreDefined(startTime, endTime);
 
   if (!startDateInfo || !endDateInfo) {
     console.error("startDateInfo or endDateInfo is missing");
@@ -125,12 +127,13 @@ function EventDateDisplaySimple({
     .substring(0, 3)
     .toUpperCase()} ${startDateInfo.day}`;
 
-  const formattedTimes = `${timeFormat(startTime)}-${timeFormat(endTime)}`;
-
+  const formattedTimes = showTimeRange
+    ? `${timeFormat(startTime)}-${timeFormat(endTime)}`
+    : "";
   return (
     <span>
       {formattedStartDate} {formattedTimes}
-      {showNightIcon && "🌛"}
+      {showTimeRange && showNightIcon && "🌛"}
     </span>
   );
 }
