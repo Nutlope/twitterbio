@@ -17,7 +17,7 @@ export async function generateMetadata(
 
   if (!list) {
     return {
-      title: "No list found | timetime.cc",
+      title: "No list found | Soonlist",
     };
   }
 
@@ -29,9 +29,9 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
-    title: `${list.name} by @${list.User.username} | timetime.cc`,
+    title: `${list.name} by @${list.User.username} | Soonlist`,
     openGraph: {
-      title: `${list.name} by @${list.User.username} (${futureEventsCount} upcoming) | timetime.cc`,
+      title: `${list.name} by @${list.User.username} (${futureEventsCount} upcoming) | Soonlist`,
       description: `${list.description}`,
       locale: "en_US",
       url: `${process.env.NEXT_PUBLIC_URL}/list/${params.listId}`,

@@ -9,7 +9,7 @@ type ContactUsProps = {
 export const ContactUs = ({
   children,
   email = "jaronheard@gmail.com",
-  title = "timetime.cc ideas",
+  title = "Soonlist ideas",
 }: ContactUsProps) => {
   return (
     <a

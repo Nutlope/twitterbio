@@ -20,10 +20,10 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
-    title: `All users | timetime.cc`,
+    title: `All users | Soonlist`,
     openGraph: {
-      title: `All users | timetime.cc`,
-      description: `See all users on  timetime.cc`,
+      title: `All users | Soonlist`,
+      description: `See all users on  Soonlist`,
       locale: "en_US",
       url: `${process.env.NEXT_PUBLIC_URL}/users`,
       type: "article",

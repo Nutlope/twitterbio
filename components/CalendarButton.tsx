@@ -15,7 +15,7 @@ type CalendarButtonProps = {
 
 export function CalendarButton(props: CalendarButtonProps) {
   const eventForCalendar = { ...props.event };
-  eventForCalendar.description = `${props.event.description}[br][br]Collected by [url]${process.env.NEXT_PUBLIC_URL}/${props.username}/events|@${props.username}[/url] on [url]${process.env.NEXT_PUBLIC_URL}/event/${props.id}|timetime.cc[/url]`;
+  eventForCalendar.description = `${props.event.description}[br][br]Collected by [url]${process.env.NEXT_PUBLIC_URL}/${props.username}/events|@${props.username}[/url] on [url]${process.env.NEXT_PUBLIC_URL}/event/${props.id}|Soonlist[/url]`;
 
   if (props.type === "dropdown") {
     return (

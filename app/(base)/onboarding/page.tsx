@@ -13,9 +13,9 @@ import { Button } from "@/components/ui/button";
 import { ContactUs } from "@/components/ContactUs";
 
 export const metadata = {
-  title: "Get Started | timetime.cc",
+  title: "Get Started | Soonlist",
   openGraph: {
-    title: "Get Started | timetime.cc",
+    title: "Get Started | Soonlist",
   },
 };
 
@@ -27,7 +27,7 @@ export default function Page() {
           Get Started
         </RainbowText>
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          Welcome to timetime.cc
+          Welcome to Soonlist
         </h1>
         <h2 className="mt-16 text-2xl font-bold tracking-tight text-gray-900">
           Our Vision
@@ -44,11 +44,11 @@ export default function Page() {
             Features
           </RainbowText>
           <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Using timetime.cc
+            Using Soonlist
           </h2>
           <p className="mt-6 max-w-xl text-xl leading-8">
-            At the core, timetime.cc is a way to collect, curate and share
-            events, and seamlessly add them to your calendar.
+            At the core, Soonlist is a way to collect, curate and share events,
+            and seamlessly add them to your calendar.
           </p>
           <h2 className="mt-16 text-2xl font-bold tracking-tight text-gray-900">
             Adding events
@@ -100,8 +100,8 @@ export default function Page() {
                         Share text or an image to the shortcut. Use the share
                         icon from any screenshot, image, or selected text to
                         invoke the shortcut. Choose{" "}
-                        <code>New timetime.cc event</code> from near the bottom
-                        of the list of options.
+                        <code>New Soonlist event</code> from near the bottom of
+                        the list of options.
                       </li>
                       <li>
                         The shortcut will generate a calendar event draft that
@@ -141,9 +141,9 @@ export default function Page() {
                 <strong className="font-semibold text-gray-900">
                   Customize:
                 </strong>{" "}
-                timetime.cc will take your image or text and get you 90-100% of
-                the way to a shareable calendar event, but you can edit it
-                before saving
+                Soonlist will take your image or text and get you 90-100% of the
+                way to a shareable calendar event, but you can edit it before
+                saving
               </span>
             </li>
             <li className="flex gap-x-3">
@@ -204,9 +204,9 @@ export default function Page() {
                   <strong className="font-semibold text-gray-900">
                     Members Support Curators:
                   </strong>{" "}
-                  timetime.cc users can financially support event curators
-                  through tips/subscriptions, and timetime.cc takes a cut to
-                  support development.
+                  Soonlist users can financially support event curators through
+                  tips/subscriptions, and Soonlist takes a cut to support
+                  development.
                 </span>
               </li>
               <li className="flex gap-x-3">
@@ -219,7 +219,7 @@ export default function Page() {
                     Free/Supporter Monthly Subscriptions:
                   </strong>{" "}
                   Some features are just available to paying members. We want
-                  most members to be able to use timetime.cc for free, so this
+                  most members to be able to use Soonlist for free, so this
                   would be more advanced features or customizations.
                 </span>
               </li>
@@ -233,7 +233,7 @@ export default function Page() {
                     Commercial Events:
                   </strong>{" "}
                   We could find ways to monetize larger, commercial events to
-                  make timetime.cc free for smaller or non-commercial events.
+                  make Soonlist free for smaller or non-commercial events.
                 </span>
               </li>
             </ul>
@@ -241,7 +241,7 @@ export default function Page() {
               Collaborative Open Source
             </h3>
             <p className="mt-6">
-              timetime.cc is more than a platform; it&apos;s a collaborative
+              Soonlist is more than a platform; it&apos;s a collaborative
               endeavor. We&apos;re open-source, meaning{" "}
               <a
                 href="https://www.icloud.com/shortcuts/1aecbd2ee98c42edb613642a1382e718"

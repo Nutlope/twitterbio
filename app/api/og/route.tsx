@@ -45,7 +45,7 @@ export async function GET() {
             <line x1="8" x2="8" y1="2" y2="6" />
             <line x1="3" x2="21" y1="10" y2="10" />
           </svg>
-          <div tw="ml-2">timetime.cc</div>
+          <div tw="ml-2">Soonlist</div>
           <div tw="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs bg-slate-100 ml-1">
             Preview
           </div>

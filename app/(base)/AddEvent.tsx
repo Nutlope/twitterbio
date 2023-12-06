@@ -150,12 +150,12 @@ export default function AddEvent({ lists }: { lists?: List[] }) {
             <CardContent>
               <Button asChild>
                 <a
-                  href="https://www.icloud.com/shortcuts/1aecbd2ee98c42edb613642a1382e718"
+                  href="https://www.icloud.com/shortcuts/1ac8a6e9d2154848ae6d9c55d078f91e"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <Download className="mr-2 h-4 w-4" />
-                  Install timetime.cc shortcut
+                  Install Soonlist shortcut
                 </a>
               </Button>
               <div className="p-3"></div>
@@ -172,14 +172,13 @@ export default function AddEvent({ lists }: { lists?: List[] }) {
                   on any screenshot, photo, or text.
                 </li>
                 <li>
-                  Scroll down to select <Code>Add event to timetime.cc</Code>.
+                  Scroll down to select <Code>Add to Soonlist</Code>.
                 </li>
                 <li>
                   Click <Code>Always Allow</Code> when prompted for permissions.
                 </li>
                 <li>
-                  Choose <Code>New timetime.cc event</Code> from the share
-                  options.
+                  Choose <Code>Add to Soonlist</Code> from the share options.
                 </li>
                 <li>
                   Edit the event draft and tap <Code>Save</Code>.

@@ -24,7 +24,7 @@ export function CTAButton() {
   return (
     <Button asChild>
       <a
-        href="https://calendly.com/jaronheard/timetime"
+        href="https://calendly.com/jaronheard/soonlist"
         target="_blank"
         rel="noopener noreferrer"
       >
