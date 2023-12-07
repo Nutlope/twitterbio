@@ -150,7 +150,7 @@ export default function AddEvent({ lists }: { lists?: List[] }) {
             <CardContent>
               <Button asChild>
                 <a
-                  href="https://www.icloud.com/shortcuts/1ac8a6e9d2154848ae6d9c55d078f91e"
+                  href="https://www.icloud.com/shortcuts/d847a6b748e04a45a52f6185b746d573"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
