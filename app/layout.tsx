@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Suspense } from "react";
 import { cookies } from "next/headers";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Fathom from "@/components/Fathom";
 import { CroppedImageProvider } from "@/context/CroppedImageContext";
 import { FormProvider } from "@/context/FormContext";
@@ -49,6 +50,7 @@ export default function RootLayout({
               <Fathom />
               <body>
                 {children}
+                <SpeedInsights />
                 <Suspense>
                   <VercelToolbar />
                 </Suspense>
