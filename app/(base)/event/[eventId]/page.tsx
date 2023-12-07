@@ -39,7 +39,7 @@ export async function generateMetadata(
       title: `${eventData.name} | Soonlist`,
       description: `(${eventData.startDate} ${eventData.startTime}-${eventData.endTime}) ${eventData.description}`,
       locale: "en_US",
-      url: `${process.env.NEXT_PUBLIC_URL}/events/${event.id}`,
+      url: `${process.env.NEXT_PUBLIC_URL}/event/${event.id}`,
       type: "article",
       images: allImages || (await parent).openGraph?.images || [],
     },
