@@ -1,5 +1,5 @@
-# timetime.cc
+# soonlist
 
-For more info, visit timetime.cc
+For more info, visit soonlist.com
 
 Contact @jaronheard for dev info

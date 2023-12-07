@@ -87,7 +87,7 @@ export default function Header() {
           <Link href="/" className="relative flex items-center space-x-3">
             <Calendar className="h-8 w-8" />
             <h1 className="ml-2 hidden text-2xl font-bold tracking-tight sm:block sm:text-4xl">
-              timetime.cc
+              Soonlist
             </h1>
             <Badge
               variant="secondary"

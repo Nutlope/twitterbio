@@ -9,12 +9,12 @@ import { FormProvider } from "@/context/FormContext";
 import { VercelToolbar } from "@/components/VercelToolbar";
 import { TRPCReactProvider } from "@/trpc/react";
 
-const title = "timetime.cc";
+const title = "Soonlist";
 const description = "Create, collect, curate & share events";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.timetime.cc/"),
+  metadataBase: new URL("https://www.soonlist.com/"),
   title,
   description,
   openGraph: {

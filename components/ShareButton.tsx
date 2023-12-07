@@ -23,7 +23,7 @@ export function ShareButton(props: ShareButtonProps) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `${props.event.name} | timetime.cc`,
+          title: `${props.event.name} | Soonlist`,
           text: shareText,
           url: `${process.env.NEXT_PUBLIC_URL}/event/${props.id}`,
         });

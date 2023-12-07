@@ -16,7 +16,7 @@ export async function generateMetadata(
 
   if (!events) {
     return {
-      title: "No events found | timetime.cc",
+      title: "No events found | Soonlist",
       openGraph: {
         images: [],
       },
@@ -35,10 +35,10 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
-    title: `@${params.userName} is following (${futureEventsCount} upcoming events) | timetime.cc`,
+    title: `@${params.userName} is following (${futureEventsCount} upcoming events) | Soonlist`,
     openGraph: {
-      title: `@${params.userName} is following (${futureEventsCount} upcoming events) | timetime.cc`,
-      description: `See the events @${params.userName} is following on  timetime.cc`,
+      title: `@${params.userName} is following (${futureEventsCount} upcoming events) | Soonlist`,
+      description: `See the events @${params.userName} is following on  Soonlist`,
       locale: "en_US",
       url: `${process.env.NEXT_PUBLIC_URL}/${params.userName}/following`,
       type: "article",

@@ -59,7 +59,7 @@ const featuredTestimonial = {
     name: "Sarah Baker",
     handle: "boogiebuffet",
     imageUrl:
-      "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWEJKQ0oxZDdVc05BcW9tUHhielljR0t0QmQifQ&w=750&q=75",
+      "https://www.soonlist.com/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWEJKQ0oxZDdVc05BcW9tUHhielljR0t0QmQifQ&w=750&q=75",
     logoUrl: makingEarthCool.src,
   },
 };
@@ -72,7 +72,7 @@ const testimonials = [
           name: "jennifer batchelor",
           handle: "jennybatch",
           imageUrl:
-            "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWE45MmZWcW5PdUE2T0VCalVBMVRRM3ViaEMifQ&w=750&q=75",
+            "https://www.soonlist.com/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWE45MmZWcW5PdUE2T0VCalVBMVRRM3ViaEMifQ&w=750&q=75",
         },
       },
     ],
@@ -83,7 +83,7 @@ const testimonials = [
           name: "Jaron Heard",
           handle: "jaronheard",
           imageUrl:
-            "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWERpc3hISWJyWkZFOUFJV3VrZ21vRkJNcnAifQ&w=750&q=75",
+            "https://www.soonlist.com/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWERpc3hISWJyWkZFOUFJV3VrZ21vRkJNcnAifQ&w=750&q=75",
         },
       },
       // More testimonials...
@@ -97,7 +97,7 @@ const testimonials = [
     //       name: "Josh Carr",
     //       handle: "joshcarr",
     //       imageUrl:
-    //         "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWEJJUDFzTW9JWmN4eURvU3JISERnTDFpbTQifQ&w=750&q=75",
+    //         "https://www.soonlist.com/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWEJJUDFzTW9JWmN4eURvU3JISERnTDFpbTQifQ&w=750&q=75",
     //     },
     //   },
     //   // More testimonials...
@@ -109,7 +109,7 @@ const testimonials = [
     //       name: "Jenny M Ng",
     //       handle: "jenny",
     //       imageUrl:
-    //         "https://www.timetime.cc/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWHJ6Smw3NWE3ckVUY0F5R2tjWW5lTWdteTkifQ&w=750&q=75",
+    //         "https://www.soonlist.com/_next/image?url=https%3A%2F%2Fimg.clerk.com%2FeyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWHJ6Smw3NWE3ckVUY0F5R2tjWW5lTWdteTkifQ&w=750&q=75",
     //     },
     //   },
     //   // More testimonials...
@@ -413,7 +413,7 @@ export default function Page() {
             ))}
           </div>
           <p className="mt-10 text-center text-xs leading-5 text-gray-500">
-            &copy; 2023 timetime.cc. All rights reserved.
+            &copy; 2023 Soonlist. All rights reserved.
           </p>
         </div>
       </footer> */}

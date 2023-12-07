@@ -21,7 +21,7 @@ export async function generateMetadata(
   const event = await api.event.get.query({ eventId: params.eventId });
   if (!event) {
     return {
-      title: "No event found | timetime.cc",
+      title: "No event found | Soonlist",
       openGraph: {
         images: [],
       },
@@ -34,9 +34,9 @@ export async function generateMetadata(
   const allImages = hasAllImages ? eventData.images?.slice(0, 3) : undefined;
 
   return {
-    title: `${eventData.name} | timetime.cc`,
+    title: `${eventData.name} | Soonlist`,
     openGraph: {
-      title: `${eventData.name} | timetime.cc`,
+      title: `${eventData.name} | Soonlist`,
       description: `(${eventData.startDate} ${eventData.startTime}-${eventData.endTime}) ${eventData.description}`,
       locale: "en_US",
       url: `${process.env.NEXT_PUBLIC_URL}/events/${event.id}`,
