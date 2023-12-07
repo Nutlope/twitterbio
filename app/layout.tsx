@@ -10,15 +10,18 @@ import { VercelToolbar } from "@/components/VercelToolbar";
 import { TRPCReactProvider } from "@/trpc/react";
 
 const title = "Soonlist";
-const description = "Create, collect, curate & share events";
+const tagline = "Create, collect, curate & share events";
+const description =
+  "Join a network of passionate curators and participants building community around events that matter.";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.soonlist.com/"),
   title,
-  description,
+  description: tagline,
   openGraph: {
-    title,
+    siteName: "Soonlist",
+    title: "Create, collect, curate & share events",
     description,
     locale: "en_US",
     type: "website",
