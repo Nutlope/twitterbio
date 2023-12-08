@@ -127,15 +127,11 @@ function EventDetails({
       </ConditionalWrapper>
       <div className="p-1"></div>
       <div className="flex gap-2">
-        <ConditionalWrapper
-          condition={eventTimesAreDefined(startTime, endTime)}
-          wrapper={() => (
-            <div className="shrink-0 items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-              {timeFormat(startTime)}-{timeFormat(endTime)}
-            </div>
-          )}
-        ></ConditionalWrapper>
-
+        {eventTimesAreDefined(startTime, endTime) && (
+          <div className="shrink-0 items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+            {timeFormat(startTime)}-{timeFormat(endTime)}{" "}
+          </div>
+        )}
         {location && (
           <Link
             href={`https://www.google.com/maps/search/?api=1&query=${location}`}
