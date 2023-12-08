@@ -19,9 +19,8 @@ export async function generateMetadata(
   return {
     title: `@${params.userName} is following (${listCount} lists) | Soonlist`,
     openGraph: {
-      title: `@${params.userName} is following (${listCount} lists) | Soonlist`,
+      title: `@${params.userName} is following (${listCount} lists)`,
       description: `See the lists @${params.userName} is following on  Soonlist`,
-      locale: "en_US",
       url: `${process.env.NEXT_PUBLIC_URL}/${params.userName}/following/users`,
       type: "article",
       images: [...previousImages],

@@ -22,9 +22,8 @@ export async function generateMetadata(
   return {
     title: `All users | Soonlist`,
     openGraph: {
-      title: `All users | Soonlist`,
+      title: `All users`,
       description: `See all users on  Soonlist`,
-      locale: "en_US",
       url: `${process.env.NEXT_PUBLIC_URL}/users`,
       type: "article",
       images: [...previousImages],
