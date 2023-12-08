@@ -1,6 +1,6 @@
 # [twitterbio.io](https://www.twitterbio.io/)
 
-This project generates Twitter bios for you using AI.
+This project generates Twitter (X) bios for you using AI.
 
 [![Twitter Bio Generator](./public/screenshot.png)](https://www.twitterbio.io)
 
