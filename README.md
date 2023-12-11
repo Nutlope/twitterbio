@@ -6,9 +6,9 @@ This project generates Twitter (X) bios for you using AI.
 
 ## How it works
 
-This project uses the [ChatGPT API](https://openai.com/api/) and [Vercel Edge functions](https://vercel.com/features/edge-functions) with streaming. It constructs a prompt based on the form and user input, sends it to the chatGPT API via a Vercel Edge function, then streams the response back to the application.
+This project uses the [ChatGPT API](https://openai.com/api/) and the [Vercel AI SDK](https://sdk.vercel.ai/docs) with streaming. It constructs a prompt based on the form and user input, sends it to the ChatGPT API with a Vercel Edge Function, then streams the response back to the application UI.
 
-If you'd like to see how I built this, check out the [video](https://youtu.be/JcE-1xzQTE0) or [blog post](https://vercel.com/blog/gpt-3-app-next-js-vercel-edge-functions).
+> This template has recently been updated for the AI SDK, simplifying the amount of code needed. I previously published a [video](https://youtu.be/JcE-1xzQTE0) and [blog post](https://vercel.com/blog/gpt-3-app-next-js-vercel-edge-functions) showing the older approach.
 
 ## Running Locally
 
@@ -17,7 +17,7 @@ After cloning the repo, go to [OpenAI](https://beta.openai.com/account/api-keys)
 Then, run the application in the command line and it will be available at `http://localhost:3000`.
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 ## One-Click Deploy

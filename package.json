@@ -11,12 +11,13 @@
     "@heroicons/react": "^2.0.13",
     "@tailwindcss/forms": "^0.5.3",
     "@vercel/analytics": "^0.1.8",
-    "eventsource-parser": "^0.0.5",
-    "next": "latest",
+    "ai": "^2.1.21",
+    "next": "^13.4.10",
+    "openai-edge": "^1.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.42.0",
-    "react-hot-toast": "^2.4.0",
+    "react-hot-toast": "^2.4.1",
     "react-use-measure": "^2.1.1"
   },
   "devDependencies": {
