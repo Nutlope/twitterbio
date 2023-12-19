@@ -6,21 +6,21 @@ export default function Footer() {
       <div>
         Powered by{' '}
         <a
-          href="https://openai.com/blog/chatgpt"
+          href="https://mistral.ai/news/mixtral-of-experts"
           target="_blank"
           rel="noreferrer"
           className="font-bold hover:underline transition underline-offset-2"
         >
-          ChatGPT{' '}
+          Mixtral{' '}
         </a>
         and{' '}
         <a
-          href="https://vercel.com/"
+          href="https://platform.openai.com/docs/models"
           target="_blank"
           rel="noreferrer"
           className="font-bold hover:underline transition underline-offset-2"
         >
-          Vercel Edge Functions.
+          GPT-3.5
         </a>
       </div>
       <div className="flex space-x-4 pb-4 sm:pb-0">

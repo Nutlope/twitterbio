@@ -5,7 +5,6 @@ import { useRef, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import DropDown, { VibeType } from '../components/DropDown';
 import Footer from '../components/Footer';
-import Github from '../components/GitHub';
 import Header from '../components/Header';
 import LoadingDots from '../components/LoadingDots';
 import {
@@ -13,12 +12,14 @@ import {
   ParsedEvent,
   ReconnectInterval,
 } from 'eventsource-parser';
+import Toggle from '../components/Toggle';
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState('');
   const [vibe, setVibe] = useState<VibeType>('Professional');
   const [generatedBios, setGeneratedBios] = useState<String>('');
+  const [isGPT, setIsGPT] = useState(false);
 
   const bioRef = useRef<null | HTMLDivElement>(null);
 
@@ -28,20 +29,22 @@ const Home: NextPage = () => {
     }
   };
 
-  const prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". ${
-    vibe === 'Funny'
-      ? "Make sure there is a joke in there and it's a little ridiculous."
-      : null
-  }
-      Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${
+  const prompt = `Generate 3 ${
+    vibe === 'Casual' ? 'relaxed' : vibe === 'Funny' ? 'silly' : 'Professional'
+  } twitter biographies with no hashtags and clearly labeled "1.", "2.", and "3.". Only return these 3 twitter bios, nothing else. ${
+    vibe === 'Funny' ? 'Make the biographies humerous' : ''
+  }Make sure each generated biography is less than 300 characters, has short sentences that are found in Twitter bios, and feel free to use this context as well: ${bio}${
     bio.slice(-1) === '.' ? '' : '.'
   }`;
+
+  console.log({ prompt });
+  console.log({ generatedBios });
 
   const generateBio = async (e: any) => {
     e.preventDefault();
     setGeneratedBios('');
     setLoading(true);
-    const response = await fetch('/api/generate', {
+    const response = await fetch(isGPT ? '/api/openai' : '/api/mistral', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,7 +64,7 @@ const Home: NextPage = () => {
       return;
     }
 
-    const onParse = (event: ParsedEvent | ReconnectInterval) => {
+    const onParseGPT = (event: ParsedEvent | ReconnectInterval) => {
       if (event.type === 'event') {
         const data = event.data;
         try {
@@ -72,6 +75,24 @@ const Home: NextPage = () => {
         }
       }
     };
+
+    const onParseMistral = (event: ParsedEvent | ReconnectInterval) => {
+      if (event.type === 'event') {
+        const data = event.data;
+        if (data === '[DONE]') {
+          return;
+        }
+        try {
+          const text = JSON.parse(data).choices[0].text ?? '';
+          if (text == '</s>') return;
+          setGeneratedBios((prev) => prev + text);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    };
+
+    const onParse = isGPT ? onParseGPT : onParseMistral;
 
     // https://web.dev/streams/#the-getreader-and-read-methods
     const reader = data.getReader();
@@ -97,19 +118,16 @@ const Home: NextPage = () => {
 
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
-        <a
-          className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mb-5"
-          href="https://github.com/Nutlope/twitterbio"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Github />
-          <p>Star on GitHub</p>
-        </a>
+        <p className="border rounded-2xl py-1 px-4 text-slate-500 text-sm mb-5 hover:scale-105 transition duration-300 ease-in-out">
+          <b>96,434</b> bios generated so far
+        </p>
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
-          Generate your next Twitter bio using chatGPT
+          Generate your next Twitter bio using AI
         </h1>
-        <p className="text-slate-500 mt-5">47,118 bios generated so far.</p>
+        <div className="mt-7">
+          <Toggle isGPT={isGPT} setIsGPT={setIsGPT} />
+        </div>
+
         <div className="max-w-xl w-full">
           <div className="flex mt-10 items-center space-x-3">
             <Image
@@ -120,11 +138,8 @@ const Home: NextPage = () => {
               className="mb-5 sm:mb-0"
             />
             <p className="text-left font-medium">
-              Copy your current bio{' '}
-              <span className="text-slate-500">
-                (or write a few sentences about yourself)
-              </span>
-              .
+              Drop in your job{' '}
+              <span className="text-slate-500">(or your favorite hobby)</span>.
             </p>
           </div>
           <textarea
@@ -132,9 +147,7 @@ const Home: NextPage = () => {
             onChange={(e) => setBio(e.target.value)}
             rows={4}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
-            placeholder={
-              'e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com.'
-            }
+            placeholder={'e.g. Amazon CEO'}
           />
           <div className="flex mb-5 items-center space-x-3">
             <Image src="/2-black.png" width={30} height={30} alt="1 icon" />
@@ -181,7 +194,7 @@ const Home: NextPage = () => {
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                 {generatedBios
                   .substring(generatedBios.indexOf('1') + 3)
-                  .split('2.')
+                  .split(/2\.|3\./)
                   .map((generatedBio) => {
                     return (
                       <div
