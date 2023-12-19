@@ -1,50 +1,50 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import { useRef, useState } from "react";
-import { Toaster, toast } from "react-hot-toast";
-import DropDown, { VibeType } from "../components/DropDown";
-import Footer from "../components/Footer";
-import Github from "../components/GitHub";
-import Header from "../components/Header";
-import LoadingDots from "../components/LoadingDots";
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import { useRef, useState } from 'react';
+import { Toaster, toast } from 'react-hot-toast';
+import DropDown, { VibeType } from '../components/DropDown';
+import Footer from '../components/Footer';
+import Github from '../components/GitHub';
+import Header from '../components/Header';
+import LoadingDots from '../components/LoadingDots';
 import {
   createParser,
   ParsedEvent,
   ReconnectInterval,
-} from "eventsource-parser";
+} from 'eventsource-parser';
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
-  const [bio, setBio] = useState("");
-  const [vibe, setVibe] = useState<VibeType>("Professional");
-  const [generatedBios, setGeneratedBios] = useState<String>("");
+  const [bio, setBio] = useState('');
+  const [vibe, setVibe] = useState<VibeType>('Professional');
+  const [generatedBios, setGeneratedBios] = useState<String>('');
 
   const bioRef = useRef<null | HTMLDivElement>(null);
 
   const scrollToBios = () => {
     if (bioRef.current !== null) {
-      bioRef.current.scrollIntoView({ behavior: "smooth" });
+      bioRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   const prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". ${
-    vibe === "Funny"
+    vibe === 'Funny'
       ? "Make sure there is a joke in there and it's a little ridiculous."
       : null
   }
       Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${
-    bio.slice(-1) === "." ? "" : "."
+    bio.slice(-1) === '.' ? '' : '.'
   }`;
 
   const generateBio = async (e: any) => {
     e.preventDefault();
-    setGeneratedBios("");
+    setGeneratedBios('');
     setLoading(true);
-    const response = await fetch("/api/generate", {
-      method: "POST",
+    const response = await fetch('/api/generate', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         prompt,
@@ -62,16 +62,16 @@ const Home: NextPage = () => {
     }
 
     const onParse = (event: ParsedEvent | ReconnectInterval) => {
-      if (event.type === "event") {
+      if (event.type === 'event') {
         const data = event.data;
         try {
-          const text = JSON.parse(data).text ?? ""
+          const text = JSON.parse(data).text ?? '';
           setGeneratedBios((prev) => prev + text);
         } catch (e) {
           console.error(e);
         }
       }
-    }
+    };
 
     // https://web.dev/streams/#the-getreader-and-read-methods
     const reader = data.getReader();
@@ -120,7 +120,7 @@ const Home: NextPage = () => {
               className="mb-5 sm:mb-0"
             />
             <p className="text-left font-medium">
-              Copy your current bio{" "}
+              Copy your current bio{' '}
               <span className="text-slate-500">
                 (or write a few sentences about yourself)
               </span>
@@ -133,7 +133,7 @@ const Home: NextPage = () => {
             rows={4}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
             placeholder={
-              "e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com."
+              'e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com.'
             }
           />
           <div className="flex mb-5 items-center space-x-3">
@@ -180,16 +180,16 @@ const Home: NextPage = () => {
               </div>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                 {generatedBios
-                  .substring(generatedBios.indexOf("1") + 3)
-                  .split("2.")
+                  .substring(generatedBios.indexOf('1') + 3)
+                  .split('2.')
                   .map((generatedBio) => {
                     return (
                       <div
                         className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
                         onClick={() => {
                           navigator.clipboard.writeText(generatedBio);
-                          toast("Bio copied to clipboard", {
-                            icon: "✂️",
+                          toast('Bio copied to clipboard', {
+                            icon: '✂️',
                           });
                         }}
                         key={generatedBio}
