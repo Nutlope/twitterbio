@@ -27,6 +27,7 @@ const handler = async (req: Request): Promise<Response> => {
       prompt: prompt,
       max_tokens: 300,
       stream_tokens: true,
+      stop: '</s>',
     }
   );
 

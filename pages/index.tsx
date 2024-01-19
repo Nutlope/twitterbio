@@ -79,12 +79,8 @@ const Home: NextPage = () => {
     const onParseMistral = (event: ParsedEvent | ReconnectInterval) => {
       if (event.type === 'event') {
         const data = event.data;
-        if (data === '[DONE]') {
-          return;
-        }
         try {
           const text = JSON.parse(data).choices[0].text ?? '';
-          if (text == '</s>') return;
           setGeneratedBios((prev) => prev + text);
         } catch (e) {
           console.error(e);
