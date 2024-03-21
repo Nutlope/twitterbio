@@ -6,13 +6,13 @@ import { Toaster, toast } from 'react-hot-toast';
 import DropDown, { VibeType } from '../components/DropDown';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import LoadingDots from '../components/LoadingDots';
 import {
   createParser,
   ParsedEvent,
   ReconnectInterval,
 } from 'eventsource-parser';
 import Toggle from '../components/Toggle';
+import Button from '../components/Button';
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -153,22 +153,11 @@ const Home: NextPage = () => {
             <DropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} />
           </div>
 
-          {!loading && (
-            <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-              onClick={(e) => generateBio(e)}
-            >
-              Generate your bio &rarr;
-            </button>
-          )}
-          {loading && (
-            <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-              disabled
-            >
-              <LoadingDots color="white" style="large" />
-            </button>
-          )}
+          <Button
+            label={`Generate your bio \u2192`}
+            onClick={(e) => generateBio(e)}
+            loading={loading}
+          />
         </div>
         <Toaster
           position="top-center"
