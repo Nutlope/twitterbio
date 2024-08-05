@@ -18,7 +18,7 @@
     "react-hook-form": "^7.42.0",
     "react-hot-toast": "^2.4.0",
     "react-use-measure": "^2.1.1",
-    "together-ai": "^0.5.2"
+    "together-ai": "^0.6.0-alpha.4"
   },
   "devDependencies": {
     "@types/node": "18.11.3",

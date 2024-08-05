@@ -44,7 +44,7 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
           const data = event.data;
           controller.enqueue(encoder.encode(data));
         }
-      }
+      };
 
       // optimistic error handling
       if (res.status !== 200) {
@@ -52,12 +52,14 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
           status: res.status,
           statusText: res.statusText,
           body: await res.text(),
-        }
-        console.log(`Error: recieved non-200 status code, ${JSON.stringify(data)}`);
+        };
+        console.log(
+          `Error: recieved non-200 status code, ${JSON.stringify(data)}`
+        );
         controller.close();
-        return
+        return;
       }
-        
+
       // stream response (SSE) from OpenAI may be fragmented into multiple chunks
       // this ensures we properly read chunks and invoke an event for each SSE event stream
       const parser = createParser(onParse);
@@ -85,7 +87,7 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
           return;
         }
         // stream transformed JSON resposne as SSE
-        const payload = {text: text};
+        const payload = { text: text };
         // https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
         controller.enqueue(
           encoder.encode(`data: ${JSON.stringify(payload)}\n\n`)

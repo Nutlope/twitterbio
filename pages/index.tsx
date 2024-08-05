@@ -1,40 +1,40 @@
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import Image from 'next/image';
-import { useRef, useState } from 'react';
-import { Toaster, toast } from 'react-hot-toast';
-import DropDown, { VibeType } from '../components/DropDown';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
-import LoadingDots from '../components/LoadingDots';
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import { useRef, useState } from "react";
+import { Toaster, toast } from "react-hot-toast";
+import DropDown, { VibeType } from "../components/DropDown";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import LoadingDots from "../components/LoadingDots";
 import {
   createParser,
   ParsedEvent,
   ReconnectInterval,
-} from 'eventsource-parser';
-import Toggle from '../components/Toggle';
+} from "eventsource-parser";
+import Toggle from "../components/Toggle";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
-  const [bio, setBio] = useState('');
-  const [vibe, setVibe] = useState<VibeType>('Professional');
-  const [generatedBios, setGeneratedBios] = useState<String>('');
+  const [bio, setBio] = useState("");
+  const [vibe, setVibe] = useState<VibeType>("Professional");
+  const [generatedBios, setGeneratedBios] = useState<String>("");
   const [isGPT, setIsGPT] = useState(false);
 
   const bioRef = useRef<null | HTMLDivElement>(null);
 
   const scrollToBios = () => {
     if (bioRef.current !== null) {
-      bioRef.current.scrollIntoView({ behavior: 'smooth' });
+      bioRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const prompt = `Generate 3 ${
-    vibe === 'Casual' ? 'relaxed' : vibe === 'Funny' ? 'silly' : 'Professional'
+    vibe === "Casual" ? "relaxed" : vibe === "Funny" ? "silly" : "Professional"
   } twitter biographies with no hashtags and clearly labeled "1.", "2.", and "3.". Only return these 3 twitter bios, nothing else. ${
-    vibe === 'Funny' ? 'Make the biographies humerous' : ''
+    vibe === "Funny" ? "Make the biographies humerous" : ""
   }Make sure each generated biography is less than 300 characters, has short sentences that are found in Twitter bios, and feel free to use this context as well: ${bio}${
-    bio.slice(-1) === '.' ? '' : '.'
+    bio.slice(-1) === "." ? "" : "."
   }`;
 
   console.log({ prompt });
@@ -42,12 +42,12 @@ const Home: NextPage = () => {
 
   const generateBio = async (e: any) => {
     e.preventDefault();
-    setGeneratedBios('');
+    setGeneratedBios("");
     setLoading(true);
-    const response = await fetch(isGPT ? '/api/openai' : '/api/mistral', {
-      method: 'POST',
+    const response = await fetch(isGPT ? "/api/openai" : "/api/mistral", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         prompt,
@@ -65,10 +65,10 @@ const Home: NextPage = () => {
     }
 
     const onParseGPT = (event: ParsedEvent | ReconnectInterval) => {
-      if (event.type === 'event') {
+      if (event.type === "event") {
         const data = event.data;
         try {
-          const text = JSON.parse(data).text ?? '';
+          const text = JSON.parse(data).text ?? "";
           setGeneratedBios((prev) => prev + text);
         } catch (e) {
           console.error(e);
@@ -77,10 +77,10 @@ const Home: NextPage = () => {
     };
 
     const onParseMistral = (event: ParsedEvent | ReconnectInterval) => {
-      if (event.type === 'event') {
+      if (event.type === "event") {
         const data = event.data;
         try {
-          const text = JSON.parse(data).choices[0].text ?? '';
+          const text = JSON.parse(data).choices[0].text ?? "";
           setGeneratedBios((prev) => prev + text);
         } catch (e) {
           console.error(e);
@@ -134,7 +134,7 @@ const Home: NextPage = () => {
               className="mb-5 sm:mb-0"
             />
             <p className="text-left font-medium">
-              Drop in your job{' '}
+              Drop in your job{" "}
               <span className="text-slate-500">(or your favorite hobby)</span>.
             </p>
           </div>
@@ -143,7 +143,7 @@ const Home: NextPage = () => {
             onChange={(e) => setBio(e.target.value)}
             rows={4}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
-            placeholder={'e.g. Amazon CEO'}
+            placeholder={"e.g. Amazon CEO"}
           />
           <div className="flex mb-5 items-center space-x-3">
             <Image src="/2-black.png" width={30} height={30} alt="1 icon" />
@@ -189,7 +189,7 @@ const Home: NextPage = () => {
               </div>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
                 {generatedBios
-                  .substring(generatedBios.indexOf('1') + 3)
+                  .substring(generatedBios.indexOf("1") + 3)
                   .split(/2\.|3\./)
                   .map((generatedBio) => {
                     return (
@@ -197,8 +197,8 @@ const Home: NextPage = () => {
                         className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
                         onClick={() => {
                           navigator.clipboard.writeText(generatedBio);
-                          toast('Bio copied to clipboard', {
-                            icon: '✂️',
+                          toast("Bio copied to clipboard", {
+                            icon: "✂️",
                           });
                         }}
                         key={generatedBio}

@@ -1,23 +1,23 @@
-import { Menu, Transition } from '@headlessui/react';
+import { Menu, Transition } from "@headlessui/react";
 import {
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-} from '@heroicons/react/20/solid';
-import { Fragment } from 'react';
+} from "@heroicons/react/20/solid";
+import { Fragment } from "react";
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 }
 
-export type VibeType = 'Professional' | 'Casual' | 'Funny';
+export type VibeType = "Professional" | "Casual" | "Funny";
 
 interface DropDownProps {
   vibe: VibeType;
   setVibe: (vibe: VibeType) => void;
 }
 
-let vibes: VibeType[] = ['Professional', 'Casual', 'Funny'];
+let vibes: VibeType[] = ["Professional", "Casual", "Funny"];
 
 export default function DropDown({ vibe, setVibe }: DropDownProps) {
   return (
@@ -56,9 +56,9 @@ export default function DropDown({ vibe, setVibe }: DropDownProps) {
                   <button
                     onClick={() => setVibe(vibeItem)}
                     className={classNames(
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      vibe === vibeItem ? 'bg-gray-200' : '',
-                      'px-4 py-2 text-sm w-full text-left flex items-center space-x-2 justify-between'
+                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                      vibe === vibeItem ? "bg-gray-200" : "",
+                      "px-4 py-2 text-sm w-full text-left flex items-center space-x-2 justify-between"
                     )}
                   >
                     <span>{vibeItem}</span>

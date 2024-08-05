@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import Github from './GitHub';
+import Link from "next/link";
+import Github from "./GitHub";
 
 export default function Header() {
   return (
