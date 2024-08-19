@@ -37,9 +37,6 @@ const Home: NextPage = () => {
     bio.slice(-1) === "." ? "" : "."
   }`;
 
-  console.log({ prompt });
-  console.log({ generatedBios });
-
   const generateBio = async (e: any) => {
     e.preventDefault();
     setGeneratedBios("");
