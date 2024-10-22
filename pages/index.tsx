@@ -7,12 +7,8 @@ import DropDown, { VibeType } from "../components/DropDown";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import LoadingDots from "../components/LoadingDots";
-import {
-  createParser,
-  ParsedEvent,
-  ReconnectInterval,
-} from "eventsource-parser";
 import Toggle from "../components/Toggle";
+import { ChatCompletionStream } from "together-ai/lib/ChatCompletionStream";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -58,49 +54,9 @@ const Home: NextPage = () => {
       throw new Error(response.statusText);
     }
 
-    // This data is a ReadableStream
-    const data = response.body;
-    if (!data) {
-      return;
-    }
+    const runner = ChatCompletionStream.fromReadableStream(response.body!);
+    runner.on("content", (delta) => setGeneratedBios((prev) => prev + delta));
 
-    const onParseGPT = (event: ParsedEvent | ReconnectInterval) => {
-      if (event.type === "event") {
-        const data = event.data;
-        try {
-          const text = JSON.parse(data).text ?? "";
-          setGeneratedBios((prev) => prev + text);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    };
-
-    const onParseMistral = (event: ParsedEvent | ReconnectInterval) => {
-      if (event.type === "event") {
-        const data = event.data;
-        try {
-          const text = JSON.parse(data).choices[0].text ?? "";
-          setGeneratedBios((prev) => prev + text);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    };
-
-    const onParse = isGPT ? onParseGPT : onParseMistral;
-
-    // https://web.dev/streams/#the-getreader-and-read-methods
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    const parser = createParser(onParse);
-    let done = false;
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      parser.feed(chunkValue);
-    }
     scrollToBios();
     setLoading(false);
   };
