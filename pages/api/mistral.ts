@@ -8,9 +8,7 @@ export const config = {
   runtime: "edge",
 };
 
-const together = new Together({
-  auth: process.env.TOGETHER_API_KEY,
-});
+const together = new Together();
 
 const handler = async (req: Request): Promise<Response> => {
   const { prompt } = (await req.json()) as {
@@ -21,21 +19,12 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response("No prompt in the request", { status: 400 });
   }
 
-  const stream = await together.inference(
-    "mistralai/Mixtral-8x7B-Instruct-v0.1",
-    {
-      prompt: prompt,
-      max_tokens: 300,
-      stream_tokens: true,
-      stop: "</s>",
-    }
-  );
-
-  return new Response(stream as ReadableStream, {
-    headers: new Headers({
-      "Cache-Control": "no-cache",
-    }),
+  const runner = together.chat.completions.stream({
+    model: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
+    messages: [{ role: "user", content: prompt }],
   });
+
+  return new Response(runner.toReadableStream());
 };
 
 export default handler;
