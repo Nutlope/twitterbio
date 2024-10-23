@@ -20,7 +20,7 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   const runner = together.chat.completions.stream({
-    model: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
+    model: "mistralai/Mixtral-8x7B-Instruct-v0.1",
     messages: [{ role: "user", content: prompt }],
   });
 
