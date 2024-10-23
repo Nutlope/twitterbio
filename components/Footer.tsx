@@ -6,21 +6,12 @@ export default function Footer() {
       <div>
         Powered by{" "}
         <a
-          href="https://mistral.ai/news/mixtral-of-experts"
+          href="https://together.ai"
           target="_blank"
           rel="noreferrer"
           className="font-bold hover:underline transition underline-offset-2"
         >
-          Mixtral{" "}
-        </a>
-        and{" "}
-        <a
-          href="https://platform.openai.com/docs/models"
-          target="_blank"
-          rel="noreferrer"
-          className="font-bold hover:underline transition underline-offset-2"
-        >
-          GPT-3.5
+          Together AI
         </a>
       </div>
       <div className="flex space-x-4 pb-4 sm:pb-0">

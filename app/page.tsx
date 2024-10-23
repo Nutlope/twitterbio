@@ -1,5 +1,5 @@
-import type { NextPage } from "next";
-import Head from "next/head";
+"use client";
+
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
@@ -10,12 +10,12 @@ import LoadingDots from "../components/LoadingDots";
 import Toggle from "../components/Toggle";
 import { ChatCompletionStream } from "together-ai/lib/ChatCompletionStream";
 
-const Home: NextPage = () => {
+export default function Home() {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState("");
   const [vibe, setVibe] = useState<VibeType>("Professional");
   const [generatedBios, setGeneratedBios] = useState<String>("");
-  const [isGPT, setIsGPT] = useState(false);
+  const [isLlama, setIsLlama] = useState(false);
 
   const bioRef = useRef<null | HTMLDivElement>(null);
 
@@ -33,20 +33,20 @@ const Home: NextPage = () => {
     bio.slice(-1) === "." ? "" : "."
   }`;
 
-  console.log({ prompt });
-  console.log({ generatedBios });
-
   const generateBio = async (e: any) => {
     e.preventDefault();
     setGeneratedBios("");
     setLoading(true);
-    const response = await fetch(isGPT ? "/api/openai" : "/api/mistral", {
+    const response = await fetch("/api/together", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         prompt,
+        model: isLlama
+          ? "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo"
+          : "mistralai/Mixtral-8x7B-Instruct-v0.1",
       }),
     });
 
@@ -63,21 +63,16 @@ const Home: NextPage = () => {
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
-      <Head>
-        <title>Twitter Bio Generator</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
         <p className="border rounded-2xl py-1 px-4 text-slate-500 text-sm mb-5 hover:scale-105 transition duration-300 ease-in-out">
-          <b>96,434</b> bios generated so far
+          <b>126,657</b> bios generated so far
         </p>
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
           Generate your next Twitter bio using AI
         </h1>
         <div className="mt-7">
-          <Toggle isGPT={isGPT} setIsGPT={setIsGPT} />
+          <Toggle isGPT={isLlama} setIsGPT={setIsLlama} />
         </div>
 
         <div className="max-w-xl w-full">
@@ -108,21 +103,19 @@ const Home: NextPage = () => {
           <div className="block">
             <DropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} />
           </div>
-
-          {!loading && (
-            <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-              onClick={(e) => generateBio(e)}
-            >
-              Generate your bio &rarr;
-            </button>
-          )}
-          {loading && (
+          {loading ? (
             <button
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
               disabled
             >
               <LoadingDots color="white" style="large" />
+            </button>
+          ) : (
+            <button
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              onClick={(e) => generateBio(e)}
+            >
+              Generate your bio &rarr;
             </button>
           )}
         </div>
@@ -171,6 +164,4 @@ const Home: NextPage = () => {
       <Footer />
     </div>
   );
-};
-
-export default Home;
+}
