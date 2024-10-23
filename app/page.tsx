@@ -55,7 +55,6 @@ export default function Home() {
     }
 
     const runner = ChatCompletionStream.fromReadableStream(response.body!);
-
     runner.on("content", (delta) => setGeneratedBios((prev) => prev + delta));
 
     scrollToBios();
