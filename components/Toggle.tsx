@@ -50,13 +50,13 @@ export default function Toggle({ isGPT, setIsGPT }: any) {
             !isGPT ? "text-gray-400" : "text-gray-900"
           }`}
         >
-          GPT-4o mini
+          Llama 3.1 8B
         </span>{" "}
         <Image
-          src="/openai-logo.jpeg"
-          width={30}
-          height={30}
-          alt="OpenAI logo"
+          src="/llama-logo.webp"
+          width={40}
+          height={40}
+          alt="Meta logo"
           className={`${!isGPT && "opacity-50"}`}
         />
       </Switch.Label>

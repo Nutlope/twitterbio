@@ -11,16 +11,7 @@ export default function Footer() {
           rel="noreferrer"
           className="font-bold hover:underline transition underline-offset-2"
         >
-          Together AI{" "}
-        </a>
-        and{" "}
-        <a
-          href="https://platform.openai.com/docs/models"
-          target="_blank"
-          rel="noreferrer"
-          className="font-bold hover:underline transition underline-offset-2"
-        >
-          Open AI
+          Together AI
         </a>
       </div>
       <div className="flex space-x-4 pb-4 sm:pb-0">

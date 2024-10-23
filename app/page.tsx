@@ -1,6 +1,5 @@
 "use client";
 
-import type { NextPage } from "next";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
@@ -11,12 +10,12 @@ import LoadingDots from "../components/LoadingDots";
 import Toggle from "../components/Toggle";
 import { ChatCompletionStream } from "together-ai/lib/ChatCompletionStream";
 
-const Home: NextPage = () => {
+export default function Home() {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState("");
   const [vibe, setVibe] = useState<VibeType>("Professional");
   const [generatedBios, setGeneratedBios] = useState<String>("");
-  const [isGPT, setIsGPT] = useState(false);
+  const [isLlama, setIsLlama] = useState(false);
 
   const bioRef = useRef<null | HTMLDivElement>(null);
 
@@ -34,20 +33,20 @@ const Home: NextPage = () => {
     bio.slice(-1) === "." ? "" : "."
   }`;
 
-  console.log({ prompt });
-  console.log({ generatedBios });
-
   const generateBio = async (e: any) => {
     e.preventDefault();
     setGeneratedBios("");
     setLoading(true);
-    const response = await fetch(isGPT ? "/api/openai" : "/api/mistral", {
+    const response = await fetch("/api/together", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         prompt,
+        model: isLlama
+          ? "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo"
+          : "mistralai/Mixtral-8x7B-Instruct-v0.1",
       }),
     });
 
@@ -56,6 +55,7 @@ const Home: NextPage = () => {
     }
 
     const runner = ChatCompletionStream.fromReadableStream(response.body!);
+
     runner.on("content", (delta) => setGeneratedBios((prev) => prev + delta));
 
     scrollToBios();
@@ -73,7 +73,7 @@ const Home: NextPage = () => {
           Generate your next Twitter bio using AI
         </h1>
         <div className="mt-7">
-          <Toggle isGPT={isGPT} setIsGPT={setIsGPT} />
+          <Toggle isGPT={isLlama} setIsGPT={setIsLlama} />
         </div>
 
         <div className="max-w-xl w-full">
@@ -165,6 +165,4 @@ const Home: NextPage = () => {
       <Footer />
     </div>
   );
-};
-
-export default Home;
+}

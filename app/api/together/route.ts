@@ -1,15 +1,13 @@
 import Together from "together-ai";
-
 const together = new Together();
+
 if (!process.env.TOGETHER_API_KEY) throw new Error("Missing Together env var");
 
 export async function POST(req: Request) {
-  const { prompt } = await req.json();
-
-  if (!prompt) return new Response("No prompt in the request", { status: 400 });
+  const { prompt, model } = await req.json();
 
   const runner = together.chat.completions.stream({
-    model: "mistralai/Mixtral-8x7B-Instruct-v0.1",
+    model,
     messages: [{ role: "user", content: prompt }],
     temperature: 0.7,
     max_tokens: 200,
