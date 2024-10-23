@@ -1,19 +1,19 @@
 # [twitterbio.io](https://www.twitterbio.io/)
 
-This project generates Twitter (X) bios for you using AI.
+This project generates Twitter (X) bios for you using Together AI & OpenAI.
 
 [![Twitter Bio Generator](./public/screenshot.png)](https://www.twitterbio.io)
 
 ## How it works
 
-This project uses both [Mixtral](https://mistral.ai/news/mixtral-of-experts/) and [GPT-3.5](https://openai.com/api/) with streaming to generate a Twitter bio. It constructs a prompt based on the form and user input, sends it either to the Mixtral API through [Together.ai](https://www.together.ai/) or the GPT-3.5 API through OpenAI, then streams the response back to the application.
+This project uses both [Mixtral](https://api.together.xyz/playground/chat/mistralai/Mixtral-8x7B-Instruct-v0.1) and [GPT-4o mini](https://openai.com/api/) with streaming to generate a Twitter bio. It constructs a prompt based on the form and user input, sends it either to the Mixtral API through [Together.ai](https://www.together.ai/) or the GPT-4o mini API through OpenAI, then streams the response back to the application.
 
-If you'd like to see how I built the GPT-3.5 version of this, check out the [video](https://youtu.be/JcE-1xzQTE0) or [blog post](https://vercel.com/blog/gpt-3-app-next-js-vercel-edge-functions).
+If you'd like to see how I built the GPT-4o mini version of this, check out the [video](https://youtu.be/JcE-1xzQTE0) or [blog post](https://vercel.com/blog/gpt-3-app-next-js-vercel-edge-functions).
 
 ## Running Locally
 
-1. Create an account at [OpenAI](https://beta.openai.com/account/api-keys) and add your API key under `OPENAI_API_KEY` in your `.env`
-2. Create an account at [Together.ai](https://www.together.ai/) and add your API key under `TOGETHER_API_KEY`
+1. Create an account at [Together.ai](https://www.together.ai/) and add your API key under `TOGETHER_API_KEY` in `.env`
+2. [Optional] Create an account at [OpenAI](https://beta.openai.com/account/api-keys) and add your API key under `OPENAI_API_KEY`
 3. Run the application with `npm run dev` and it will be available at `http://localhost:3000`.
 
 ## One-Click Deploy

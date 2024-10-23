@@ -22,7 +22,7 @@ export default function Toggle({ isGPT, setIsGPT }: any) {
         <span
           className={`font-medium ${isGPT ? "text-gray-400" : "text-gray-900"}`}
         >
-          Mixtral
+          Mixtral 8x7B
         </span>{" "}
       </Switch.Label>
       <Switch
@@ -50,7 +50,7 @@ export default function Toggle({ isGPT, setIsGPT }: any) {
             !isGPT ? "text-gray-400" : "text-gray-900"
           }`}
         >
-          GPT-3.5
+          GPT-4o mini
         </span>{" "}
         <Image
           src="/openai-logo.jpeg"
