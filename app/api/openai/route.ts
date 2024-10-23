@@ -18,4 +18,4 @@ export async function POST(req: Request) {
   return new Response(runner.toReadableStream());
 }
 
-export const config = { runtime: "edge" };
+export const runtime = "edge";
