@@ -12,7 +12,7 @@ export default function Header() {
       <Link href="/" className="flex space-x-3 items-center hover-scale">
         <img
           alt="header text"
-          src="/write.svg"
+          src="/write-adaptive.svg"
           className="sm:w-9 sm:h-9 w-8 h-8"
         />
         <h1 
