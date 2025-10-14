@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PlausibleProvider from "next-plausible";
 import localFont from "next/font/local";
+import { ThemeProvider } from "../components/ThemeContext";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -53,9 +54,11 @@ export default function RootLayout({
         <PlausibleProvider domain="twitterbio.io" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-full`}
       >
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

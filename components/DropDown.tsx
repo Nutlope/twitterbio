@@ -23,7 +23,17 @@ export default function DropDown({ vibe, setVibe }: DropDownProps) {
   return (
     <Menu as="div" className="relative block text-left w-full">
       <div>
-        <Menu.Button className="inline-flex w-full justify-between items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black">
+        <Menu.Button 
+          className="inline-flex w-full justify-between items-center rounded-xl 
+                     px-4 py-3 text-lg shadow-custom hover-scale
+                     transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          style={{
+            backgroundColor: 'var(--bg-secondary)',
+            borderColor: 'var(--border-primary)',
+            color: 'var(--text-primary)',
+            border: '2px solid'
+          }}
+        >
           {vibe}
           <ChevronUpIcon
             className="-mr-1 ml-2 h-5 w-5 ui-open:hidden"
@@ -46,24 +56,36 @@ export default function DropDown({ vibe, setVibe }: DropDownProps) {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items
-          className="absolute left-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          className="absolute left-0 z-10 mt-2 w-full origin-top-right 
+                     rounded-xl shadow-custom-lg ring-1 ring-gray-300 ring-opacity-5 
+                     focus:outline-none overflow-hidden"
+          style={{
+            backgroundColor: 'var(--bg-secondary)'
+          }}
           key={vibe}
         >
-          <div className="">
+          <div>
             {vibes.map((vibeItem) => (
               <Menu.Item key={vibeItem}>
                 {({ active }) => (
                   <button
                     onClick={() => setVibe(vibeItem)}
                     className={classNames(
-                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                      vibe === vibeItem ? "bg-gray-200" : "",
-                      "px-4 py-2 text-sm w-full text-left flex items-center space-x-2 justify-between"
+                      "px-4 py-3 text-lg w-full text-left flex items-center space-x-2 justify-between transition-colors duration-200",
+                      active ? "opacity-80" : "",
+                      vibe === vibeItem ? "font-semibold" : ""
                     )}
+                    style={{
+                      backgroundColor: active ? 'var(--bg-tertiary)' : 'transparent',
+                      color: vibe === vibeItem ? 'var(--accent-primary)' : 'var(--text-primary)'
+                    }}
                   >
                     <span>{vibeItem}</span>
                     {vibe === vibeItem ? (
-                      <CheckIcon className="w-4 h-4 text-bold" />
+                      <CheckIcon 
+                        className="w-5 h-5" 
+                        style={{ color: 'var(--accent-primary)' }}
+                      />
                     ) : null}
                   </button>
                 )}

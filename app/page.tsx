@@ -62,97 +62,184 @@ export default function Home() {
   };
 
   return (
-    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
+    <div 
+      className="flex max-w-6xl mx-auto flex-col items-center justify-center py-2 min-h-screen px-4"
+      style={{ backgroundColor: 'var(--bg-primary)' }}
+    >
       <Header />
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
-        <p className="border rounded-2xl py-1 px-4 text-slate-500 text-sm mb-5 hover:scale-105 transition duration-300 ease-in-out">
-          <b>126,657</b> bios generated so far
-        </p>
-        <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
-          Generate your next Twitter bio using AI
+      <main className="flex flex-1 w-full flex-col items-center justify-center text-center mt-12 sm:mt-20">
+        {/* Stats Badge */}
+        <div 
+          className="glass-effect rounded-2xl py-2 px-6 text-sm mb-8 hover-scale 
+                     transition-all duration-300 shadow-custom"
+          style={{ 
+            color: 'var(--text-secondary)',
+            border: '1px solid var(--border-primary)'
+          }}
+        >
+          <span className="font-bold" style={{ color: 'var(--accent-primary)' }}>126,657</span> bios generated so far
+        </div>
+
+        {/* Main Title */}
+        <h1 
+          className="sm:text-6xl text-4xl max-w-4xl font-bold mb-4 leading-tight"
+          style={{ color: 'var(--text-primary)' }}
+        >
+          Generate your next{" "}
+          <span className="gradient-text">Twitter bio</span>{" "}
+          using AI
         </h1>
-        <div className="mt-7">
+        
+        <p 
+          className="text-xl sm:text-2xl max-w-2xl mb-10"
+          style={{ color: 'var(--text-secondary)' }}
+        >
+          Create professional, engaging Twitter bios in seconds with the power of AI
+        </p>
+
+        {/* Model Toggle */}
+        <div className="mb-12">
           <Toggle isGPT={isLlama} setIsGPT={setIsLlama} />
         </div>
 
-        <div className="max-w-xl w-full">
-          <div className="flex mt-10 items-center space-x-3">
-            <Image
-              src="/1-black.png"
-              width={30}
-              height={30}
-              alt="1 icon"
-              className="mb-5 sm:mb-0"
-            />
-            <p className="text-left font-medium">
+        {/* Main Form */}
+        <div className="max-w-2xl w-full">
+          {/* Step 1 */}
+          <div className="flex mt-10 items-center space-x-4 mb-6">
+            <div 
+              className="flex items-center justify-center w-10 h-10 rounded-full 
+                         font-bold text-white shadow-custom"
+              style={{ background: 'var(--gradient-primary)' }}
+            >
+              1
+            </div>
+            <p 
+              className="text-left font-medium text-lg"
+              style={{ color: 'var(--text-primary)' }}
+            >
               Drop in your job{" "}
-              <span className="text-slate-500">(or your favorite hobby)</span>.
+              <span style={{ color: 'var(--text-secondary)' }}>(or your favorite hobby)</span>
             </p>
           </div>
+          
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             rows={4}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
-            placeholder={"e.g. Amazon CEO"}
+            className="w-full rounded-xl p-4 text-lg shadow-custom 
+                       transition-all duration-300 focus:shadow-custom-lg
+                       focus:outline-none focus:ring-2 focus:ring-blue-500"
+            style={{
+              backgroundColor: 'var(--bg-secondary)',
+              borderColor: 'var(--border-primary)',
+              color: 'var(--text-primary)',
+              border: '2px solid'
+            }}
+            placeholder="e.g. Amazon CEO"
           />
-          <div className="flex mb-5 items-center space-x-3">
-            <Image src="/2-black.png" width={30} height={30} alt="1 icon" />
-            <p className="text-left font-medium">Select your vibe.</p>
+          
+          {/* Step 2 */}
+          <div className="flex mb-6 mt-10 items-center space-x-4">
+            <div 
+              className="flex items-center justify-center w-10 h-10 rounded-full 
+                         font-bold text-white shadow-custom"
+              style={{ background: 'var(--gradient-primary)' }}
+            >
+              2
+            </div>
+            <p 
+              className="text-left font-medium text-lg"
+              style={{ color: 'var(--text-primary)' }}
+            >
+              Select your vibe
+            </p>
           </div>
-          <div className="block">
+          
+          <div className="mb-10">
             <DropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} />
           </div>
+          
+          {/* Generate Button */}
           {loading ? (
             <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              className="w-full rounded-xl font-medium px-8 py-4 text-lg 
+                         shadow-custom transition-all duration-300"
+              style={{
+                background: 'var(--gradient-primary)',
+                color: 'white'
+              }}
               disabled
             >
               <LoadingDots color="white" style="large" />
             </button>
           ) : (
             <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              className="w-full rounded-xl font-medium px-8 py-4 text-lg 
+                         shadow-custom hover-scale hover:shadow-custom-lg
+                         transition-all duration-300"
+              style={{
+                background: 'var(--gradient-primary)',
+                color: 'white'
+              }}
               onClick={(e) => generateBio(e)}
             >
-              Generate your bio &rarr;
+              Generate your bio ✨
             </button>
           )}
         </div>
+        
         <Toaster
           position="top-center"
           reverseOrder={false}
           toastOptions={{ duration: 2000 }}
         />
-        <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
-        <div className="space-y-10 my-10">
+        
+        {/* Divider */}
+        <div 
+          className="w-full max-w-2xl h-px my-16"
+          style={{ backgroundColor: 'var(--border-primary)' }}
+        />
+        
+        {/* Generated Results */}
+        <div className="space-y-10 my-10 w-full max-w-4xl">
           {generatedBios && (
             <>
               <div>
                 <h2
-                  className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
+                  className="sm:text-4xl text-3xl font-bold mx-auto mb-8"
+                  style={{ color: 'var(--text-primary)' }}
                   ref={bioRef}
                 >
                   Your generated bios
                 </h2>
               </div>
-              <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+              <div className="grid gap-6 md:grid-cols-1 max-w-3xl mx-auto">
                 {generatedBios
                   .substring(generatedBios.indexOf("1") + 3)
                   .split(/2\.|3\./)
-                  .map((generatedBio) => {
+                  .map((generatedBio, index) => {
                     return (
                       <div
-                        className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
+                        className="glass-effect rounded-2xl p-6 hover-scale 
+                                   transition-all duration-300 cursor-copy
+                                   shadow-custom hover:shadow-custom-lg"
+                        style={{
+                          border: '1px solid var(--border-primary)'
+                        }}
                         onClick={() => {
                           navigator.clipboard.writeText(generatedBio);
                           toast("Bio copied to clipboard", {
                             icon: "✂️",
                           });
                         }}
-                        key={generatedBio}
+                        key={index}
                       >
-                        <p>{generatedBio}</p>
+                        <p 
+                          className="text-lg leading-relaxed"
+                          style={{ color: 'var(--text-primary)' }}
+                        >
+                          {generatedBio}
+                        </p>
                       </div>
                     );
                   })}
