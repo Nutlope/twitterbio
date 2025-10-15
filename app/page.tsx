@@ -63,21 +63,21 @@ export default function Home() {
 
   return (
     <div 
-      className="flex max-w-6xl mx-auto flex-col items-center justify-center py-2 min-h-screen px-4"
+      className="flex max-w-6xl mx-auto flex-col items-center justify-center py-2 min-h-screen px-4 liquid-bg"
       style={{ backgroundColor: 'var(--bg-primary)' }}
     >
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center mt-12 sm:mt-20">
         {/* Stats Badge */}
         <div 
-          className="glass-effect rounded-2xl py-2 px-6 text-sm mb-8 hover-scale 
-                     transition-all duration-300 shadow-custom"
+          className="glass-anamorphic rounded-2xl py-3 px-8 text-sm mb-8 hover-scale 
+                     transition-all duration-300 shadow-custom float-animation"
           style={{ 
             color: 'var(--text-secondary)',
-            border: '1px solid var(--border-primary)'
+            animationDelay: '0s'
           }}
         >
-          <span className="font-bold" style={{ color: 'var(--accent-primary)' }}>126,657</span> bios generated so far
+          <span className="font-bold gradient-text">126,657</span> bios generated so far
         </div>
 
         {/* Main Title */}
@@ -98,7 +98,7 @@ export default function Home() {
         </p>
 
         {/* Model Toggle */}
-        <div className="mb-12">
+        <div className="mb-12 float-animation" style={{ animationDelay: '2s' }}>
           <Toggle isGPT={isLlama} setIsGPT={setIsLlama} />
         </div>
 
@@ -107,9 +107,12 @@ export default function Home() {
           {/* Step 1 */}
           <div className="flex mt-10 items-center space-x-4 mb-6">
             <div 
-              className="flex items-center justify-center w-10 h-10 rounded-full 
-                         font-bold text-white shadow-custom"
-              style={{ background: 'var(--gradient-primary)' }}
+              className="flex items-center justify-center w-12 h-12 rounded-full 
+                         font-bold text-white shadow-custom glass-anamorphic"
+              style={{ 
+                background: 'var(--gradient-primary)',
+                transform: 'perspective(1000px) rotateX(2deg) rotateY(-1deg)'
+              }}
             >
               1
             </div>
@@ -126,14 +129,13 @@ export default function Home() {
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             rows={4}
-            className="w-full rounded-xl p-4 text-lg shadow-custom 
+            className="w-full rounded-2xl p-6 text-lg shadow-custom-lg 
                        transition-all duration-300 focus:shadow-custom-lg
-                       focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       focus:outline-none focus:ring-2 focus:ring-blue-500 
+                       glass-anamorphic hover-scale mb-8"
             style={{
-              backgroundColor: 'var(--bg-secondary)',
-              borderColor: 'var(--border-primary)',
               color: 'var(--text-primary)',
-              border: '2px solid'
+              resize: 'none'
             }}
             placeholder="e.g. Amazon CEO"
           />
@@ -141,9 +143,12 @@ export default function Home() {
           {/* Step 2 */}
           <div className="flex mb-6 mt-10 items-center space-x-4">
             <div 
-              className="flex items-center justify-center w-10 h-10 rounded-full 
-                         font-bold text-white shadow-custom"
-              style={{ background: 'var(--gradient-primary)' }}
+              className="flex items-center justify-center w-12 h-12 rounded-full 
+                         font-bold text-white shadow-custom glass-anamorphic"
+              style={{ 
+                background: 'var(--gradient-primary)',
+                transform: 'perspective(1000px) rotateX(2deg) rotateY(-1deg)'
+              }}
             >
               2
             </div>
@@ -162,8 +167,8 @@ export default function Home() {
           {/* Generate Button */}
           {loading ? (
             <button
-              className="w-full rounded-xl font-medium px-8 py-4 text-lg 
-                         shadow-custom transition-all duration-300"
+              className="w-full rounded-2xl font-medium px-8 py-5 text-lg 
+                         shadow-custom-lg transition-all duration-300 glass-anamorphic"
               style={{
                 background: 'var(--gradient-primary)',
                 color: 'white'
@@ -174,9 +179,9 @@ export default function Home() {
             </button>
           ) : (
             <button
-              className="w-full rounded-xl font-medium px-8 py-4 text-lg 
+              className="w-full rounded-2xl font-medium px-8 py-5 text-lg 
                          shadow-custom hover-scale hover:shadow-custom-lg
-                         transition-all duration-300"
+                         transition-all duration-300 glass-anamorphic prismatic-border"
               style={{
                 background: 'var(--gradient-primary)',
                 color: 'white'
@@ -196,8 +201,8 @@ export default function Home() {
         
         {/* Divider */}
         <div 
-          className="w-full max-w-2xl h-px my-16"
-          style={{ backgroundColor: 'var(--border-primary)' }}
+          className="w-full max-w-2xl h-px my-16 glass-effect"
+          style={{ height: '2px' }}
         />
         
         {/* Generated Results */}
@@ -206,25 +211,25 @@ export default function Home() {
             <>
               <div>
                 <h2
-                  className="sm:text-4xl text-3xl font-bold mx-auto mb-8"
-                  style={{ color: 'var(--text-primary)' }}
+                  className="sm:text-4xl text-3xl font-bold mx-auto mb-8 gradient-text"
                   ref={bioRef}
                 >
                   Your generated bios
                 </h2>
               </div>
-              <div className="grid gap-6 md:grid-cols-1 max-w-3xl mx-auto">
+              <div className="grid gap-8 md:grid-cols-1 max-w-3xl mx-auto">
                 {generatedBios
                   .substring(generatedBios.indexOf("1") + 3)
                   .split(/2\.|3\./)
                   .map((generatedBio, index) => {
                     return (
                       <div
-                        className="glass-effect rounded-2xl p-6 hover-scale 
+                        className="glass-anamorphic rounded-3xl p-8 hover-scale 
                                    transition-all duration-300 cursor-copy
-                                   shadow-custom hover:shadow-custom-lg"
+                                   shadow-custom hover:shadow-custom-lg float-animation"
                         style={{
-                          border: '1px solid var(--border-primary)'
+                          animationDelay: `${index * 0.5}s`,
+                          animationDuration: '8s'
                         }}
                         onClick={() => {
                           navigator.clipboard.writeText(generatedBio);
