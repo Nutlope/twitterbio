@@ -6,14 +6,14 @@ export default function Header() {
   return (
     <header 
       className="flex justify-between items-center w-full mt-5 pb-7 sm:px-4 px-2 
-                 border-b-2 transition-colors duration-300"
-      style={{ borderColor: 'var(--border-primary)' }}
+                 transition-colors duration-300"
     >
       <Link href="/" className="flex space-x-3 items-center hover-scale">
         <img
           alt="header text"
           src="/write-adaptive.svg"
-          className="sm:w-9 sm:h-9 w-8 h-8"
+          className="sm:w-10 sm:h-10 w-9 h-9 float-animation"
+          style={{ animationDelay: '1s' }}
         />
         <h1 
           className="sm:text-3xl text-2xl font-bold ml-2 tracking-tight gradient-text"
@@ -22,17 +22,15 @@ export default function Header() {
         </h1>
       </Link>
       
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center space-x-4">
         <ThemeToggle />
         <a
           className="flex max-w-fit items-center justify-center space-x-2 
-                     rounded-full px-4 py-2 text-sm shadow-custom hover-scale
-                     transition-all duration-300 hover:shadow-custom-lg"
+                     rounded-2xl px-5 py-3 text-sm shadow-custom hover-scale
+                     transition-all duration-300 hover:shadow-custom-lg
+                     glass-anamorphic"
           style={{
-            backgroundColor: 'var(--bg-secondary)',
-            borderColor: 'var(--border-primary)',
-            color: 'var(--text-secondary)',
-            border: '1px solid'
+            color: 'var(--text-secondary)'
           }}
           href="https://github.com/Nutlope/twitterbio"
           target="_blank"

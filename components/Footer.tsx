@@ -3,27 +3,27 @@ import Link from 'next/link';
 export default function Footer() {
   return (
     <footer 
-      className="text-center h-16 sm:h-20 w-full sm:pt-2 pt-4 mt-16 
+      className="text-center h-20 sm:h-24 w-full sm:pt-4 pt-6 mt-20 
                  flex sm:flex-row flex-col justify-between items-center 
-                 px-6 space-y-3 sm:mb-0 mb-3 border-t transition-colors duration-300"
-      style={{ borderColor: 'var(--border-primary)' }}
+                 px-6 space-y-3 sm:mb-0 mb-3 transition-colors duration-300
+                 glass-effect rounded-3xl mx-4"
     >
-      <div style={{ color: 'var(--text-secondary)' }}>
+      <div style={{ color: 'var(--text-secondary)' }} className="text-center sm:text-left">
         Powered by{' '}
         <a
           href="https://togetherai.link"
           target="_blank"
           rel="noreferrer"
-          className="font-bold hover:underline transition-all duration-300 underline-offset-2"
-          style={{ color: 'var(--accent-primary)' }}
+          className="font-bold hover:underline transition-all duration-300 underline-offset-2 gradient-text"
         >
           Together AI
         </a>
       </div>
-      <div className="flex space-x-4 pb-4 sm:pb-0">
+      <div className="flex space-x-6 pb-4 sm:pb-0">
         <Link
           href="https://twitter.com/nutlope"
-          className="group transition-transform duration-300 hover:scale-110"
+          className="group transition-all duration-300 hover:scale-125 hover-scale 
+                     p-2 rounded-full glass-anamorphic"
           aria-label="Twitter"
         >
           <svg
@@ -44,7 +44,8 @@ export default function Footer() {
         </Link>
         <Link
           href="https://github.com/Nutlope/twitterbio"
-          className="group transition-transform duration-300 hover:scale-110"
+          className="group transition-all duration-300 hover:scale-125 hover-scale
+                     p-2 rounded-full glass-anamorphic"
           aria-label="GitHub"
         >
           <svg

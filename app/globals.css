@@ -57,34 +57,149 @@ body {
 
 /* Custom utilities */
 .glass-effect {
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 
+    0 8px 32px 0 rgba(31, 38, 135, 0.37),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
 [data-theme="dark"] .glass-effect {
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(15, 23, 42, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
 }
 
+/* Anamorphic glass effect with distortion */
+.glass-anamorphic {
+  backdrop-filter: blur(24px) contrast(1.2) brightness(1.1);
+  -webkit-backdrop-filter: blur(24px) contrast(1.2) brightness(1.1);
+  background: 
+    linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%),
+    radial-gradient(ellipse 200% 100% at 50% 0%, rgba(120, 119, 198, 0.3), transparent 50%);
+  border: 1px solid;
+  border-image: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1)) 1;
+  transform: perspective(1000px) rotateX(5deg) rotateY(-2deg);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="dark"] .glass-anamorphic {
+  background: 
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%),
+    radial-gradient(ellipse 200% 100% at 50% 0%, rgba(79, 70, 229, 0.2), transparent 50%);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.glass-anamorphic:hover {
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.02);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.2),
+    0 8px 20px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="dark"] .glass-anamorphic:hover {
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Holographic text effect */
 .gradient-text {
-  background: var(--gradient-primary);
+  background: linear-gradient(
+    45deg,
+    #667eea 0%,
+    #764ba2 25%,
+    #f093fb 50%,
+    #667eea 75%,
+    #764ba2 100%
+  );
+  background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: holographic 3s ease-in-out infinite;
 }
 
+@keyframes holographic {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Enhanced hover effects */
 .hover-scale {
-  transition: transform 0.2s ease-in-out;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
 }
 
 .hover-scale:hover {
-  transform: scale(1.05);
+  transform: translateY(-4px) scale(1.05);
 }
 
+/* Morphic shadow effects */
 .shadow-custom {
-  box-shadow: var(--shadow-md);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .shadow-custom-lg {
-  box-shadow: var(--shadow-lg);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    0 8px 24px rgba(0, 0, 0, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Floating animation for glassy elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Liquid background animation */
+.liquid-bg {
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+  background-size: 400% 400%;
+  animation: liquidMove 15s ease infinite;
+}
+
+@keyframes liquidMove {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Prismatic border effect */
+.prismatic-border {
+  border: 2px solid transparent;
+  background: 
+    linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
+    linear-gradient(135deg, #667eea, #764ba2, #f093fb, #667eea) border-box;
+  animation: prismRotate 4s linear infinite;
+}
+
+@keyframes prismRotate {
+  from { filter: hue-rotate(0deg); }
+  to { filter: hue-rotate(360deg); }
 }
