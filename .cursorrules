@@ -1,0 +1,14 @@
+# AI Protocol
+
+## 1. Streaming Safety
+- **Anti-Hallucination**: When using Vercel AI SDK streams, ensure the UI handles incomplete checks gracefully.
+- **Strict Parsing**: Do not assume the stream is valid JSON until the `onFinish` callback.
+
+## 2. Next.js App Router
+- Use `app/` directory conventions.
+- Use `className` (Tailwind) for styling. Avoid inline styles.
+- **Images**: Use `next/image` only.
+
+## 3. Regression Prevention
+- **Engram Check**: Assume the user has the Engram extension installed locally.
+- If `engram_context.md` is present, strictly follow its "Forbidden Patterns".
