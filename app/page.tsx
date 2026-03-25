@@ -45,8 +45,8 @@ export default function Home() {
       body: JSON.stringify({
         prompt,
         model: isLlama
-          ? "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo"
-          : "mistralai/Mixtral-8x7B-Instruct-v0.1",
+          ? "openai/gpt-oss-20b"
+          : "Qwen/Qwen3.5-9B",
       }),
     });
 
@@ -55,10 +55,16 @@ export default function Home() {
     }
 
     const runner = ChatCompletionStream.fromReadableStream(response.body!);
-    runner.on("content", (delta) => setGeneratedBios((prev) => prev + delta));
+    runner.on("content", (delta) => {
+      setLoading(false);
+      setGeneratedBios((prev) => prev + delta);
+    });
+    runner.on("error", (err) => {
+      console.error("stream error:", err);
+      setLoading(false);
+    });
 
     scrollToBios();
-    setLoading(false);
   };
 
   return (
@@ -108,7 +114,14 @@ export default function Home() {
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
               disabled
             >
-              <LoadingDots color="white" style="large" />
+              {isLlama ? (
+                <span className="flex items-center justify-center gap-2">
+                  Thinking
+                  <LoadingDots color="white" style="large" />
+                </span>
+              ) : (
+                <LoadingDots color="white" style="large" />
+              )}
             </button>
           ) : (
             <button
