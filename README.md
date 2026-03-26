@@ -6,7 +6,7 @@ This project generates Twitter (X) bios for you using Together AI.
 
 ## How it works
 
-This project uses both [Mixtral 8x7B](https://api.together.xyz/playground/chat/mistralai/Mixtral-8x7B-Instruct-v0.1) and [Llama 3.1 8B](https://api.together.xyz/playground/chat/meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo) with streaming to generate a Twitter bio. It constructs a prompt based on the form and user input, sends it either to the [Together.ai](https://togetherai.link/) API, then streams the response back to the application.
+This project uses both [Qwen 3.5 9B](https://api.together.xyz/playground/chat/Qwen/Qwen3.5-9B) and [GPT OSS 20B](https://api.together.xyz/playground/chat/openai/gpt-oss-20b) with streaming to generate a Twitter bio. It constructs a prompt based on the form and user input, sends it to the [Together.ai](https://togetherai.link/) API, then streams the response back to the application. Qwen 3.5 9B has thinking disabled for fast direct responses. GPT OSS 20B is a reasoning model that thinks before responding, shown with a "Thinking..." indicator.
 
 If you'd like to see how I built an older version of this app with GPT 3.5, check out the [video](https://youtu.be/JcE-1xzQTE0) or [blog post](https://vercel.com/blog/gpt-3-app-next-js-vercel-edge-functions).
 
