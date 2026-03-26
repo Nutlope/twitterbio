@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 
   const isReasoningModel = model === "Qwen/Qwen3.5-9B";
 
-  // @ts-expect-error chat_template_kwargs disables thinking for reasoning models
+  // @ts-ignore chat_template_kwargs disables thinking for reasoning models
   const runner = together.chat.completions.stream({
     model,
     messages: [{ role: "user", content: prompt }],
