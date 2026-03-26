@@ -114,7 +114,14 @@ export default function Home() {
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
               disabled
             >
-              <LoadingDots color="white" style="large" />
+              {isLlama ? (
+                <span className="flex items-center justify-center gap-2">
+                  Thinking
+                  <LoadingDots color="white" style="large" />
+                </span>
+              ) : (
+                <LoadingDots color="white" style="large" />
+              )}
             </button>
           ) : (
             <button
