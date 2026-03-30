@@ -13,16 +13,16 @@ export default function Toggle({ isGPT, setIsGPT }: any) {
         className="mr-3 text-sm flex justify-center gap-2 items-center"
       >
         <Image
-          src="/qwen-logo.svg"
+          src="/kimi-logo.svg"
           width={25}
           height={25}
-          alt="Qwen logo"
+          alt="Kimi logo"
           className={`${isGPT && "opacity-50"}`}
         />
         <span
           className={`font-medium ${isGPT ? "text-gray-400" : "text-gray-900"}`}
         >
-          Qwen 3.5 9B
+          Kimi K2.5
         </span>{" "}
       </Switch.Label>
       <Switch
@@ -50,13 +50,13 @@ export default function Toggle({ isGPT, setIsGPT }: any) {
             !isGPT ? "text-gray-400" : "text-gray-900"
           }`}
         >
-          GPT OSS 20B
+          Opus 4.6
         </span>{" "}
         <Image
-          src="/openai-logo.svg"
+          src="/gpt-logo.svg"
           width={25}
           height={25}
-          alt="OpenAI logo"
+          alt="GPT logo"
           className={`${!isGPT && "opacity-50"}`}
         />
       </Switch.Label>
