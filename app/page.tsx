@@ -45,8 +45,8 @@ export default function Home() {
       body: JSON.stringify({
         prompt,
         model: isLlama
-          ? "openai/gpt-oss-20b"
-          : "Qwen/Qwen3.5-9B",
+          ? "moonshot/kimi-k2.5"
+          : "anthropic/claude-opus-4.6",
       }),
     });
 

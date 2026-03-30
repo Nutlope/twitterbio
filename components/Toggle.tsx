@@ -1,5 +1,4 @@
 import { Switch } from "@headlessui/react";
-import Image from "next/image";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -12,17 +11,10 @@ export default function Toggle({ isGPT, setIsGPT }: any) {
         as="span"
         className="mr-3 text-sm flex justify-center gap-2 items-center"
       >
-        <Image
-          src="/qwen-logo.svg"
-          width={25}
-          height={25}
-          alt="Qwen logo"
-          className={`${isGPT && "opacity-50"}`}
-        />
         <span
           className={`font-medium ${isGPT ? "text-gray-400" : "text-gray-900"}`}
         >
-          Qwen 3.5 9B
+          Opus 4.6
         </span>{" "}
       </Switch.Label>
       <Switch
@@ -50,15 +42,8 @@ export default function Toggle({ isGPT, setIsGPT }: any) {
             !isGPT ? "text-gray-400" : "text-gray-900"
           }`}
         >
-          GPT OSS 20B
-        </span>{" "}
-        <Image
-          src="/openai-logo.svg"
-          width={25}
-          height={25}
-          alt="OpenAI logo"
-          className={`${!isGPT && "opacity-50"}`}
-        />
+          Kimi K2.5
+        </span>
       </Switch.Label>
     </Switch.Group>
   );
