@@ -7,7 +7,6 @@ import DropDown, { VibeType } from "../components/DropDown";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import LoadingDots from "../components/LoadingDots";
-import Toggle from "../components/Toggle";
 import { ChatCompletionStream } from "together-ai/lib/ChatCompletionStream";
 
 export default function Home() {
@@ -15,7 +14,6 @@ export default function Home() {
   const [bio, setBio] = useState("");
   const [vibe, setVibe] = useState<VibeType>("Professional");
   const [generatedBios, setGeneratedBios] = useState<String>("");
-  const [isLlama, setIsLlama] = useState(false);
 
   const bioRef = useRef<null | HTMLDivElement>(null);
 
@@ -42,12 +40,7 @@ export default function Home() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        prompt,
-        model: isLlama
-          ? "openai/gpt-oss-20b"
-          : "Qwen/Qwen3.5-9B",
-      }),
+      body: JSON.stringify({ prompt }),
     });
 
     if (!response.ok) {
@@ -77,10 +70,6 @@ export default function Home() {
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
           Generate your next Twitter bio using AI
         </h1>
-        <div className="mt-7">
-          <Toggle isGPT={isLlama} setIsGPT={setIsLlama} />
-        </div>
-
         <div className="max-w-xl w-full">
           <div className="flex mt-10 items-center space-x-3">
             <Image
@@ -114,14 +103,7 @@ export default function Home() {
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
               disabled
             >
-              {isLlama ? (
-                <span className="flex items-center justify-center gap-2">
-                  Thinking
-                  <LoadingDots color="white" style="large" />
-                </span>
-              ) : (
-                <LoadingDots color="white" style="large" />
-              )}
+              <LoadingDots color="white" style="large" />
             </button>
           ) : (
             <button
